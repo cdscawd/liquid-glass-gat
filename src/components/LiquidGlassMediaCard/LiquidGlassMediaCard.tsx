@@ -1,11 +1,12 @@
 import { type HTMLAttributes, type ReactNode } from 'react'
-import { LiquidGlassCard } from '../LiquidGlassCard'
+import { LiquidGlassCard, type LiquidGlassCardSize } from '../LiquidGlassCard'
 import type { LiquidGlassParams } from '../../lib/liquid-glass'
 import './LiquidGlassMediaCard.scss'
 
 export interface LiquidGlassMediaCardProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   glassParams?: LiquidGlassParams
+  size?: LiquidGlassCardSize
   image?: string
   imageAlt?: string
   title?: ReactNode
@@ -15,6 +16,7 @@ export interface LiquidGlassMediaCardProps
 
 export function LiquidGlassMediaCard({
   glassParams,
+  size = 'md',
   image,
   imageAlt = '',
   title,
@@ -27,6 +29,7 @@ export function LiquidGlassMediaCard({
   return (
     <LiquidGlassCard
       glassParams={glassParams}
+      size={size}
       className={`liquid-glass-media-card${className ? ` ${className}` : ''}`}
       {...props}
     >

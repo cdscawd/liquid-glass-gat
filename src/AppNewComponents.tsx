@@ -63,8 +63,15 @@ export function AppNewComponents() {
 
   return (
     <>
-      <section className="app__section">
-        <h2 className="app__section-title">Card & Media</h2>
+        <section className="app__section">
+          <h2 className="app__section-title">Visual Regression Checklist</h2>
+          <p className="app__section-hint">
+            切换 Global Theme 后目测：Button / Card / Input / Navbar 边框与 hover 一致；pill 组件圆角贴图对齐；List 仅 1 个 filter
+          </p>
+        </section>
+
+        <section className="app__section">
+          <h2 className="app__section-title">Card & Media</h2>
         <div className="app__row">
           <LiquidGlassCard glassParams={{ borderRadius: 12 }}>
             <LiquidGlassCard.Header>Glass Card</LiquidGlassCard.Header>

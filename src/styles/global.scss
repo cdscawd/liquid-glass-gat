@@ -6,6 +6,20 @@
   box-sizing: border-box;
 }
 
+:root {
+  --lg-bg: #{$glass-bg};
+  --lg-bg-hover: #{$glass-bg-hover};
+  --lg-bg-selected: #{$glass-bg-selected};
+  --lg-border: #{$glass-border};
+  --lg-text-primary: #{$glass-text-primary};
+  --lg-text-secondary: #{$glass-text-secondary};
+  --lg-text-muted: #{$glass-text-muted};
+  --lg-focus-ring: #{$glass-focus-ring};
+  --lg-overlay: #{$glass-overlay};
+  --lg-radius: #{$glass-radius};
+  --lg-radius-pill: #{$glass-radius-pill};
+}
+
 body {
   margin: 0;
   font-family: $font-sans;

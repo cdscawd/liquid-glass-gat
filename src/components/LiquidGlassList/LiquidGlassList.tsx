@@ -11,6 +11,7 @@ export interface LiquidGlassListItem {
   title: ReactNode
   description?: ReactNode
   selected?: boolean
+  disabled?: boolean
   onClick?: () => void
 }
 
@@ -19,15 +20,15 @@ export interface LiquidGlassListProps extends HTMLAttributes<HTMLUListElement> {
   items: LiquidGlassListItem[]
 }
 
-function LiquidGlassListRow({
-  item,
+export function LiquidGlassList({
   glassParams,
-}: {
-  item: LiquidGlassListItem
-  glassParams?: LiquidGlassParams
-}) {
+  items,
+  className = '',
+  style,
+  ...props
+}: LiquidGlassListProps) {
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLLIElement>(glassParams)
+    useLiquidGlassEffect<HTMLUListElement>(glassParams)
 
   return (
     <>
@@ -38,38 +39,32 @@ function LiquidGlassListRow({
         width={filterSize.width}
         height={filterSize.height}
       />
-      <li
+      <ul
         ref={hostRef}
-        className={`liquid-glass-list__item${item.selected ? ' liquid-glass-list__item--selected' : ''}`}
-        style={{ ...filterStyle, borderRadius }}
+        className={`liquid-glass-list${className ? ` ${className}` : ''}`}
+        style={{ ...filterStyle, borderRadius, ...style }}
+        {...props}
       >
-        <button
-          type="button"
-          className="liquid-glass-list__btn"
-          onClick={item.onClick}
-        >
-          <span className="liquid-glass-list__title">{item.title}</span>
-          {item.description && (
-            <span className="liquid-glass-list__desc">{item.description}</span>
-          )}
-        </button>
-      </li>
+        {items.map((item) => (
+          <li
+            key={item.id}
+            className={`liquid-glass-list__item${item.selected ? ' liquid-glass-list__item--selected' : ''}`}
+          >
+            <button
+              type="button"
+              className="liquid-glass-list__btn"
+              disabled={item.disabled}
+              onClick={item.onClick}
+            >
+              <span className="liquid-glass-list__title">{item.title}</span>
+              {item.description && (
+                <span className="liquid-glass-list__desc">{item.description}</span>
+              )}
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
-  )
-}
-
-export function LiquidGlassList({
-  glassParams,
-  items,
-  className = '',
-  ...props
-}: LiquidGlassListProps) {
-  return (
-    <ul className={`liquid-glass-list${className ? ` ${className}` : ''}`} {...props}>
-      {items.map((item) => (
-        <LiquidGlassListRow key={item.id} item={item} glassParams={glassParams} />
-      ))}
-    </ul>
   )
 }
 

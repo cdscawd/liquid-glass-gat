@@ -1,6 +1,7 @@
 import { type InputHTMLAttributes } from 'react'
 import {
   LiquidGlassFilter,
+  GLASS_SHAPE,
   useLiquidGlassEffect,
   type LiquidGlassParams,
 } from '../../lib/liquid-glass'
@@ -9,12 +10,10 @@ import './LiquidGlassSlider.scss'
 export interface LiquidGlassSliderProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   glassParams?: LiquidGlassParams
-  thumbGlassParams?: LiquidGlassParams
 }
 
 export function LiquidGlassSlider({
   glassParams,
-  thumbGlassParams,
   className = '',
   style,
   min = 0,
@@ -24,24 +23,9 @@ export function LiquidGlassSlider({
   ...props
 }: LiquidGlassSliderProps) {
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLDivElement>({
-      borderRadius: glassParams?.borderRadius ?? 999,
-      edgeFalloff: glassParams?.edgeFalloff,
-      strength: glassParams?.strength,
+    useLiquidGlassEffect<HTMLDivElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.pill },
     })
-
-  const {
-    hostRef: thumbRef,
-    filterId: thumbFilterId,
-    mapId: thumbMapId,
-    mapUrl: thumbMapUrl,
-    filterSize: thumbFilterSize,
-    filterStyle: thumbFilterStyle,
-  } = useLiquidGlassEffect<HTMLDivElement>({
-    borderRadius: thumbGlassParams?.borderRadius ?? 999,
-    edgeFalloff: thumbGlassParams?.edgeFalloff ?? glassParams?.edgeFalloff,
-    strength: thumbGlassParams?.strength ?? glassParams?.strength ?? 1.15,
-  })
 
   return (
     <>
@@ -52,24 +36,11 @@ export function LiquidGlassSlider({
         width={filterSize.width}
         height={filterSize.height}
       />
-      <LiquidGlassFilter
-        filterId={thumbFilterId}
-        mapId={thumbMapId}
-        mapUrl={thumbMapUrl}
-        width={thumbFilterSize.width}
-        height={thumbFilterSize.height}
-      />
       <div
         ref={hostRef}
         className={`liquid-glass-slider${className ? ` ${className}` : ''}`}
         style={{ ...filterStyle, borderRadius, ...style }}
       >
-        <div
-          ref={thumbRef}
-          className="liquid-glass-slider__thumb-glass"
-          aria-hidden
-          style={thumbFilterStyle}
-        />
         <input
           type="range"
           className="liquid-glass-slider__input"

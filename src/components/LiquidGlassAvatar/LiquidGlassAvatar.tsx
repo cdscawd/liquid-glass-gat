@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react'
 import {
+  GLASS_SHAPE,
   LiquidGlassFilter,
   useLiquidGlassEffect,
   type LiquidGlassParams,
@@ -27,14 +28,10 @@ export function LiquidGlassAvatar({
   children,
   ...props
 }: LiquidGlassAvatarProps) {
-  const resolvedParams = {
-    borderRadius: glassParams?.borderRadius ?? 999,
-    edgeFalloff: glassParams?.edgeFalloff,
-    strength: glassParams?.strength,
-  }
-
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLDivElement>(resolvedParams)
+    useLiquidGlassEffect<HTMLDivElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.pill },
+    })
 
   const sizeClass = size === 'md' ? '' : ` liquid-glass-avatar--${size}`
 

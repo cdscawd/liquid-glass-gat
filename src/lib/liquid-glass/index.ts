@@ -1,11 +1,28 @@
 export { generateDisplacementMap } from './generateDisplacementMap'
 export {
   BACKDROP_FILTER,
+  BADGE_BORDER_RADIUS,
   DEFAULT_BORDER_RADIUS,
   DEFAULT_EDGE_FALLOFF_RATIO,
+  DEFAULT_FILL_STRENGTH_MULTIPLIER,
+  DEFAULT_GLASS_PARAMS,
+  DEFAULT_THUMB_STRENGTH,
   DISPLACEMENT_SCALE,
+  DOCK_BORDER_RADIUS,
+  GLASS_SHAPE,
+  PILL_BORDER_RADIUS,
+  type GlassShapePreset,
 } from './constants'
 export { LiquidGlassFilter } from './LiquidGlassFilter'
+export {
+  LiquidGlassProvider,
+  useLiquidGlassDefaults,
+  type LiquidGlassProviderProps,
+} from './LiquidGlassProvider'
+export { resolveGlassParams } from './resolveGlassParams'
 export { useLiquidGlassEffect } from './useLiquidGlassEffect'
-export type { UseLiquidGlassEffectResult } from './useLiquidGlassEffect'
+export type {
+  UseLiquidGlassEffectOptions,
+  UseLiquidGlassEffectResult,
+} from './useLiquidGlassEffect'
 export type { LiquidGlassMapInput, LiquidGlassParams } from './types'

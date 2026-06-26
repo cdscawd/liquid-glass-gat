@@ -35,6 +35,7 @@ export {
 export { LiquidGlassTabs, type LiquidGlassTabItem, type LiquidGlassTabsProps } from './LiquidGlassTabs'
 export { LiquidGlassProgress, type LiquidGlassProgressProps } from './LiquidGlassProgress'
 export { LiquidGlassSlider, type LiquidGlassSliderProps } from './LiquidGlassSlider'
+export { LiquidGlassProvider, useLiquidGlassDefaults } from '../lib/liquid-glass'
 export { LiquidGlassNavbar, type LiquidGlassNavbarProps } from './LiquidGlassNavbar'
 export {
   LiquidGlassDock,

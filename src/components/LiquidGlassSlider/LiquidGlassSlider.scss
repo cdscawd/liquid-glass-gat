@@ -9,16 +9,6 @@
   max-width: 280px;
   height: 32px;
   padding: 0 8px;
-  border-radius: 999px;
-
-  &__thumb-glass {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    pointer-events: none;
-    opacity: 0;
-  }
 
   &__input {
     position: relative;
@@ -32,32 +22,32 @@
 
     &::-webkit-slider-runnable-track {
       height: 4px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.15);
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-track;
     }
 
     &::-webkit-slider-thumb {
       width: 20px;
       height: 20px;
       margin-top: -8px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid $glass-border;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-hover;
       appearance: none;
     }
 
     &::-moz-range-track {
       height: 4px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.15);
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-track;
     }
 
     &::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid $glass-border;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-hover;
     }
   }
 }

@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react'
 import {
+  GLASS_SHAPE,
   LiquidGlassFilter,
   useLiquidGlassEffect,
   type LiquidGlassParams,
@@ -10,6 +11,7 @@ export interface LiquidGlassDockItem {
   id: string
   label: string
   icon: ReactNode
+  disabled?: boolean
   onClick?: () => void
 }
 
@@ -26,10 +28,8 @@ export function LiquidGlassDock({
   ...props
 }: LiquidGlassDockProps) {
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLDivElement>({
-      borderRadius: glassParams?.borderRadius ?? 24,
-      edgeFalloff: glassParams?.edgeFalloff,
-      strength: glassParams?.strength,
+    useLiquidGlassEffect<HTMLDivElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.dock },
     })
 
   return (
@@ -49,12 +49,13 @@ export function LiquidGlassDock({
         style={{ ...filterStyle, borderRadius, ...style }}
         {...props}
       >
-        {items.map(({ id, label, icon, onClick }) => (
+        {items.map(({ id, label, icon, disabled, onClick }) => (
           <button
             key={id}
             type="button"
             className="liquid-glass-dock__item"
             aria-label={label}
+            disabled={disabled}
             onClick={onClick}
           >
             <span className="liquid-glass-dock__icon">{icon}</span>

@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, type ReactNode } from 'react'
 import {
+  GLASS_SHAPE,
   LiquidGlassFilter,
   useLiquidGlassEffect,
   type LiquidGlassParams,
@@ -24,14 +25,10 @@ export function LiquidGlassIconButton({
   children,
   ...props
 }: LiquidGlassIconButtonProps) {
-  const resolvedParams = {
-    borderRadius: glassParams?.borderRadius ?? 999,
-    edgeFalloff: glassParams?.edgeFalloff,
-    strength: glassParams?.strength,
-  }
-
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLButtonElement>(resolvedParams)
+    useLiquidGlassEffect<HTMLButtonElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.pill },
+    })
 
   const sizeClass = size === 'md' ? '' : ` liquid-glass-icon-button--${size}`
 

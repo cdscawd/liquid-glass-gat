@@ -1,20 +1,28 @@
 import {
   type ButtonHTMLAttributes,
   useCallback,
+  useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
 import {
-  DEFAULT_BORDER_RADIUS,
+  GLASS_SHAPE,
   LiquidGlassFilter,
+  PILL_BORDER_RADIUS,
   useLiquidGlassEffect,
   type LiquidGlassParams,
 } from '../../lib/liquid-glass'
 import './LiquidGlassSwitch.scss'
 
-const THUMB_INSET = 3
+const THUMB_INSET = 2
+const DRAG_THRESHOLD = 4
+
+const TRACK_SIZE = {
+  sm: { width: 42, height: 26 },
+  md: { width: 52, height: 32 },
+  lg: { width: 60, height: 36 },
+} as const
 
 export type LiquidGlassSwitchSize = 'sm' | 'md' | 'lg'
 
@@ -29,8 +37,10 @@ export interface LiquidGlassSwitchProps
 }
 
 function getThumbRadius(borderRadius: number, height: number): number {
-  if (borderRadius >= 999 || borderRadius >= height / 2) return 999
-  return Math.max(0, borderRadius - THUMB_INSET)
+  if (borderRadius >= PILL_BORDER_RADIUS || borderRadius >= height / 2) {
+    return PILL_BORDER_RADIUS
+  }
+  return Math.max(0, borderRadius - 1)
 }
 
 export function LiquidGlassSwitch({
@@ -43,6 +53,7 @@ export function LiquidGlassSwitch({
   className = '',
   style,
   disabled,
+  onClick,
   ...props
 }: LiquidGlassSwitchProps) {
   const [uncontrolled, setUncontrolled] = useState(defaultChecked)
@@ -50,20 +61,38 @@ export function LiquidGlassSwitch({
   const checked = isControlled ? checkedProp : uncontrolled
 
   const trackRef = useRef<HTMLButtonElement>(null)
-  const [trackSize, setTrackSize] = useState({ width: 0, height: 0 })
+  const ignoreClickRef = useRef(false)
+  const dragStateRef = useRef<{
+    pointerId: number
+    startX: number
+    startThumbLeft: number
+    didDrag: boolean
+    lastClientX: number
+  } | null>(null)
+
+  const [trackSize, setTrackSize] = useState<{ width: number; height: number }>(
+    TRACK_SIZE[size],
+  )
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragSessionId, setDragSessionId] = useState(0)
+  const [dragThumbLeft, setDragThumbLeft] = useState<number | null>(null)
+
+  const setChecked = useCallback(
+    (next: boolean) => {
+      if (disabled) return
+      if (!isControlled) setUncontrolled(next)
+      onCheckedChange?.(next)
+    },
+    [disabled, isControlled, onCheckedChange],
+  )
 
   const toggle = useCallback(() => {
-    if (disabled) return
-    const next = !checked
-    if (!isControlled) setUncontrolled(next)
-    onCheckedChange?.(next)
-  }, [checked, disabled, isControlled, onCheckedChange])
+    setChecked(!checked)
+  }, [checked, setChecked])
 
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLButtonElement>({
-      borderRadius: glassParams?.borderRadius ?? 999,
-      edgeFalloff: glassParams?.edgeFalloff,
-      strength: glassParams?.strength,
+    useLiquidGlassEffect<HTMLButtonElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.pill },
     })
 
   useLayoutEffect(() => {
@@ -71,7 +100,9 @@ export function LiquidGlassSwitch({
     if (!el) return
     const measure = () => {
       const { width, height } = el.getBoundingClientRect()
-      setTrackSize({ width, height })
+      if (width > 0 && height > 0) {
+        setTrackSize({ width, height })
+      }
     }
     measure()
     const observer = new ResizeObserver(measure)
@@ -81,40 +112,120 @@ export function LiquidGlassSwitch({
 
   const thumbHeight = Math.max(trackSize.height - THUMB_INSET * 2, 0)
   const thumbWidth = thumbHeight
-  const thumbLeft = checked
-    ? Math.max(trackSize.width - thumbWidth - THUMB_INSET, THUMB_INSET)
-    : THUMB_INSET
+  const offLeft = THUMB_INSET
+  const onLeft = Math.max(trackSize.width - thumbWidth - THUMB_INSET, THUMB_INSET)
+  const restingThumbLeft = checked ? onLeft : offLeft
+  const thumbLeft = dragThumbLeft ?? restingThumbLeft
 
   const thumbRadius = getThumbRadius(
-    thumbGlassParams?.borderRadius ??
-      glassParams?.borderRadius ??
-      DEFAULT_BORDER_RADIUS,
+    thumbGlassParams?.borderRadius ?? GLASS_SHAPE.pill,
     thumbHeight,
   )
 
-  const resolvedThumbGlassParams = useMemo(
-    (): LiquidGlassParams => ({
-      borderRadius: thumbRadius,
-      edgeFalloff: thumbGlassParams?.edgeFalloff ?? glassParams?.edgeFalloff,
-      strength: thumbGlassParams?.strength ?? glassParams?.strength ?? 1.15,
-    }),
-    [
-      glassParams?.edgeFalloff,
-      glassParams?.strength,
-      thumbGlassParams?.edgeFalloff,
-      thumbGlassParams?.strength,
-      thumbRadius,
-    ],
+  const clampThumbLeft = useCallback(
+    (left: number) => {
+      return Math.min(Math.max(left, offLeft), onLeft)
+    },
+    [offLeft, onLeft],
   )
 
-  const {
-    hostRef: thumbRef,
-    filterId: thumbFilterId,
-    mapId: thumbMapId,
-    mapUrl: thumbMapUrl,
-    filterSize: thumbFilterSize,
-    filterStyle: thumbFilterStyle,
-  } = useLiquidGlassEffect<HTMLDivElement>(resolvedThumbGlassParams)
+  const snapFromClientX = useCallback(
+    (clientX: number) => {
+      const track = trackRef.current
+      if (!track) return
+      const rect = track.getBoundingClientRect()
+      setChecked(clientX - rect.left >= rect.width / 2)
+    },
+    [setChecked],
+  )
+
+  const endDragSession = useCallback(
+    (clientX?: number) => {
+      const dragState = dragStateRef.current
+      const track = trackRef.current
+
+      if (!dragState) {
+        setIsDragging(false)
+        setDragThumbLeft(null)
+        return
+      }
+
+      const resolvedClientX = clientX ?? dragState.lastClientX
+
+      if (track?.hasPointerCapture(dragState.pointerId)) {
+        track.releasePointerCapture(dragState.pointerId)
+      }
+
+      if (resolvedClientX !== undefined) {
+        if (dragState.didDrag) {
+          snapFromClientX(resolvedClientX)
+        } else {
+          toggle()
+        }
+      }
+
+      dragStateRef.current = null
+      setIsDragging(false)
+      setDragThumbLeft(null)
+
+      ignoreClickRef.current = true
+      window.setTimeout(() => {
+        ignoreClickRef.current = false
+      }, 0)
+    },
+    [snapFromClientX, toggle],
+  )
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (event.button !== 0 || disabled || dragStateRef.current) return
+
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startThumbLeft: restingThumbLeft,
+      didDrag: false,
+      lastClientX: event.clientX,
+    }
+    setDragSessionId((id) => id + 1)
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  useEffect(() => {
+    if (dragSessionId === 0 || !dragStateRef.current) return
+
+    const onPointerMove = (event: PointerEvent) => {
+      const state = dragStateRef.current
+      if (!state || event.pointerId !== state.pointerId) return
+
+      state.lastClientX = event.clientX
+
+      const deltaX = event.clientX - state.startX
+      if (!state.didDrag && Math.abs(deltaX) >= DRAG_THRESHOLD) {
+        state.didDrag = true
+        setIsDragging(true)
+      }
+
+      if (!state.didDrag) return
+
+      setDragThumbLeft(clampThumbLeft(state.startThumbLeft + deltaX))
+    }
+
+    const onPointerEnd = (event: PointerEvent) => {
+      const state = dragStateRef.current
+      if (!state || event.pointerId !== state.pointerId) return
+      endDragSession(event.clientX)
+    }
+
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerEnd)
+    window.addEventListener('pointercancel', onPointerEnd)
+
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerEnd)
+      window.removeEventListener('pointercancel', onPointerEnd)
+    }
+  }, [dragSessionId, clampThumbLeft, endDragSession])
 
   const sizeClass = size === 'md' ? '' : ` liquid-glass-switch--${size}`
 
@@ -135,40 +246,36 @@ export function LiquidGlassSwitch({
         width={filterSize.width}
         height={filterSize.height}
       />
-      {trackSize.width > 0 && (
-        <LiquidGlassFilter
-          filterId={thumbFilterId}
-          mapId={thumbMapId}
-          mapUrl={thumbMapUrl}
-          width={thumbFilterSize.width}
-          height={thumbFilterSize.height}
-        />
-      )}
       <button
         ref={setRefs}
         type="button"
         role="switch"
         aria-checked={checked}
         disabled={disabled}
-        className={`liquid-glass-switch${sizeClass}${checked ? ' liquid-glass-switch--checked' : ''}${className ? ` ${className}` : ''}`}
+        className={`liquid-glass-switch${sizeClass}${checked ? ' liquid-glass-switch--checked' : ''}${isDragging ? ' liquid-glass-switch--dragging' : ''}${className ? ` ${className}` : ''}`}
         style={{ ...filterStyle, borderRadius, ...style }}
-        onClick={toggle}
+        onPointerDown={handlePointerDown}
+        onClick={(event) => {
+          onClick?.(event)
+          if (event.defaultPrevented || ignoreClickRef.current) return
+          toggle()
+        }}
+        onLostPointerCapture={() => {
+          if (dragStateRef.current) endDragSession()
+        }}
         {...props}
       >
-        {trackSize.width > 0 && (
-          <span
-            ref={thumbRef}
-            className="liquid-glass-switch__thumb"
-            aria-hidden
-            style={{
-              ...thumbFilterStyle,
-              width: thumbWidth,
-              height: thumbHeight,
-              transform: `translate3d(${thumbLeft}px, ${THUMB_INSET}px, 0)`,
-              borderRadius: thumbRadius >= 999 ? '999px' : `${thumbRadius}px`,
-            }}
-          />
-        )}
+        <span
+          className={`liquid-glass-switch__thumb${isDragging ? ' liquid-glass-switch__thumb--dragging' : ''}`}
+          aria-hidden
+          style={{
+            width: thumbWidth,
+            height: thumbHeight,
+            transform: `translate3d(${thumbLeft}px, ${THUMB_INSET}px, 0)`,
+            borderRadius:
+              thumbRadius >= PILL_BORDER_RADIUS ? '999px' : `${thumbRadius}px`,
+          }}
+        />
       </button>
     </>
   )

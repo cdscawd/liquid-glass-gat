@@ -1,24 +1,16 @@
-@use '../../styles/variables' as *;
+@use '../../styles/glass-mixins' as *;
 
 .liquid-glass-button-group {
-  position: relative;
+  @include glass-surface;
   display: inline-flex;
-  contain: layout style paint;
-  isolation: isolate;
   align-items: stretch;
-  overflow: hidden;
-  border: 1px solid $glass-border;
-  border-radius: $glass-radius;
-  box-shadow:
-    $glass-shadow-outer 0 4px 8px,
-    $glass-shadow-inner 0 -10px 25px inset;
 
   &--default {
-    background: rgba(255, 255, 255, 0.06);
+    background: $glass-bg;
   }
 
   &--slider {
-    background: rgba(255, 255, 255, 0.04);
+    background: $glass-bg-subtle;
   }
 
   &__track {
@@ -36,16 +28,12 @@
   }
 
   &__thumb {
+    @include glass-thumb;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1;
     pointer-events: none;
-    background: rgba(255, 255, 255, 0.18);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.35) inset,
-      0 8px 20px rgba(0, 0, 0, 0.18),
-      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
     will-change: transform, width;
     transition:
       transform 0.42s cubic-bezier(0.34, 1.28, 0.64, 1),
@@ -73,7 +61,7 @@
     white-space: nowrap;
 
     &:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.45);
+      outline: 2px solid $glass-focus-ring;
       outline-offset: -2px;
       z-index: 1;
     }
@@ -97,8 +85,8 @@
   }
 
   &--default &__item {
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.75);
+    border-left: 1px solid $glass-divider;
+    color: $glass-text-muted;
     cursor: pointer;
     transition:
       background-color 0.2s ease,
@@ -109,28 +97,28 @@
     }
 
     &:hover:not(:disabled):not(&--selected) {
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
+      background: $glass-bg;
+      color: $glass-text-primary;
     }
 
     &--selected {
-      background: rgba(255, 255, 255, 0.14);
-      color: #fff;
+      background: $glass-bg-active;
+      color: $glass-text-primary;
     }
   }
 
   &--slider &__item {
     z-index: 2;
-    color: rgba(255, 255, 255, 0.55);
+    color: $glass-text-disabled;
     cursor: inherit;
     transition: color 0.25s ease;
 
     &:hover:not(:disabled):not(&--selected) {
-      color: rgba(255, 255, 255, 0.82);
+      color: $glass-text-secondary;
     }
 
     &--selected {
-      color: #fff;
+      color: $glass-text-primary;
     }
   }
 }

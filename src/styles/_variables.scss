@@ -3,8 +3,44 @@ $font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
 $color-text: #1a1a1a;
 $color-bg: #0a0a0a;
 
-// Liquid Glass 按钮
+// Liquid Glass — 形状
 $glass-radius: 8px;
+$glass-radius-pill: 999px;
+$glass-radius-dock: 24px;
+$glass-radius-badge: 6px;
+
+// Liquid Glass — 表面
 $glass-border: rgba(255, 255, 255, 0.35);
+$glass-bg: rgba(255, 255, 255, 0.06);
+$glass-bg-hover: rgba(255, 255, 255, 0.1);
+$glass-bg-focus: rgba(255, 255, 255, 0.1);
+$glass-bg-selected: rgba(255, 255, 255, 0.12);
+$glass-bg-active: rgba(255, 255, 255, 0.14);
+$glass-bg-thumb: rgba(255, 255, 255, 0.18);
+$glass-bg-subtle: rgba(255, 255, 255, 0.04);
+$glass-bg-track: rgba(255, 255, 255, 0.15);
+$glass-bg-item-hover: rgba(255, 255, 255, 0.08);
+
 $glass-shadow-outer: rgba(0, 0, 0, 0.25);
 $glass-shadow-inner: rgba(0, 0, 0, 0.15);
+$glass-thumb-highlight: rgba(255, 255, 255, 0.35);
+$glass-thumb-ring: rgba(255, 255, 255, 0.08);
+$glass-divider: rgba(255, 255, 255, 0.12);
+
+// Liquid Glass — 文字
+$glass-text-primary: #fff;
+$glass-text-secondary: rgba(255, 255, 255, 0.85);
+$glass-text-muted: rgba(255, 255, 255, 0.65);
+$glass-text-faint: rgba(255, 255, 255, 0.45);
+$glass-text-disabled: rgba(255, 255, 255, 0.55);
+
+// Liquid Glass — 交互
+$glass-focus-ring: rgba(255, 255, 255, 0.45);
+$glass-overlay: rgba(0, 0, 0, 0.4);
+$glass-overlay-light: rgba(0, 0, 0, 0.35);
+
+// Liquid Glass — 语义边框
+$glass-border-info: rgba(140, 180, 255, 0.35);
+$glass-border-success: rgba(120, 255, 180, 0.35);
+$glass-border-warning: rgba(255, 210, 120, 0.35);
+$glass-border-error: rgba(255, 120, 120, 0.35);

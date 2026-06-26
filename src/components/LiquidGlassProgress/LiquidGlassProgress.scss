@@ -6,15 +6,14 @@
   width: 100%;
   max-width: 280px;
   height: 10px;
-  border-radius: 999px;
   overflow: hidden;
 
   &__fill {
+    @include glass-thumb;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    background: rgba(255, 255, 255, 0.14);
     transition: width 0.25s ease;
   }
 }

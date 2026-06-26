@@ -1,51 +1,19 @@
-@use '../../styles/variables' as *;
+@use '../../styles/glass-mixins' as *;
 
 .liquid-glass-button {
-  position: relative;
+  @include glass-surface;
+  @include glass-interactive;
   display: inline-flex;
-  contain: layout style paint;
-  isolation: isolate;
   align-items: center;
   justify-content: center;
   gap: 8px;
   min-height: 40px;
   padding: 10px 20px;
-  border: 1px solid $glass-border;
-  border-radius: $glass-radius;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
-  font-family: $font-sans;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.25;
   white-space: nowrap;
-  cursor: pointer;
-  overflow: hidden;
-  box-shadow:
-    $glass-shadow-outer 0 4px 8px,
-    $glass-shadow-inner 0 -10px 25px inset;
-  transition:
-    background-color 0.2s ease,
-    opacity 0.15s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  &:active {
-    opacity: 0.88;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.45);
-    outline-offset: 2px;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
+  color: $glass-text-primary;
 
   &--sm {
     min-height: 32px;

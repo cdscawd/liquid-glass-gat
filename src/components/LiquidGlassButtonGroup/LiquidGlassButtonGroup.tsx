@@ -14,7 +14,9 @@ import {
 } from 'react'
 import {
   DEFAULT_BORDER_RADIUS,
+  DEFAULT_THUMB_STRENGTH,
   LiquidGlassFilter,
+  PILL_BORDER_RADIUS,
   useLiquidGlassEffect,
   type LiquidGlassParams,
 } from '../../lib/liquid-glass'
@@ -133,7 +135,9 @@ function LiquidGlassButtonGroupItem({
 }
 
 function getThumbRadius(borderRadius: number, height: number): number {
-  if (borderRadius >= 999 || borderRadius >= height / 2) return 999
+  if (borderRadius >= PILL_BORDER_RADIUS || borderRadius >= height / 2) {
+    return PILL_BORDER_RADIUS
+  }
   return Math.max(0, borderRadius - THUMB_INSET)
 }
 
@@ -307,7 +311,7 @@ function LiquidGlassButtonGroupSlider({
     (): LiquidGlassParams => ({
       borderRadius: thumbRadius,
       edgeFalloff: thumbGlassParams?.edgeFalloff ?? glassParams?.edgeFalloff,
-      strength: thumbGlassParams?.strength ?? glassParams?.strength ?? 1.15,
+      strength: thumbGlassParams?.strength ?? glassParams?.strength ?? DEFAULT_THUMB_STRENGTH,
     }),
     [
       glassParams?.edgeFalloff,
@@ -555,7 +559,7 @@ function LiquidGlassButtonGroupSlider({
                 width: thumbRect.width,
                 height: thumbRect.height,
                 transform: `translate3d(${thumbRect.left}px, ${thumbRect.top}px, 0)`,
-                borderRadius: thumbRadius >= 999 ? '999px' : `${thumbRadius}px`,
+                borderRadius: thumbRadius >= PILL_BORDER_RADIUS ? '999px' : `${thumbRadius}px`,
               }}
             />
           )}

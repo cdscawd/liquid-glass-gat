@@ -3,8 +3,6 @@
 .liquid-glass-card {
   @include glass-surface;
   @include glass-text;
-  contain: layout style paint;
-  isolation: isolate;
   display: flex;
   flex-direction: column;
   min-width: 200px;
@@ -30,7 +28,7 @@
 
   &__body {
     flex: 1;
-    color: rgba(255, 255, 255, 0.85);
+    color: $glass-text-secondary;
     line-height: 1.5;
   }
 

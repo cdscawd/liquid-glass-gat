@@ -1,5 +1,8 @@
 import { type HTMLAttributes } from 'react'
 import {
+  DEFAULT_FILL_STRENGTH_MULTIPLIER,
+  DEFAULT_THUMB_STRENGTH,
+  GLASS_SHAPE,
   LiquidGlassFilter,
   useLiquidGlassEffect,
   type LiquidGlassParams,
@@ -8,12 +11,14 @@ import './LiquidGlassProgress.scss'
 
 export interface LiquidGlassProgressProps extends HTMLAttributes<HTMLDivElement> {
   glassParams?: LiquidGlassParams
+  fillGlassParams?: LiquidGlassParams
   value?: number
   max?: number
 }
 
 export function LiquidGlassProgress({
   glassParams,
+  fillGlassParams,
   value = 0,
   max = 100,
   className = '',
@@ -23,10 +28,8 @@ export function LiquidGlassProgress({
   const percent = max > 0 ? Math.min(Math.max((value / max) * 100, 0), 100) : 0
 
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLDivElement>({
-      borderRadius: glassParams?.borderRadius ?? 999,
-      edgeFalloff: glassParams?.edgeFalloff,
-      strength: glassParams?.strength,
+    useLiquidGlassEffect<HTMLDivElement>(glassParams, {
+      preset: { borderRadius: GLASS_SHAPE.pill },
     })
 
   const {
@@ -36,10 +39,11 @@ export function LiquidGlassProgress({
     mapUrl: fillMapUrl,
     filterSize: fillFilterSize,
     filterStyle: fillFilterStyle,
-  } = useLiquidGlassEffect<HTMLDivElement>({
-    borderRadius: glassParams?.borderRadius ?? 999,
-    edgeFalloff: glassParams?.edgeFalloff,
-    strength: (glassParams?.strength ?? 1) * 1.1,
+  } = useLiquidGlassEffect<HTMLDivElement>(fillGlassParams, {
+    preset: {
+      borderRadius: GLASS_SHAPE.pill,
+      strength: DEFAULT_THUMB_STRENGTH * DEFAULT_FILL_STRENGTH_MULTIPLIER,
+    },
   })
 
   return (

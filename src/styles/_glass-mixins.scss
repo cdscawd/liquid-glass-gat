@@ -3,23 +3,80 @@
 
 @mixin glass-surface {
   position: relative;
+  contain: layout style paint;
+  isolation: isolate;
   overflow: hidden;
   border: 1px solid $glass-border;
   border-radius: $glass-radius;
-  background: rgba(255, 255, 255, 0.06);
+  background: $glass-bg;
   box-shadow:
     $glass-shadow-outer 0 4px 8px,
     $glass-shadow-inner 0 -10px 25px inset;
 }
 
 @mixin glass-text {
-  color: #fff;
+  color: $glass-text-primary;
   font-family: $font-sans;
 }
 
 @mixin glass-focus-ring {
   &:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.45);
+    outline: 2px solid $glass-focus-ring;
     outline-offset: 2px;
   }
+}
+
+@mixin glass-surface-hover {
+  &:hover {
+    background: $glass-bg-hover;
+  }
+}
+
+@mixin glass-surface-selected {
+  background: $glass-bg-selected;
+}
+
+@mixin glass-interactive {
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: $glass-bg-hover;
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @include glass-focus-ring;
+}
+
+@mixin glass-input-host {
+  transition: background-color 0.2s ease;
+
+  &:focus-within {
+    background: $glass-bg-focus;
+  }
+}
+
+@mixin glass-thumb {
+  background: $glass-bg-thumb;
+  box-shadow:
+    $glass-thumb-highlight 0 1px 0 inset,
+    0 8px 20px $glass-shadow-outer,
+    0 0 0 1px $glass-thumb-ring inset;
+}
+
+@mixin glass-overlay-backdrop {
+  padding: 0;
+  border: none;
+  background: $glass-overlay;
+  cursor: pointer;
 }

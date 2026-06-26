@@ -12,11 +12,11 @@
   padding: 14px 16px;
 
   &--success {
-    border-color: rgba(120, 255, 180, 0.35);
+    border-color: $glass-border-success;
   }
 
   &--error {
-    border-color: rgba(255, 120, 120, 0.35);
+    border-color: $glass-border-error;
   }
 
   &__title {
@@ -26,7 +26,7 @@
 
   &__desc {
     margin-top: 4px;
-    color: rgba(255, 255, 255, 0.8);
+    color: $glass-text-secondary;
     font-size: 13px;
     line-height: 1.45;
   }

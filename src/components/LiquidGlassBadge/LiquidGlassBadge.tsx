@@ -1,5 +1,6 @@
 import { type HTMLAttributes } from 'react'
 import {
+  GLASS_SHAPE,
   LiquidGlassFilter,
   useLiquidGlassEffect,
   type LiquidGlassParams,
@@ -24,14 +25,12 @@ export function LiquidGlassBadge({
   children,
   ...props
 }: LiquidGlassBadgeProps) {
-  const resolvedParams = {
-    borderRadius: glassParams?.borderRadius ?? (variant === 'chip' ? 999 : 6),
-    edgeFalloff: glassParams?.edgeFalloff,
-    strength: glassParams?.strength,
-  }
-
   const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
-    useLiquidGlassEffect<HTMLSpanElement>(resolvedParams)
+    useLiquidGlassEffect<HTMLSpanElement>(glassParams, {
+      preset: {
+        borderRadius: variant === 'chip' ? GLASS_SHAPE.pill : GLASS_SHAPE.badge,
+      },
+    })
 
   const sizeClass = size === 'md' ? '' : ` liquid-glass-badge--${size}`
   const variantClass =

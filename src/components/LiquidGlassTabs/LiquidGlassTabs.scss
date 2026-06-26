@@ -1,3 +1,5 @@
+@use '../../styles/glass-mixins' as *;
+
 .liquid-glass-tabs {
   display: flex;
   flex-direction: column;
@@ -7,12 +9,14 @@
   max-width: 480px;
 
   &__panel {
+    @include glass-surface;
+    @include glass-text;
     width: 100%;
     padding: 16px;
-    color: rgba(255, 255, 255, 0.88);
     font-size: 14px;
     line-height: 1.5;
     text-align: center;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    color: $glass-text-secondary;
+    text-shadow: 0 1px 4px $glass-shadow-outer;
   }
 }

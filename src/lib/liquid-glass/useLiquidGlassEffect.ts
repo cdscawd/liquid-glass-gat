@@ -8,9 +8,15 @@ import {
   type CSSProperties,
   type RefObject,
 } from 'react'
-import { DEFAULT_BORDER_RADIUS, BACKDROP_FILTER } from './constants'
+import { BACKDROP_FILTER } from './constants'
+import { useLiquidGlassDefaults } from './LiquidGlassProvider'
 import { generateDisplacementMap } from './generateDisplacementMap'
+import { resolveGlassParams } from './resolveGlassParams'
 import type { LiquidGlassParams } from './types'
+
+export interface UseLiquidGlassEffectOptions {
+  preset?: Partial<LiquidGlassParams>
+}
 
 export interface UseLiquidGlassEffectResult<T extends HTMLElement> {
   hostRef: RefObject<T | null>
@@ -20,6 +26,7 @@ export interface UseLiquidGlassEffectResult<T extends HTMLElement> {
   filterSize: { width: number; height: number }
   filterStyle: CSSProperties
   borderRadius: number
+  resolvedParams: LiquidGlassParams
 }
 
 function scheduleIdle(callback: () => void, timeout = 120): number {
@@ -39,7 +46,15 @@ function cancelIdle(id: number) {
 
 export function useLiquidGlassEffect<T extends HTMLElement>(
   glassParams?: LiquidGlassParams,
+  options?: UseLiquidGlassEffectOptions,
 ): UseLiquidGlassEffectResult<T> {
+  const contextParams = useLiquidGlassDefaults()
+  const resolvedParams = resolveGlassParams(
+    glassParams,
+    contextParams,
+    options?.preset,
+  )
+
   const reactId = useId().replace(/:/g, '')
   const filterId = `liquid-glass-${reactId}`
   const mapId = `${filterId}-map`
@@ -48,24 +63,21 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
   const [mapUrl, setMapUrl] = useState('')
   const [filterSize, setFilterSize] = useState({ width: 0, height: 0 })
 
-  const lastSizeRef = useRef({ width: 0, height: 0 })
   const idleIdRef = useRef<number | null>(null)
   const measureRafRef = useRef<number | null>(null)
   const debounceMeasureRef = useRef<number | null>(null)
-
   const lastMapKeyRef = useRef('')
 
-  const borderRadius = glassParams?.borderRadius ?? DEFAULT_BORDER_RADIUS
+  const { borderRadius, edgeFalloff, strength } = resolvedParams
 
   const updateMap = useCallback(
     (width: number, height: number) => {
       if (width < 2 || height < 2) return
 
-      const mapKey = `${width}x${height}:${borderRadius}:${glassParams?.edgeFalloff ?? ''}:${glassParams?.strength ?? ''}`
+      const mapKey = `${width}x${height}:${borderRadius}:${edgeFalloff ?? ''}:${strength ?? ''}`
       if (lastMapKeyRef.current === mapKey) return
 
       lastMapKeyRef.current = mapKey
-      lastSizeRef.current = { width, height }
       setFilterSize({ width, height })
 
       if (idleIdRef.current !== null) {
@@ -79,13 +91,13 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
             width,
             height,
             borderRadius,
-            edgeFalloff: glassParams?.edgeFalloff,
-            strength: glassParams?.strength,
+            edgeFalloff,
+            strength,
           }),
         )
       })
     },
-    [borderRadius, glassParams?.edgeFalloff, glassParams?.strength],
+    [borderRadius, edgeFalloff, strength],
   )
 
   useEffect(() => {
@@ -147,6 +159,7 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
     mapUrl,
     filterSize,
     filterStyle,
-    borderRadius,
+    borderRadius: borderRadius ?? 8,
+    resolvedParams,
   }
 }

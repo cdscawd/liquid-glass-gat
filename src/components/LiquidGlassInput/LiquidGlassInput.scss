@@ -2,14 +2,10 @@
 
 .liquid-glass-input {
   @include glass-surface;
+  @include glass-input-host;
   display: inline-flex;
   align-items: center;
   min-width: 180px;
-  transition: background-color 0.2s ease;
-
-  &:focus-within {
-    background: rgba(255, 255, 255, 0.1);
-  }
 
   &--sm {
     min-width: 140px;
@@ -24,14 +20,14 @@
     padding: 10px 14px;
     border: none;
     background: transparent;
-    color: #fff;
+    color: $glass-text-primary;
     font-family: $font-sans;
     font-size: 14px;
     line-height: 1.25;
     outline: none;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.45);
+      color: $glass-text-faint;
     }
 
     &:disabled {

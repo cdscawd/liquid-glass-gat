@@ -30,13 +30,11 @@
   }
 
   &__backdrop {
+    @include glass-overlay-backdrop;
     position: fixed;
     inset: 0;
     z-index: 39;
-    padding: 0;
-    border: none;
-    background: rgba(0, 0, 0, 0.35);
-    cursor: pointer;
+    background: $glass-overlay-light;
   }
 
   &__title {
@@ -49,7 +47,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    color: rgba(255, 255, 255, 0.85);
+    color: $glass-text-secondary;
     font-size: 14px;
     line-height: 1.5;
   }

@@ -3,6 +3,7 @@ import { AppNewComponents } from './AppNewComponents'
 import { CyberspaceBackground } from './components/CyberspaceBackground'
 import { LiquidGlassButton } from './components/LiquidGlassButton'
 import { LiquidGlassButtonGroup } from './components/LiquidGlassButtonGroup'
+import { LiquidGlassProvider } from './lib/liquid-glass'
 import type { LiquidGlassParams } from './lib/liquid-glass'
 import './App.scss'
 
@@ -402,6 +403,11 @@ function renderButtonGroup(
 
 function App() {
   const [groupValues, setGroupValues] = useState(INITIAL_GROUP_VALUES)
+  const [globalGlass, setGlobalGlass] = useState<LiquidGlassParams>({
+    borderRadius: 8,
+    strength: 1,
+    edgeFalloff: 14,
+  })
 
   const setGroupValue = (name: string, value: string) => {
     setGroupValues((prev) => ({ ...prev, [name]: value }))
@@ -410,8 +416,42 @@ function App() {
   return (
     <>
       <CyberspaceBackground />
-      <main className="app">
-        <h1 className="app__title">Liquid Glass Components</h1>
+      <LiquidGlassProvider glassParams={globalGlass}>
+        <main className="app">
+          <h1 className="app__title">Liquid Glass Components</h1>
+
+          <section className="app__section">
+            <h2 className="app__section-title">Global Theme (Provider)</h2>
+            <p className="app__section-hint">
+              通过 LiquidGlassProvider 注入全局 glassParams，下方所有组件继承默认值
+            </p>
+            <div className="app__row">
+              <LiquidGlassButton
+                size="sm"
+                onClick={() =>
+                  setGlobalGlass({ borderRadius: 8, strength: 1, edgeFalloff: 14 })
+                }
+              >
+                Default
+              </LiquidGlassButton>
+              <LiquidGlassButton
+                size="sm"
+                onClick={() =>
+                  setGlobalGlass({ borderRadius: 12, strength: 1.35, edgeFalloff: 20 })
+                }
+              >
+                Strong
+              </LiquidGlassButton>
+              <LiquidGlassButton
+                size="sm"
+                onClick={() =>
+                  setGlobalGlass({ borderRadius: 999, strength: 0.85, edgeFalloff: 16 })
+                }
+              >
+                Pill Soft
+              </LiquidGlassButton>
+            </div>
+          </section>
 
         <section className="app__section">
           <h2 className="app__section-title">Buttons</h2>
@@ -462,6 +502,7 @@ function App() {
           赛博隧道 Three.js 背景自动循环 · 玻璃折射建议在 Chrome 查看
         </p>
       </main>
+      </LiquidGlassProvider>
     </>
   )
 }

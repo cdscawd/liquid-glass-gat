@@ -19,12 +19,9 @@
   }
 
   &__backdrop {
+    @include glass-overlay-backdrop;
     position: absolute;
     inset: 0;
-    padding: 0;
-    border: none;
-    background: rgba(0, 0, 0, 0.45);
-    cursor: pointer;
   }
 
   &__title {
@@ -34,7 +31,7 @@
   }
 
   &__body {
-    color: rgba(255, 255, 255, 0.88);
+    color: $glass-text-secondary;
     font-size: 14px;
     line-height: 1.55;
   }
