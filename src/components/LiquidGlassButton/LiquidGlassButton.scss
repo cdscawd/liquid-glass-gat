@@ -1,0 +1,67 @@
+@use '../../styles/variables' as *;
+
+.liquid-glass-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.liquid-glass-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 20px;
+  border: 1px solid $glass-border;
+  border-radius: $glass-radius;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow:
+    $glass-shadow-outer 0 4px 8px,
+    $glass-shadow-inner 0 -10px 25px inset;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  &--sm {
+    min-height: 32px;
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  &--lg {
+    min-height: 48px;
+    padding: 12px 28px;
+    font-size: 16px;
+  }
+}
