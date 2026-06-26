@@ -1,0 +1,23 @@
+@use '../../styles/glass-mixins' as *;
+
+.popover-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-text;
+  position: fixed;
+  z-index: 45;
+  min-width: 160px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  transform: translateX(-50%);
+
+  &__trigger {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+}

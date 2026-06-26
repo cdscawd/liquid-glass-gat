@@ -21,7 +21,7 @@ export function LiquidGlassFilter({
     <svg
       width={0}
       height={0}
-      className="liquid-glass-filter"
+      className="filter-liquid-glass"
       aria-hidden
     >
       <defs>

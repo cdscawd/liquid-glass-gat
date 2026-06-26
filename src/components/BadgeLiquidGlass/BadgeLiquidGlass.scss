@@ -1,0 +1,30 @@
+@use '../../styles/glass-mixins' as *;
+
+.badge-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-text;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  &--chip {
+    padding: 6px 14px;
+    cursor: default;
+  }
+
+  &--sm {
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+
+  &--lg {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+}

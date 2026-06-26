@@ -8,51 +8,92 @@ export interface DemoNavGroup {
   items: DemoNavItem[]
 }
 
+/** 每个已导出组件对应独立导航项与页面板块 */
 export const DEMO_NAV: DemoNavGroup[] = [
   {
     title: '全局',
     items: [{ id: 'theme', label: 'Provider 主题' }],
   },
   {
-    title: '基础',
+    title: '通用',
     items: [
       { id: 'button', label: 'Button' },
       { id: 'button-group', label: 'Button Group' },
-      { id: 'badge', label: 'Badge & Icon' },
+      { id: 'icon-button', label: 'Icon Button' },
+      { id: 'float-button', label: 'Float Button' },
     ],
   },
   {
-    title: '表单',
+    title: '数据展示',
     items: [
-      { id: 'form', label: 'Input & Controls' },
-      { id: 'data-entry', label: 'Checkbox & Select' },
+      { id: 'badge', label: 'Badge' },
+      { id: 'tag', label: 'Tag' },
+      { id: 'avatar', label: 'Avatar' },
+      { id: 'avatar-group', label: 'Avatar Group' },
+      { id: 'card', label: 'Card' },
+      { id: 'media-card', label: 'Media Card' },
+      { id: 'list', label: 'List' },
+      { id: 'empty', label: 'Empty' },
+      { id: 'statistic', label: 'Statistic' },
+      { id: 'timeline', label: 'Timeline' },
+      { id: 'collapse', label: 'Collapse' },
+      { id: 'typography', label: 'Typography' },
     ],
   },
   {
-    title: '容器',
+    title: '数据录入',
     items: [
-      { id: 'card', label: 'Card & Media' },
-      { id: 'tabs', label: 'Tabs' },
-      { id: 'list', label: 'List & Avatar' },
-      { id: 'data-display', label: 'Empty & Collapse' },
+      { id: 'input', label: 'Input' },
+      { id: 'textarea', label: 'Textarea' },
+      { id: 'select', label: 'Select' },
+      { id: 'checkbox', label: 'Checkbox' },
+      { id: 'radio', label: 'Radio' },
+      { id: 'switch', label: 'Switch' },
+      { id: 'slider', label: 'Slider' },
+      { id: 'rate', label: 'Rate' },
     ],
   },
   {
-    title: '布局',
-    items: [{ id: 'layout', label: 'Space & Typography' }],
+    title: '反馈',
+    items: [
+      { id: 'alert', label: 'Alert' },
+      { id: 'toast', label: 'Toast' },
+      { id: 'spin', label: 'Spin' },
+      { id: 'skeleton', label: 'Skeleton' },
+      { id: 'progress', label: 'Progress' },
+      { id: 'result', label: 'Result' },
+      { id: 'popconfirm', label: 'Popconfirm' },
+    ],
   },
   {
     title: '导航',
     items: [
-      { id: 'navigation', label: 'Navbar & Dock' },
-      { id: 'nav-more', label: 'Steps & Menu' },
+      { id: 'breadcrumb', label: 'Breadcrumb' },
+      { id: 'menu', label: 'Menu' },
+      { id: 'dropdown', label: 'Dropdown' },
+      { id: 'pagination', label: 'Pagination' },
+      { id: 'steps', label: 'Steps' },
+      { id: 'anchor', label: 'Anchor' },
+      { id: 'navbar', label: 'Navbar' },
+      { id: 'dock', label: 'Dock' },
+      { id: 'tabs', label: 'Tabs' },
+    ],
+  },
+  {
+    title: '布局',
+    items: [
+      { id: 'space', label: 'Space' },
+      { id: 'divider', label: 'Divider' },
+      { id: 'affix', label: 'Affix' },
     ],
   },
   {
     title: '浮层',
     items: [
-      { id: 'overlay', label: 'Modal & Feedback' },
-      { id: 'feedback', label: 'Spin & Result' },
+      { id: 'modal', label: 'Modal' },
+      { id: 'drawer', label: 'Drawer' },
+      { id: 'popover', label: 'Popover' },
+      { id: 'tooltip', label: 'Tooltip' },
     ],
   },
 ]

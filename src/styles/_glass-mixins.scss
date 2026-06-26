@@ -1,4 +1,5 @@
 @forward 'variables';
+@use 'sass:color';
 @use 'variables' as *;
 
 @mixin glass-surface {
@@ -6,48 +7,59 @@
   contain: layout style paint;
   isolation: isolate;
   overflow: hidden;
-  border: 1px solid $glass-border;
+  border: 1px solid var(--lg-surface-border, #{$glass-border});
   border-radius: $glass-radius;
-  background: $glass-bg;
+  background: var(--lg-surface-bg, #{$glass-bg});
+  color: var(--lg-surface-text, #{$glass-text-primary});
   box-shadow:
     $glass-shadow-outer 0 4px 8px,
-    $glass-shadow-inner 0 -10px 25px inset;
+    $glass-shadow-inner 0 -10px 25px inset,
+    inset 0 0 48px var(--lg-surface-glow, transparent),
+    inset 0 1px 0 var(--lg-surface-glow-strong, transparent);
 }
 
 @mixin glass-text {
-  color: $glass-text-primary;
+  color: var(--lg-surface-text, #{$glass-text-primary});
   font-family: $font-sans;
 }
 
 @mixin glass-focus-ring {
   &:focus-visible {
-    outline: 2px solid $glass-focus-ring;
+    outline: 2px solid var(--lg-surface-border, #{$glass-focus-ring});
     outline-offset: 2px;
   }
 }
 
 @mixin glass-surface-hover {
   &:hover {
-    background: $glass-bg-hover;
+    background: var(--lg-surface-bg-hover, #{$glass-bg-hover});
   }
 }
 
 @mixin glass-surface-selected {
-  background: $glass-bg-selected;
+  background: var(--lg-surface-bg-active, #{$glass-bg-selected});
 }
 
 @mixin glass-interactive {
   cursor: pointer;
   transition:
     background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
     opacity 0.15s ease;
 
   &:hover:not(:disabled) {
-    background: $glass-bg-hover;
+    background: var(--lg-surface-bg-hover, #{$glass-bg-hover});
+    box-shadow:
+      $glass-shadow-outer 0 4px 8px,
+      $glass-shadow-inner 0 -10px 25px inset,
+      inset 0 0 56px var(--lg-surface-glow, transparent),
+      inset 0 1px 0 var(--lg-surface-glow-strong, transparent);
   }
 
   &:active:not(:disabled) {
-    opacity: 0.88;
+    background: var(--lg-surface-bg-active, #{$glass-bg-active});
+    opacity: 0.92;
   }
 
   &:disabled {
@@ -59,19 +71,28 @@
 }
 
 @mixin glass-input-host {
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:focus-within {
-    background: $glass-bg-focus;
+    background: var(--lg-surface-bg-focus, #{$glass-bg-focus});
+    box-shadow:
+      $glass-shadow-outer 0 4px 8px,
+      $glass-shadow-inner 0 -10px 25px inset,
+      inset 0 0 52px var(--lg-surface-glow, transparent),
+      inset 0 1px 0 var(--lg-surface-glow-strong, transparent);
   }
 }
 
 @mixin glass-thumb {
-  background: $glass-bg-thumb;
+  background: var(--lg-surface-bg-active, #{$glass-bg-thumb});
   box-shadow:
     $glass-thumb-highlight 0 1px 0 inset,
     0 8px 20px $glass-shadow-outer,
-    0 0 0 1px $glass-thumb-ring inset;
+    0 0 0 1px $glass-thumb-ring inset,
+    inset 0 0 24px var(--lg-surface-glow, transparent);
 }
 
 @mixin glass-overlay-backdrop {
@@ -79,4 +100,58 @@
   border: none;
   background: $glass-overlay;
   cursor: pointer;
+}
+
+@function glass-alpha($c, $alpha) {
+  @return color.change($c, $alpha: $alpha);
+}
+
+@function glass-variant-text($c) {
+  @return color.mix(white, $c, 92%);
+}
+
+@mixin glass-variant-from-color($color) {
+  --lg-variant-color: #{$color};
+  --lg-surface-border: #{glass-alpha($color, 0.58)};
+  --lg-surface-bg: #{glass-alpha($color, 0.22)};
+  --lg-surface-bg-hover: #{glass-alpha($color, 0.32)};
+  --lg-surface-bg-active: #{glass-alpha($color, 0.38)};
+  --lg-surface-bg-focus: #{glass-alpha($color, 0.3)};
+  --lg-surface-text: #{glass-variant-text($color)};
+  --lg-surface-glow: #{glass-alpha($color, 0.28)};
+  --lg-surface-glow-strong: #{glass-alpha($color, 0.42)};
+  border-color: var(--lg-surface-border);
+  background: var(--lg-surface-bg);
+  color: var(--lg-surface-text);
+  box-shadow:
+    $glass-shadow-outer 0 4px 8px,
+    $glass-shadow-inner 0 -10px 25px inset,
+    inset 0 0 48px var(--lg-surface-glow),
+    inset 0 1px 0 var(--lg-surface-glow-strong);
+
+  &:hover:not(:disabled) {
+    background: var(--lg-surface-bg-hover);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--lg-surface-bg-active);
+  }
+
+  &:focus-within {
+    background: var(--lg-surface-bg-focus);
+  }
+}
+
+@mixin glass-variant-modifiers {
+  &--primary {
+    @include glass-variant-from-color($glass-variant-primary);
+  }
+
+  &--danger {
+    @include glass-variant-from-color($glass-variant-danger);
+  }
+
+  &--success {
+    @include glass-variant-from-color($glass-variant-success);
+  }
 }

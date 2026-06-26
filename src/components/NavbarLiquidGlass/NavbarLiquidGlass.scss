@@ -1,0 +1,27 @@
+@use '../../styles/glass-mixins' as *;
+
+.navbar-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: 640px;
+  padding: 10px 16px;
+
+  &__brand {
+    font-size: 15px;
+    font-weight: 600;
+    color: $glass-text-primary;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+}

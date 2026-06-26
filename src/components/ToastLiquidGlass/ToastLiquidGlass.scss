@@ -1,0 +1,34 @@
+@use '../../styles/glass-mixins' as *;
+
+.toast-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-text;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 55;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 14px 16px;
+
+  &--success {
+    border-color: $glass-border-success;
+  }
+
+  &--error {
+    border-color: $glass-border-error;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__desc {
+    margin-top: 4px;
+    color: $glass-text-secondary;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}

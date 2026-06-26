@@ -1,9 +1,11 @@
 @use '../styles/variables' as *;
 
 .demo-sidebar {
-  &.liquid-glass-card {
+  &.card-liquid-glass {
     position: sticky;
     top: 0;
+    display: flex;
+    flex-direction: column;
     flex-shrink: 0;
     width: 220px;
     height: 100svh;
@@ -39,7 +41,7 @@
   }
 
   &__divider {
-    &.liquid-glass-divider--horizontal {
+    &.divider-liquid-glass--horizontal {
       width: 100%;
       max-width: none;
       margin-bottom: 14px;
@@ -69,16 +71,16 @@
   }
 
   &__list {
-    &.liquid-glass-list {
+    &.list-liquid-glass {
       max-width: none;
       padding: 2px;
     }
 
-    .liquid-glass-list__btn {
+    .list-liquid-glass__btn {
       padding: 8px 10px;
     }
 
-    .liquid-glass-list__title {
+    .list-liquid-glass__title {
       font-size: 13px;
       font-weight: 500;
     }
@@ -87,7 +89,7 @@
 
 @media (max-width: 768px) {
   .demo-sidebar {
-    &.liquid-glass-card {
+    &.card-liquid-glass {
       position: relative;
       width: 100%;
       height: auto;

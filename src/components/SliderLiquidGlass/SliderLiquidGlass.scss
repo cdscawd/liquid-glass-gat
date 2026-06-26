@@ -1,0 +1,54 @@
+@use '../../styles/glass-mixins' as *;
+
+.slider-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  max-width: 280px;
+  height: 32px;
+  padding: 0 8px;
+
+  &__input {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+
+    &::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-track;
+    }
+
+    &::-webkit-slider-thumb {
+      width: 20px;
+      height: 20px;
+      margin-top: -8px;
+      border: 1px solid $glass-border;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-hover;
+      appearance: none;
+    }
+
+    &::-moz-range-track {
+      height: 4px;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-track;
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: 1px solid $glass-border;
+      border-radius: $glass-radius-pill;
+      background: $glass-bg-hover;
+    }
+  }
+}

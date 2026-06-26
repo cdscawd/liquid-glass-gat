@@ -15,8 +15,16 @@ export {
 } from './constants'
 export { LiquidGlassFilter } from './LiquidGlassFilter'
 export {
+  getLiquidGlassVariantStyle,
+  liquidGlassVariantClass,
+  LIQUID_GLASS_VARIANT_COLORS,
+  LIQUID_GLASS_VARIANT_VARS,
+  resolveLiquidGlassVariant,
+} from './variant'
+export {
   LiquidGlassProvider,
   useLiquidGlassDefaults,
+  useLiquidGlassVariantDefault,
   type LiquidGlassProviderProps,
 } from './LiquidGlassProvider'
 export { resolveGlassParams } from './resolveGlassParams'
@@ -25,4 +33,5 @@ export type {
   UseLiquidGlassEffectOptions,
   UseLiquidGlassEffectResult,
 } from './useLiquidGlassEffect'
+export type { LiquidGlassVariant } from './variant'
 export type { LiquidGlassMapInput, LiquidGlassParams } from './types'

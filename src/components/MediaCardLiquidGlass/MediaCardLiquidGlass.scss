@@ -1,0 +1,33 @@
+.media-card-liquid-glass {
+  min-width: 240px;
+  max-width: 320px;
+  padding: 0;
+  overflow: hidden;
+
+  .card-liquid-glass__header,
+  .card-liquid-glass__body,
+  .card-liquid-glass__footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .card-liquid-glass__header {
+    padding-top: 14px;
+  }
+
+  .card-liquid-glass__footer {
+    padding-bottom: 14px;
+  }
+
+  &__media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

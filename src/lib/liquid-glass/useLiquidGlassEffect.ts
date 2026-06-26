@@ -9,13 +9,21 @@ import {
   type RefObject,
 } from 'react'
 import { BACKDROP_FILTER } from './constants'
-import { useLiquidGlassDefaults } from './LiquidGlassProvider'
+import { useLiquidGlassDefaults, useLiquidGlassVariantDefault } from './LiquidGlassProvider'
 import { generateDisplacementMap } from './generateDisplacementMap'
 import { resolveGlassParams } from './resolveGlassParams'
 import type { LiquidGlassParams } from './types'
+import {
+  liquidGlassVariantClass,
+  resolveLiquidGlassVariant,
+  type LiquidGlassVariant,
+} from './variant'
 
 export interface UseLiquidGlassEffectOptions {
   preset?: Partial<LiquidGlassParams>
+  /** 组件根 class，用于生成 --primary 等 modifier */
+  baseClass?: string
+  variant?: LiquidGlassVariant
 }
 
 export interface UseLiquidGlassEffectResult<T extends HTMLElement> {
@@ -27,6 +35,8 @@ export interface UseLiquidGlassEffectResult<T extends HTMLElement> {
   filterStyle: CSSProperties
   borderRadius: number
   resolvedParams: LiquidGlassParams
+  variant: LiquidGlassVariant
+  variantClass: string
 }
 
 function scheduleIdle(callback: () => void, timeout = 120): number {
@@ -49,6 +59,11 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
   options?: UseLiquidGlassEffectOptions,
 ): UseLiquidGlassEffectResult<T> {
   const contextParams = useLiquidGlassDefaults()
+  const contextVariant = useLiquidGlassVariantDefault()
+  const resolvedVariant = resolveLiquidGlassVariant(options?.variant, contextVariant)
+  const variantClass = options?.baseClass
+    ? liquidGlassVariantClass(options.baseClass, resolvedVariant)
+    : ''
   const resolvedParams = resolveGlassParams(
     glassParams,
     contextParams,
@@ -144,13 +159,12 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
     }
   }, [updateMap])
 
-  const filterStyle = useMemo(
-    (): CSSProperties => ({
+  const filterStyle = useMemo((): CSSProperties => {
+    return {
       backdropFilter: `url(#${filterId}) ${BACKDROP_FILTER}`,
       WebkitBackdropFilter: `url(#${filterId}) ${BACKDROP_FILTER}`,
-    }),
-    [filterId],
-  )
+    }
+  }, [filterId])
 
   return {
     hostRef,
@@ -161,5 +175,7 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
     filterStyle,
     borderRadius: borderRadius ?? 8,
     resolvedParams,
+    variant: resolvedVariant,
+    variantClass,
   }
 }

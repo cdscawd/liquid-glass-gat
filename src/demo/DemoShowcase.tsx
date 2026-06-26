@@ -2,23 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { CyberspaceBackground } from '../components/CyberspaceBackground'
 import { LiquidGlassProvider } from '../lib/liquid-glass'
 import type { LiquidGlassParams } from '../lib/liquid-glass'
-import {
-  BadgeSection,
-  ButtonGroupSection,
-  ButtonSection,
-  CardSection,
-  DataDisplaySection,
-  DataEntrySection,
-  FeedbackSection,
-  FormSection,
-  LayoutSection,
-  ListSection,
-  NavMoreSection,
-  NavigationSection,
-  OverlaySection,
-  TabsSection,
-  ThemeSection,
-} from './DemoSections'
+import { DEMO_SECTIONS, ThemeSection } from './DemoSections'
 import { DemoSidebar } from './DemoSidebar'
 import { DEMO_NAV_ITEMS } from './demoNav'
 import './DemoShowcase.scss'
@@ -82,20 +66,9 @@ export function DemoShowcase() {
             </header>
 
             <ThemeSection globalGlass={globalGlass} onThemeChange={setGlobalGlass} />
-            <ButtonSection />
-            <ButtonGroupSection />
-            <BadgeSection />
-            <FormSection />
-            <DataEntrySection />
-            <CardSection />
-            <TabsSection />
-            <ListSection />
-            <DataDisplaySection />
-            <LayoutSection />
-            <NavigationSection />
-            <NavMoreSection />
-            <OverlaySection />
-            <FeedbackSection />
+            {DEMO_SECTIONS.map(({ id, Component }) => (
+              <Component key={id} />
+            ))}
 
             <footer className="demo-showcase__footer">
               赛博隧道 Three.js 背景 · 玻璃折射建议在 Chrome 查看

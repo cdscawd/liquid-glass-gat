@@ -39,7 +39,12 @@ $glass-focus-ring: rgba(255, 255, 255, 0.45);
 $glass-overlay: rgba(0, 0, 0, 0.4);
 $glass-overlay-light: rgba(0, 0, 0, 0.35);
 
-// Liquid Glass — 语义边框
+// Liquid Glass — 语义 variant 基色（border / bg / text / glow 由 mixin 自动推导）
+$glass-variant-primary: #2161f7;
+$glass-variant-danger: #ff3c3c;
+$glass-variant-success: #28b464;
+
+// Liquid Glass — 语义边框（Alert / Toast / Steps 等待办状态，非 variant 体系）
 $glass-border-info: rgba(140, 180, 255, 0.35);
 $glass-border-success: rgba(120, 255, 180, 0.35);
 $glass-border-warning: rgba(255, 210, 120, 0.35);

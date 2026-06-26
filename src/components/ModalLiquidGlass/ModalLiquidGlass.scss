@@ -1,0 +1,46 @@
+@use '../../styles/glass-mixins' as *;
+
+.modal-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-text;
+  position: relative;
+  z-index: 51;
+  width: min(420px, calc(100vw - 32px));
+  padding: 20px 22px;
+
+  &__root {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  &__backdrop {
+    @include glass-overlay-backdrop;
+    position: absolute;
+    inset: 0;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  &__body {
+    color: $glass-text-secondary;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+  }
+}

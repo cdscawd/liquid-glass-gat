@@ -1,0 +1,41 @@
+@use '../../styles/glass-mixins' as *;
+
+.card-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-text;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 16px 20px;
+
+  &--sm {
+    min-width: 160px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  &--lg {
+    min-width: 280px;
+    padding: 20px 24px;
+    font-size: 15px;
+  }
+
+  &__header {
+    margin-bottom: 12px;
+    font-size: 1.05em;
+    font-weight: 600;
+  }
+
+  &__body {
+    flex: 1;
+    color: $glass-text-secondary;
+    line-height: 1.5;
+  }
+
+  &__footer {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}

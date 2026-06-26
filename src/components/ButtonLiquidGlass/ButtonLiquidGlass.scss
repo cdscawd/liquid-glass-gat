@@ -1,0 +1,29 @@
+@use '../../styles/glass-mixins' as *;
+
+.button-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-interactive;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+
+  &--sm {
+    min-height: 32px;
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  &--lg {
+    min-height: 48px;
+    padding: 12px 28px;
+    font-size: 16px;
+  }
+}

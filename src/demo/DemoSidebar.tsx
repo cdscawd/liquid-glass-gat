@@ -1,9 +1,9 @@
 import {
-  LiquidGlassAvatar,
-  LiquidGlassBadge,
-  LiquidGlassCard,
-  LiquidGlassDivider,
-  LiquidGlassList,
+  AvatarLiquidGlass,
+  BadgeLiquidGlass,
+  CardLiquidGlass,
+  DividerLiquidGlass,
+  ListLiquidGlass,
 } from '../components'
 import { DEMO_NAV } from './demoNav'
 import './DemoSidebar.scss'
@@ -15,22 +15,22 @@ interface DemoSidebarProps {
 
 export function DemoSidebar({ activeId, onNavigate }: DemoSidebarProps) {
   return (
-    <LiquidGlassCard
+    <CardLiquidGlass
       className="demo-sidebar"
       size="sm"
       glassParams={{ borderRadius: 12, strength: 0.85, edgeFalloff: 14 }}
     >
       <div className="demo-sidebar__brand">
-        <LiquidGlassAvatar fallback="LG" size="sm" />
+        <AvatarLiquidGlass fallback="LG" size="sm" />
         <div className="demo-sidebar__brand-text">
           <div className="demo-sidebar__title">Liquid Glass</div>
-          <LiquidGlassBadge variant="chip" size="sm">
+          <BadgeLiquidGlass variant="chip" size="sm">
             Showcase
-          </LiquidGlassBadge>
+          </BadgeLiquidGlass>
         </div>
       </div>
 
-      <LiquidGlassDivider
+      <DividerLiquidGlass
         orientation="horizontal"
         className="demo-sidebar__divider"
         glassParams={{ borderRadius: 999, strength: 0.5, edgeFalloff: 6 }}
@@ -40,7 +40,7 @@ export function DemoSidebar({ activeId, onNavigate }: DemoSidebarProps) {
         {DEMO_NAV.map((group) => (
           <div key={group.title} className="demo-sidebar__group">
             <div className="demo-sidebar__group-title">{group.title}</div>
-            <LiquidGlassList
+            <ListLiquidGlass
               className="demo-sidebar__list"
               glassParams={{ borderRadius: 8, strength: 0.75, edgeFalloff: 10 }}
               items={group.items.map((item) => ({
@@ -53,6 +53,6 @@ export function DemoSidebar({ activeId, onNavigate }: DemoSidebarProps) {
           </div>
         ))}
       </nav>
-    </LiquidGlassCard>
+    </CardLiquidGlass>
   )
 }

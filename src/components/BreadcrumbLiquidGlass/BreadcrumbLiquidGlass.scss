@@ -1,0 +1,54 @@
+@use '../../styles/glass-mixins' as *;
+
+.breadcrumb-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  display: inline-flex;
+  padding: 8px 14px;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: $glass-text-muted;
+    font-family: $font-sans;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      color: $glass-text-primary;
+    }
+
+    &--current {
+      color: $glass-text-primary;
+      font-weight: 500;
+      cursor: default;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+
+  &__sep {
+    color: $glass-text-faint;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,34 @@
+@use '../../styles/glass-mixins' as *;
+
+.textarea-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-input-host;
+  display: inline-flex;
+  min-width: 240px;
+
+  &--sm {
+    min-width: 180px;
+  }
+
+  &--lg {
+    min-width: 320px;
+  }
+
+  &__field {
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-family: $font-sans;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+
+    &::placeholder {
+      color: $glass-text-faint;
+    }
+  }
+}

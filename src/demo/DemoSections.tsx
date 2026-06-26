@@ -1,52 +1,53 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type JSX, type ReactNode } from 'react'
 import {
-  LiquidGlassAlert,
-  LiquidGlassAnchor,
-  LiquidGlassAvatar,
-  LiquidGlassAvatarGroup,
-  LiquidGlassBadge,
-  LiquidGlassBreadcrumb,
-  LiquidGlassButton,
-  LiquidGlassButtonGroup,
-  LiquidGlassCard,
-  LiquidGlassCheckbox,
-  LiquidGlassCollapse,
-  LiquidGlassDivider,
-  LiquidGlassDock,
-  LiquidGlassDrawer,
-  LiquidGlassDropdown,
-  LiquidGlassEmpty,
-  LiquidGlassFloatButton,
-  LiquidGlassIconButton,
-  LiquidGlassInput,
-  LiquidGlassList,
-  LiquidGlassMediaCard,
-  LiquidGlassMenu,
-  LiquidGlassModal,
-  LiquidGlassNavbar,
-  LiquidGlassPagination,
-  LiquidGlassPopconfirm,
-  LiquidGlassPopover,
-  LiquidGlassProgress,
-  LiquidGlassRadio,
-  LiquidGlassRadioGroup,
-  LiquidGlassRate,
-  LiquidGlassResult,
-  LiquidGlassSelect,
-  LiquidGlassSkeleton,
-  LiquidGlassSlider,
-  LiquidGlassSpace,
-  LiquidGlassSpin,
-  LiquidGlassStatistic,
-  LiquidGlassSteps,
-  LiquidGlassSwitch,
-  LiquidGlassTabs,
-  LiquidGlassTag,
-  LiquidGlassTextarea,
-  LiquidGlassTimeline,
-  LiquidGlassToast,
-  LiquidGlassTooltip,
-  LiquidGlassTypography,
+  AffixLiquidGlass,
+  AlertLiquidGlass,
+  AnchorLiquidGlass,
+  AvatarLiquidGlass,
+  AvatarGroupLiquidGlass,
+  BadgeLiquidGlass,
+  BreadcrumbLiquidGlass,
+  ButtonLiquidGlass,
+  ButtonGroupLiquidGlass,
+  CardLiquidGlass,
+  CheckboxLiquidGlass,
+  CollapseLiquidGlass,
+  DividerLiquidGlass,
+  DockLiquidGlass,
+  DrawerLiquidGlass,
+  DropdownLiquidGlass,
+  EmptyLiquidGlass,
+  FloatButtonLiquidGlass,
+  IconButtonLiquidGlass,
+  InputLiquidGlass,
+  ListLiquidGlass,
+  MediaCardLiquidGlass,
+  MenuLiquidGlass,
+  ModalLiquidGlass,
+  NavbarLiquidGlass,
+  PaginationLiquidGlass,
+  PopconfirmLiquidGlass,
+  PopoverLiquidGlass,
+  ProgressLiquidGlass,
+  RadioLiquidGlass,
+  RadioLiquidGlassGroup,
+  RateLiquidGlass,
+  ResultLiquidGlass,
+  SelectLiquidGlass,
+  SkeletonLiquidGlass,
+  SliderLiquidGlass,
+  SpaceLiquidGlass,
+  SpinLiquidGlass,
+  StatisticLiquidGlass,
+  StepsLiquidGlass,
+  SwitchLiquidGlass,
+  TabsLiquidGlass,
+  TagLiquidGlass,
+  TextareaLiquidGlass,
+  TimelineLiquidGlass,
+  ToastLiquidGlass,
+  TooltipLiquidGlass,
+  TypographyLiquidGlass,
 } from '../components'
 import type { LiquidGlassParams } from '../lib/liquid-glass'
 import { DemoBlock } from './DemoBlock'
@@ -57,7 +58,15 @@ import {
   type DemoButtonConfig,
   type DemoButtonGroupConfig,
 } from './demoData'
-import { FILL_PRESETS, GLASS_PRESETS, PANEL_PRESETS, SIZES, THUMB_PRESETS } from './demoVariants'
+import { DEMO_NAV_ITEMS } from './demoNav'
+import {
+  DisabledDemoBlock,
+  GlassPresetDemoBlocks,
+  LIQUID_GLASS_VARIANTS,
+  SizeDemoBlock,
+  VariantDemoBlock,
+} from './demoSectionHelpers'
+import { FILL_PRESETS, GLASS_PRESETS, PANEL_PRESETS, THUMB_PRESETS } from './demoVariants'
 import {
   fillPropsLine,
   formatGlassParams,
@@ -87,12 +96,30 @@ const DOCK_ITEMS = [
   { id: 'settings', label: 'Settings', icon: '⚙️' },
 ]
 
+const TIMELINE_ITEMS = [
+  { key: '1', label: '2024-01', children: 'Create project' },
+  { key: '2', label: '2024-06', children: 'Release v1.0' },
+  { key: '3', label: '2025-03', children: 'Liquid glass refresh' },
+]
+
+const STEPS_ITEMS = [
+  { title: 'Finished', description: 'Step 1' },
+  { title: 'In Progress', description: 'Step 2' },
+  { title: 'Waiting', description: 'Step 3' },
+]
+
+const ANCHOR_LINKS = DEMO_NAV_ITEMS.filter(({ id }) => id !== 'anchor').map(({ id, label }) => ({
+  key: id,
+  href: `#${id}`,
+  title: label,
+}))
+
 function buttonCode(demo: DemoButtonConfig): string {
-  return `<LiquidGlassButton\n${sizePropLine(demo.size)}${glassPropsLine(demo.glassParams)}>\n  ${demo.label}\n</LiquidGlassButton>`
+  return `<ButtonLiquidGlass\n${sizePropLine(demo.size)}${glassPropsLine(demo.glassParams)}>\n  ${demo.label}\n</ButtonLiquidGlass>`
 }
 
 function buttonGroupCode(demo: DemoButtonGroupConfig): string {
-  const lines: string[] = ['<LiquidGlassButtonGroup']
+  const lines: string[] = ['<ButtonGroupLiquidGlass']
   if (demo.variant === 'slider') lines.push('  variant="slider"')
   if (demo.size && demo.size !== 'md') lines.push(`  size="${demo.size}"`)
   lines.push(`  defaultValue="${demo.defaultValue}"`)
@@ -102,9 +129,9 @@ function buttonGroupCode(demo: DemoButtonGroupConfig): string {
   if (tgp) lines.push(`  thumbGlassParams={${tgp}}`)
   lines.push('>')
   demo.items.forEach((item) => {
-    lines.push(`  <LiquidGlassButtonGroup.Item value="${item.value}">${item.label}</LiquidGlassButtonGroup.Item>`)
+    lines.push(`  <ButtonGroupLiquidGlass.Item value="${item.value}">${item.label}</ButtonGroupLiquidGlass.Item>`)
   })
-  lines.push('</LiquidGlassButtonGroup>')
+  lines.push('</ButtonGroupLiquidGlass>')
   return lines.join('\n')
 }
 
@@ -153,24 +180,24 @@ export function ThemeSection({ globalGlass, onThemeChange }: ThemeSectionProps) 
   <App />
 </LiquidGlassProvider>`}
       >
-        <LiquidGlassButton
+        <ButtonLiquidGlass
           size="sm"
           onClick={() => onThemeChange({ borderRadius: 8, strength: 1, edgeFalloff: 14 })}
         >
           Default
-        </LiquidGlassButton>
-        <LiquidGlassButton
+        </ButtonLiquidGlass>
+        <ButtonLiquidGlass
           size="sm"
           onClick={() => onThemeChange({ borderRadius: 12, strength: 1.35, edgeFalloff: 20 })}
         >
           Strong
-        </LiquidGlassButton>
-        <LiquidGlassButton
+        </ButtonLiquidGlass>
+        <ButtonLiquidGlass
           size="sm"
           onClick={() => onThemeChange({ borderRadius: 999, strength: 0.85, edgeFalloff: 16 })}
         >
           Pill Soft
-        </LiquidGlassButton>
+        </ButtonLiquidGlass>
       </DemoBlock>
 
       {GLASS_PRESETS.map((preset) => (
@@ -178,9 +205,9 @@ export function ThemeSection({ globalGlass, onThemeChange }: ThemeSectionProps) 
           key={`theme-${preset.id}`}
           title={`glassParams · ${preset.label}`}
           description={preset.description}
-          code={`<LiquidGlassButton\n${glassPropsLine(preset.params)}>\n  Preview\n</LiquidGlassButton>`}
+          code={`<ButtonLiquidGlass\n${glassPropsLine(preset.params)}>\n  Preview\n</ButtonLiquidGlass>`}
         >
-          <LiquidGlassButton glassParams={preset.params}>Preview</LiquidGlassButton>
+          <ButtonLiquidGlass glassParams={preset.params}>Preview</ButtonLiquidGlass>
         </DemoBlock>
       ))}
     </DemoSection>
@@ -193,40 +220,37 @@ export function ButtonSection() {
       id="button"
       title="Button"
       hint="标准按钮 — 支持 size 与 glassParams"
-      propsHint="Props: glassParams?, size?: sm | md | lg, disabled?, onClick, …"
+      propsHint="Props: glassParams?, variant?: default | primary | danger | success, size?, disabled?, onClick"
     >
-      <DemoBlock
-        title="size · sm / md / lg"
-        description="尺寸预设，影响 padding 与字号"
-        code={SIZES.map(
-          (s) => `<LiquidGlassButton size="${s}">${s.toUpperCase()}</LiquidGlassButton>`,
-        ).join('\n')}
-      >
-        {SIZES.map((size) => (
-          <LiquidGlassButton key={size} size={size}>
-            {size.toUpperCase()}
-          </LiquidGlassButton>
-        ))}
-      </DemoBlock>
+      <VariantDemoBlock
+        component="ButtonLiquidGlass"
+        render={(variant, label) => (
+          <ButtonLiquidGlass key={variant} variant={variant}>
+            {label.charAt(0).toUpperCase() + label.slice(1)}
+          </ButtonLiquidGlass>
+        )}
+      />
 
-      <DemoBlock
-        title="disabled"
-        description="disabled 态降低 opacity，不可点击"
-        code={`<LiquidGlassButton disabled>Disabled</LiquidGlassButton>`}
-      >
-        <LiquidGlassButton disabled>Disabled</LiquidGlassButton>
-        <LiquidGlassButton>Enabled</LiquidGlassButton>
-      </DemoBlock>
+      <SizeDemoBlock
+        component="ButtonLiquidGlass"
+        render={(size) => (
+          <ButtonLiquidGlass key={size} size={size}>
+            {size.toUpperCase()}
+          </ButtonLiquidGlass>
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="ButtonLiquidGlass"
+        renderDisabled={<ButtonLiquidGlass disabled>Disabled</ButtonLiquidGlass>}
+        renderEnabled={<ButtonLiquidGlass>Enabled</ButtonLiquidGlass>}
+      />
 
       {DEMO_BUTTONS.map((demo) => (
-        <DemoBlock
-          key={demo.id}
-          title={`glassParams · ${demo.label}`}
-          code={buttonCode(demo)}
-        >
-          <LiquidGlassButton size={demo.size} glassParams={demo.glassParams}>
+        <DemoBlock key={demo.id} title={`glassParams · ${demo.label}`} code={buttonCode(demo)}>
+          <ButtonLiquidGlass size={demo.size} glassParams={demo.glassParams}>
             {demo.label}
-          </LiquidGlassButton>
+          </ButtonLiquidGlass>
         </DemoBlock>
       ))}
     </DemoSection>
@@ -242,14 +266,14 @@ export function ButtonGroupSection() {
       setGroupValues((prev) => ({ ...prev, [demo.name]: next }))
 
     const items = demo.items.map(({ value: itemValue, label }) => (
-      <LiquidGlassButtonGroup.Item key={itemValue} value={itemValue}>
+      <ButtonGroupLiquidGlass.Item key={itemValue} value={itemValue}>
         {label}
-      </LiquidGlassButtonGroup.Item>
+      </ButtonGroupLiquidGlass.Item>
     ))
 
     if (demo.variant === 'slider') {
       return (
-        <LiquidGlassButtonGroup
+        <ButtonGroupLiquidGlass
           name={demo.name}
           size={demo.size}
           variant="slider"
@@ -259,12 +283,12 @@ export function ButtonGroupSection() {
           onValueChange={onChange}
         >
           {items}
-        </LiquidGlassButtonGroup>
+        </ButtonGroupLiquidGlass>
       )
     }
 
     return (
-      <LiquidGlassButtonGroup
+      <ButtonGroupLiquidGlass
         name={demo.name}
         size={demo.size}
         glassParams={demo.glassParams}
@@ -272,7 +296,7 @@ export function ButtonGroupSection() {
         onValueChange={onChange}
       >
         {items}
-      </LiquidGlassButtonGroup>
+      </ButtonGroupLiquidGlass>
     )
   }
 
@@ -286,18 +310,15 @@ export function ButtonGroupSection() {
       hint="分段控制 — default 项内高亮 · slider 滑动 thumb"
       propsHint="Props: variant?: default | slider, size?, glassParams?, thumbGlassParams? (slider), value?, defaultValue?, onValueChange?, name?"
     >
-      <DemoBlock
-        title="size · sm / md / lg (slider)"
-        description="slider 变体三种尺寸"
-        code={`<LiquidGlassButtonGroup variant="slider" size="sm" defaultValue="a">...</LiquidGlassButtonGroup>`}
-      >
-        {SIZES.map((size) => (
-          <LiquidGlassButtonGroup key={size} variant="slider" size={size} defaultValue="a">
-            <LiquidGlassButtonGroup.Item value="a">A</LiquidGlassButtonGroup.Item>
-            <LiquidGlassButtonGroup.Item value="b">B</LiquidGlassButtonGroup.Item>
-          </LiquidGlassButtonGroup>
-        ))}
-      </DemoBlock>
+      <SizeDemoBlock
+        component="ButtonGroupLiquidGlass"
+        render={(size) => (
+          <ButtonGroupLiquidGlass key={size} variant="slider" size={size} defaultValue="a">
+            <ButtonGroupLiquidGlass.Item value="a">A</ButtonGroupLiquidGlass.Item>
+            <ButtonGroupLiquidGlass.Item value="b">B</ButtonGroupLiquidGlass.Item>
+          </ButtonGroupLiquidGlass>
+        )}
+      />
 
       {defaultGroups.map((demo) => (
         <DemoBlock
@@ -309,6 +330,7 @@ export function ButtonGroupSection() {
           {renderGroup(demo)}
         </DemoBlock>
       ))}
+
       {sliderGroups.map((demo) => (
         <DemoBlock
           key={demo.name}
@@ -323,238 +345,301 @@ export function ButtonGroupSection() {
   )
 }
 
+export function IconButtonSection() {
+  return (
+    <DemoSection
+      id="icon-button"
+      title="Icon Button"
+      hint="圆形图标按钮 — aria-label 必填"
+      propsHint="Props: size?, variant?, disabled?, glassParams?, aria-label (必填)"
+    >
+      <SizeDemoBlock
+        component="IconButtonLiquidGlass"
+        render={(size) => (
+          <>
+            <IconButtonLiquidGlass key={`${size}-star`} size={size} aria-label="Star">
+              ⭐
+            </IconButtonLiquidGlass>
+            <IconButtonLiquidGlass key={`${size}-settings`} size={size} aria-label="Settings">
+              ⚙️
+            </IconButtonLiquidGlass>
+          </>
+        )}
+      />
+
+      <VariantDemoBlock
+        component="IconButtonLiquidGlass"
+        render={(variant) => (
+          <IconButtonLiquidGlass key={variant} variant={variant} aria-label={variant}>
+            ✦
+          </IconButtonLiquidGlass>
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="IconButtonLiquidGlass"
+        renderDisabled={
+          <IconButtonLiquidGlass disabled aria-label="Disabled">
+            ✦
+          </IconButtonLiquidGlass>
+        }
+        renderEnabled={
+          <IconButtonLiquidGlass aria-label="Enabled">
+            ✦
+          </IconButtonLiquidGlass>
+        }
+      />
+
+      <GlassPresetDemoBlocks
+        component="IconButtonLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 4)}
+        extraProps='aria-label="Star"'
+        render={(preset) => (
+          <IconButtonLiquidGlass glassParams={preset.params} aria-label="Star">
+            ⭐
+          </IconButtonLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function FloatButtonSection() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <DemoSection
+      id="float-button"
+      title="Float Button"
+      hint="悬浮操作按钮"
+      propsHint="Props: shape?: circle | square, variant?, icon?, description?, disabled?, onClick?"
+    >
+      <DemoBlock
+        title="点击返回顶部"
+        description="固定于视口右下角，点击平滑滚动至页面顶部"
+        code={`<FloatButtonLiquidGlass\n  icon="↑"\n  aria-label="返回顶部"\n  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}\n/>`}
+      >
+        <FloatButtonLiquidGlass icon="↑" aria-label="返回顶部" onClick={scrollToTop} />
+      </DemoBlock>
+
+      <DemoBlock
+        title="shape · circle / square"
+        code={`<FloatButtonLiquidGlass shape="circle" icon="+" />\n<FloatButtonLiquidGlass shape="square" icon="+" />`}
+      >
+        <div style={{ position: 'relative', height: 88, width: '100%' }}>
+          <FloatButtonLiquidGlass
+            icon="+"
+            description="Circle"
+            style={{ position: 'absolute', left: 0, bottom: 0 }}
+          />
+          <FloatButtonLiquidGlass
+            shape="square"
+            icon="+"
+            description="Square"
+            style={{ position: 'absolute', left: 72, bottom: 0 }}
+          />
+        </div>
+      </DemoBlock>
+
+      <VariantDemoBlock
+        component="FloatButtonLiquidGlass"
+        render={(variant) => (
+          <div key={variant} style={{ position: 'relative', height: 56, width: 56 }}>
+            <FloatButtonLiquidGlass
+              variant={variant}
+              icon="↑"
+              aria-label={variant}
+              style={{ position: 'absolute', left: 0, bottom: 0 }}
+            />
+          </div>
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="FloatButtonLiquidGlass"
+        renderDisabled={
+          <FloatButtonLiquidGlass
+            disabled
+            icon="↑"
+            aria-label="返回顶部"
+            style={{ position: 'relative' }}
+          />
+        }
+        renderEnabled={
+          <FloatButtonLiquidGlass
+            icon="↑"
+            aria-label="返回顶部"
+            onClick={scrollToTop}
+            style={{ position: 'relative' }}
+          />
+        }
+      />
+    </DemoSection>
+  )
+}
+
 export function BadgeSection() {
   return (
     <DemoSection
       id="badge"
-      title="Badge & Icon"
-      hint="Badge / IconButton / Divider"
-      propsHint="Badge: variant?: badge | chip, size?, glassParams? · IconButton: size?, glassParams?, aria-label (必填) · Divider: orientation?, glassParams?"
+      title="Badge"
+      hint="标签 / Chip 外形"
+      propsHint="Props: shape?: badge | chip, size?, tone?, glassParams?"
     >
       <DemoBlock
-        title='variant · badge / chip'
+        title="shape · badge / chip"
         description="chip 使用 pill 圆角预设"
-        code={`<LiquidGlassBadge variant="badge">Beta</LiquidGlassBadge>\n<LiquidGlassBadge variant="chip">Chip</LiquidGlassBadge>`}
+        code={`<BadgeLiquidGlass shape="badge">Beta</BadgeLiquidGlass>\n<BadgeLiquidGlass shape="chip">Chip</BadgeLiquidGlass>`}
       >
-        <LiquidGlassBadge variant="badge">Beta</LiquidGlassBadge>
-        <LiquidGlassBadge variant="chip">Chip</LiquidGlassBadge>
+        <BadgeLiquidGlass shape="badge">Beta</BadgeLiquidGlass>
+        <BadgeLiquidGlass shape="chip">Chip</BadgeLiquidGlass>
       </DemoBlock>
 
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`badge-size-${size}`}
-          title={`Badge size · ${size}`}
-          code={`<LiquidGlassBadge size="${size}">Badge</LiquidGlassBadge>`}
-        >
-          <LiquidGlassBadge size={size}>Badge</LiquidGlassBadge>
-          <LiquidGlassBadge size={size} variant="chip">
-            Chip
-          </LiquidGlassBadge>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(0, 4).map((preset) => (
-        <DemoBlock
-          key={`badge-glass-${preset.id}`}
-          title={`Badge glassParams · ${preset.label}`}
-          code={`<LiquidGlassBadge\n${glassPropsLine(preset.params)}>\n  ${preset.label}\n</LiquidGlassBadge>`}
-        >
-          <LiquidGlassBadge glassParams={preset.params}>{preset.label}</LiquidGlassBadge>
-        </DemoBlock>
-      ))}
-
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`icon-size-${size}`}
-          title={`IconButton size · ${size}`}
-          code={`<LiquidGlassIconButton size="${size}" aria-label="Star">⭐</LiquidGlassIconButton>`}
-        >
-          <LiquidGlassIconButton size={size} aria-label="Star">
-            ⭐
-          </LiquidGlassIconButton>
-          <LiquidGlassIconButton size={size} aria-label="Settings">
-            ⚙️
-          </LiquidGlassIconButton>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 4).map((preset) => (
-        <DemoBlock
-          key={`icon-glass-${preset.id}`}
-          title={`IconButton glassParams · ${preset.label}`}
-          code={`<LiquidGlassIconButton\n${glassPropsLine(preset.params)} aria-label="Star">\n  ⭐\n</LiquidGlassIconButton>`}
-        >
-          <LiquidGlassIconButton glassParams={preset.params} aria-label="Star">
-            ⭐
-          </LiquidGlassIconButton>
-        </DemoBlock>
-      ))}
+      <SizeDemoBlock
+        component="BadgeLiquidGlass"
+        render={(size) => (
+          <>
+            <BadgeLiquidGlass key={`${size}-badge`} size={size}>
+              Badge
+            </BadgeLiquidGlass>
+            <BadgeLiquidGlass key={`${size}-chip`} size={size} shape="chip">
+              Chip
+            </BadgeLiquidGlass>
+          </>
+        )}
+      />
 
       <DemoBlock
-        title="Divider orientation · horizontal / vertical"
-        code={`<LiquidGlassDivider orientation="horizontal" />\n<LiquidGlassDivider orientation="vertical" />`}
+        title="tone · semantic colors"
+        code={LIQUID_GLASS_VARIANTS.map(
+          (v) => `<BadgeLiquidGlass tone="${v}">${v}</BadgeLiquidGlass>`,
+        ).join('\n')}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
-          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Left</span>
-          <LiquidGlassDivider orientation="vertical" />
-          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Right</span>
-        </div>
-        <LiquidGlassDivider orientation="horizontal" />
+        {LIQUID_GLASS_VARIANTS.map((tone) => (
+          <BadgeLiquidGlass key={tone} tone={tone}>
+            {tone}
+          </BadgeLiquidGlass>
+        ))}
+      </DemoBlock>
+
+      <GlassPresetDemoBlocks
+        component="BadgeLiquidGlass"
+        render={(preset) => (
+          <BadgeLiquidGlass glassParams={preset.params}>{preset.label}</BadgeLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function TagSection() {
+  return (
+    <DemoSection
+      id="tag"
+      title="Tag"
+      hint="可关闭标签 — variant 与 legacy color"
+      propsHint="Props: variant?, size?, closable?, color? (legacy), glassParams?"
+    >
+      <VariantDemoBlock
+        component="TagLiquidGlass"
+        render={(variant, label) => (
+          <TagLiquidGlass key={variant} variant={variant}>
+            {label}
+          </TagLiquidGlass>
+        )}
+      />
+
+      <SizeDemoBlock
+        component="TagLiquidGlass"
+        render={(size) => (
+          <TagLiquidGlass key={size} size={size}>
+            {size.toUpperCase()}
+          </TagLiquidGlass>
+        )}
+      />
+
+      <DemoBlock
+        title="closable"
+        code={`<TagLiquidGlass closable onClose={() => {}}>Closable</TagLiquidGlass>`}
+      >
+        <TagLiquidGlass closable onClose={() => {}}>
+          Closable
+        </TagLiquidGlass>
+        <TagLiquidGlass variant="primary" closable onClose={() => {}}>
+          Primary
+        </TagLiquidGlass>
+      </DemoBlock>
+
+      <DemoBlock
+        title="color · legacy semantic"
+        description="color 映射 variant；warning 保留 legacy 样式类"
+        code={`<TagLiquidGlass color="warning">Warning</TagLiquidGlass>\n<TagLiquidGlass color="info">Info</TagLiquidGlass>`}
+      >
+        <TagLiquidGlass color="warning">Warning</TagLiquidGlass>
+        <TagLiquidGlass color="info">Info</TagLiquidGlass>
+        <TagLiquidGlass color="success">Success</TagLiquidGlass>
+        <TagLiquidGlass color="error">Error</TagLiquidGlass>
       </DemoBlock>
     </DemoSection>
   )
 }
 
-export function FormSection() {
-  const [switchOn, setSwitchOn] = useState(true)
-  const [sliderValue, setSliderValue] = useState(62)
-  const [progressValue] = useState(72)
-
+export function AvatarSection() {
   return (
     <DemoSection
-      id="form"
-      title="Form & Controls"
-      hint="Input / Textarea / Switch / Slider / Progress"
-      propsHint="Switch: thumbGlassParams?, checked?, onCheckedChange? · Progress: fillGlassParams?, value?, max?"
+      id="avatar"
+      title="Avatar"
+      hint="头像 — fallback 或 src"
+      propsHint="Props: size?, src?, fallback?, glassParams?"
     >
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`input-size-${size}`}
-          title={`Input size · ${size}`}
-          code={`<LiquidGlassInput size="${size}" placeholder="Search…" />`}
-        >
-          <LiquidGlassInput size={size} placeholder={`${size} input`} style={{ minWidth: 180 }} />
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(0, 4).map((preset) => (
-        <DemoBlock
-          key={`input-glass-${preset.id}`}
-          title={`Input glassParams · ${preset.label}`}
-          code={`<LiquidGlassInput\n${glassPropsLine(preset.params)} placeholder="Search…" />`}
-        >
-          <LiquidGlassInput
-            glassParams={preset.params}
-            placeholder={preset.label}
-            style={{ minWidth: 180 }}
-          />
-        </DemoBlock>
-      ))}
+      <SizeDemoBlock
+        component="AvatarLiquidGlass"
+        render={(size) => <AvatarLiquidGlass key={size} size={size} fallback="LG" />}
+      />
 
       <DemoBlock
-        title="Input disabled"
-        code={`<LiquidGlassInput disabled placeholder="Disabled" />`}
+        title="fallback / custom glass"
+        code={`<AvatarLiquidGlass fallback="AB" />\n<AvatarLiquidGlass fallback="CD" glassParams={{ strength: 1.3 }} />`}
       >
-        <LiquidGlassInput disabled placeholder="Disabled" style={{ minWidth: 180 }} />
+        <AvatarLiquidGlass fallback="AB" />
+        <AvatarLiquidGlass fallback="CD" glassParams={{ strength: 1.3 }} />
       </DemoBlock>
 
-      {SIZES.map((size) => (
+      <GlassPresetDemoBlocks
+        component="AvatarLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps='fallback="GL"'
+        render={(preset) => (
+          <AvatarLiquidGlass glassParams={preset.params} fallback="GL" />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function AvatarGroupSection() {
+  return (
+    <DemoSection
+      id="avatar-group"
+      title="Avatar Group"
+      hint="头像组 — max 限制显示数量"
+      propsHint="Props: max?, glassParams?, children: AvatarLiquidGlass[]"
+    >
+      {[2, 3, 4].map((max) => (
         <DemoBlock
-          key={`textarea-size-${size}`}
-          title={`Textarea size · ${size}`}
-          code={`<LiquidGlassTextarea size="${size}" rows={2} placeholder="Note…" />`}
+          key={`avatar-group-max-${max}`}
+          title={`max · ${max}`}
+          code={`<AvatarGroupLiquidGlass max={${max}}>\n  <AvatarLiquidGlass fallback="A" size="sm" />\n  ...\n</AvatarGroupLiquidGlass>`}
         >
-          <LiquidGlassTextarea
-            size={size}
-            rows={2}
-            placeholder={`${size} textarea`}
-            style={{ minWidth: 220 }}
-          />
-        </DemoBlock>
-      ))}
-
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`switch-size-${size}`}
-          title={`Switch size · ${size}`}
-          code={`<LiquidGlassSwitch size="${size}" checked={checked} onCheckedChange={setChecked} />`}
-        >
-          <LiquidGlassSwitch size={size} defaultChecked />
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="Switch checked / unchecked"
-        description="点击切换 · 拖拽 thumb 吸附"
-        code={`<LiquidGlassSwitch checked={checked} onCheckedChange={setChecked} />`}
-      >
-        <LiquidGlassSwitch checked={switchOn} onCheckedChange={setSwitchOn} />
-        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>
-          {switchOn ? 'ON' : 'OFF'}
-        </span>
-      </DemoBlock>
-
-      {GLASS_PRESETS.slice(1, 4).map((preset) => (
-        <DemoBlock
-          key={`switch-glass-${preset.id}`}
-          title={`Switch glassParams · ${preset.label}`}
-          code={`<LiquidGlassSwitch\n${glassPropsLine(preset.params)} defaultChecked />`}
-        >
-          <LiquidGlassSwitch glassParams={preset.params} defaultChecked />
-        </DemoBlock>
-      ))}
-
-      {THUMB_PRESETS.map((preset) => (
-        <DemoBlock
-          key={`switch-thumb-${preset.id}`}
-          title={`Switch thumbGlassParams · ${preset.label}`}
-          description="track 玻璃 + thumb 视觉强度"
-          code={`<LiquidGlassSwitch\n${thumbPropsLine(preset.params)} defaultChecked />`}
-        >
-          <LiquidGlassSwitch thumbGlassParams={preset.params} defaultChecked />
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 4).map((preset) => (
-        <DemoBlock
-          key={`slider-glass-${preset.id}`}
-          title={`Slider glassParams · ${preset.label}`}
-          description="track-only 玻璃，原生 thumb 样式"
-          code={`<LiquidGlassSlider\n${glassPropsLine(preset.params)} value={62} />`}
-        >
-          <LiquidGlassSlider
-            glassParams={preset.params}
-            value={sliderValue}
-            onChange={(e) => setSliderValue(Number(e.target.value))}
-            style={{ width: 220 }}
-          />
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="Progress value · 25 / 50 / 75 / 100"
-        code={`<LiquidGlassProgress value={75} max={100} />`}
-      >
-        {[25, 50, 75, 100].map((v) => (
-          <LiquidGlassProgress key={v} value={v} style={{ width: 180 }} />
-        ))}
-      </DemoBlock>
-
-      {FILL_PRESETS.map((preset) => (
-        <DemoBlock
-          key={`progress-fill-${preset.id}`}
-          title={`Progress fillGlassParams · ${preset.label}`}
-          code={`<LiquidGlassProgress\n  value={72}\n${fillPropsLine(preset.params)}/>`}
-        >
-          <LiquidGlassProgress
-            value={progressValue}
-            fillGlassParams={preset.params}
-            style={{ width: 220 }}
-          />
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`progress-track-${preset.id}`}
-          title={`Progress glassParams (track) · ${preset.label}`}
-          code={`<LiquidGlassProgress\n  value={72}\n${glassPropsLine(preset.params)}/>`}
-        >
-          <LiquidGlassProgress
-            value={progressValue}
-            glassParams={preset.params}
-            style={{ width: 220 }}
-          />
+          <AvatarGroupLiquidGlass max={max}>
+            <AvatarLiquidGlass fallback="A" size="sm" />
+            <AvatarLiquidGlass fallback="B" size="sm" />
+            <AvatarLiquidGlass fallback="C" size="sm" />
+            <AvatarLiquidGlass fallback="D" size="sm" />
+            <AvatarLiquidGlass fallback="E" size="sm" />
+          </AvatarGroupLiquidGlass>
         </DemoBlock>
       ))}
     </DemoSection>
@@ -565,150 +650,82 @@ export function CardSection() {
   return (
     <DemoSection
       id="card"
-      title="Card & Media"
-      hint="Card 复合组件 · MediaCard 封装"
-      propsHint="Card: size?, glassParams?, Header/Body/Footer 子组件 · MediaCard: image?, imageAlt?, title?, description?, footer?, size?"
+      title="Card"
+      hint="复合卡片 — Header / Body / Footer"
+      propsHint="Props: size?, glassParams?, Header/Body/Footer 子组件"
     >
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`card-size-${size}`}
-          title={`Card size · ${size}`}
-          code={`<LiquidGlassCard size="${size}">\n  <LiquidGlassCard.Header>Title</LiquidGlassCard.Header>\n  <LiquidGlassCard.Body>Body</LiquidGlassCard.Body>\n</LiquidGlassCard>`}
-        >
-          <LiquidGlassCard size={size} style={{ width: 280 }}>
-            <LiquidGlassCard.Header>Size {size.toUpperCase()}</LiquidGlassCard.Header>
-            <LiquidGlassCard.Body>Card body content.</LiquidGlassCard.Body>
-          </LiquidGlassCard>
-        </DemoBlock>
-      ))}
+      <SizeDemoBlock
+        component="CardLiquidGlass"
+        render={(size) => (
+          <CardLiquidGlass key={size} size={size} style={{ width: 280 }}>
+            <CardLiquidGlass.Header>Size {size.toUpperCase()}</CardLiquidGlass.Header>
+            <CardLiquidGlass.Body>Card body content.</CardLiquidGlass.Body>
+          </CardLiquidGlass>
+        )}
+      />
 
-      {GLASS_PRESETS.slice(0, 4).map((preset) => (
-        <DemoBlock
-          key={`card-glass-${preset.id}`}
-          title={`Card glassParams · ${preset.label}`}
-          code={`<LiquidGlassCard\n${glassPropsLine(preset.params)}>\n  ...\n</LiquidGlassCard>`}
-        >
-          <LiquidGlassCard glassParams={preset.params} style={{ width: 280 }}>
-            <LiquidGlassCard.Header>{preset.label}</LiquidGlassCard.Header>
-            <LiquidGlassCard.Body>{preset.description}</LiquidGlassCard.Body>
-            <LiquidGlassCard.Footer>
-              <LiquidGlassButton size="sm">Action</LiquidGlassButton>
-            </LiquidGlassCard.Footer>
-          </LiquidGlassCard>
-        </DemoBlock>
-      ))}
+      <GlassPresetDemoBlocks
+        component="CardLiquidGlass"
+        render={(preset) => (
+          <CardLiquidGlass glassParams={preset.params} style={{ width: 280 }}>
+            <CardLiquidGlass.Header>{preset.label}</CardLiquidGlass.Header>
+            <CardLiquidGlass.Body>{preset.description}</CardLiquidGlass.Body>
+            <CardLiquidGlass.Footer>
+              <ButtonLiquidGlass size="sm">Action</ButtonLiquidGlass>
+            </CardLiquidGlass.Footer>
+          </CardLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
 
+export function MediaCardSection() {
+  return (
+    <DemoSection
+      id="media-card"
+      title="Media Card"
+      hint="媒体卡片 — 封装 Card"
+      propsHint="Props: image?, title?, description?, footer?, size?, glassParams?"
+    >
       <DemoBlock
-        title="MediaCard · 无 image"
-        code={`<LiquidGlassMediaCard\n  title="Title"\n  description="Description text"\n  footer={<LiquidGlassBadge variant="chip">New</LiquidGlassBadge>}\n/>`}
+        title="无 image"
+        code={`<MediaCardLiquidGlass\n  title="Title"\n  description="Description text"\n  footer={<BadgeLiquidGlass shape="chip">New</BadgeLiquidGlass>}\n/>`}
       >
-        <LiquidGlassMediaCard
+        <MediaCardLiquidGlass
           title="No Image"
           description="image prop 可选，不传则仅文字区域"
-          footer={<LiquidGlassBadge variant="chip">New</LiquidGlassBadge>}
+          footer={<BadgeLiquidGlass shape="chip">New</BadgeLiquidGlass>}
           style={{ width: 280 }}
         />
       </DemoBlock>
 
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`media-size-${size}`}
-          title={`MediaCard size · ${size}`}
-          code={`<LiquidGlassMediaCard size="${size}" title="Media" description="..." />`}
-        >
-          <LiquidGlassMediaCard
+      <SizeDemoBlock
+        component="MediaCardLiquidGlass"
+        render={(size) => (
+          <MediaCardLiquidGlass
+            key={size}
             size={size}
             title={`Media ${size}`}
             description="size 影响内边距"
             style={{ width: 280 }}
           />
-        </DemoBlock>
-      ))}
+        )}
+      />
 
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`media-glass-${preset.id}`}
-          title={`MediaCard glassParams · ${preset.label}`}
-          code={`<LiquidGlassMediaCard\n${glassPropsLine(preset.params)} title="Media" />`}
-        >
-          <LiquidGlassMediaCard
+      <GlassPresetDemoBlocks
+        component="MediaCardLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps='title="Media"'
+        render={(preset) => (
+          <MediaCardLiquidGlass
             glassParams={preset.params}
             title={preset.label}
             description={preset.description}
             style={{ width: 280 }}
           />
-        </DemoBlock>
-      ))}
-    </DemoSection>
-  )
-}
-
-export function TabsSection() {
-  const [tabSize, setTabSize] = useState<string>('overview')
-
-  return (
-    <DemoSection
-      id="tabs"
-      title="Tabs"
-      hint="内部使用 ButtonGroup slider + 独立 panel 玻璃"
-      propsHint="Props: items[], size?, glassParams?, thumbGlassParams?, panelGlassParams?, value?, defaultValue?, onValueChange?"
-    >
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`tabs-size-${size}`}
-          title={`Tabs size · ${size}`}
-          code={`<LiquidGlassTabs size="${size}" items={items} defaultValue="overview" />`}
-        >
-          <LiquidGlassTabs items={TAB_ITEMS} size={size} defaultValue="overview" />
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`tabs-glass-${preset.id}`}
-          title={`Tabs glassParams · ${preset.label}`}
-          description="Tab 轨道折射"
-          code={`<LiquidGlassTabs\n${glassPropsLine(preset.params)} items={items} />`}
-        >
-          <LiquidGlassTabs items={TAB_ITEMS} glassParams={preset.params} defaultValue="overview" />
-        </DemoBlock>
-      ))}
-
-      {THUMB_PRESETS.slice(1).map((preset) => (
-        <DemoBlock
-          key={`tabs-thumb-${preset.id}`}
-          title={`Tabs thumbGlassParams · ${preset.label}`}
-          code={`<LiquidGlassTabs\n${thumbPropsLine(preset.params)} items={items} />`}
-        >
-          <LiquidGlassTabs items={TAB_ITEMS} thumbGlassParams={preset.params} defaultValue="overview" />
-        </DemoBlock>
-      ))}
-
-      {PANEL_PRESETS.map((preset) => (
-        <DemoBlock
-          key={`tabs-panel-${preset.id}`}
-          title={`Tabs panelGlassParams · ${preset.label}`}
-          description="Tab 内容面板独立玻璃"
-          code={`<LiquidGlassTabs\n${panelPropsLine(preset.params)} items={items} />`}
-        >
-          <LiquidGlassTabs
-            items={TAB_ITEMS}
-            panelGlassParams={preset.params}
-            defaultValue="overview"
-          />
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="Tabs controlled · value + onValueChange"
-        code={`<LiquidGlassTabs\n  items={items}\n  value={value}\n  onValueChange={setValue}\n/>`}
-      >
-        <LiquidGlassTabs
-          items={TAB_ITEMS}
-          value={tabSize}
-          onValueChange={setTabSize}
-        />
-      </DemoBlock>
+        )}
+      />
     </DemoSection>
   )
 }
@@ -719,68 +736,16 @@ export function ListSection() {
   return (
     <DemoSection
       id="list"
-      title="List & Avatar"
-      hint="List 单容器 1 filter · 行内 selected 高亮"
-      propsHint="List item: id, title, description?, selected?, disabled?, onClick? · Avatar: src?, fallback?, size?, glassParams? · AvatarGroup: max?, glassParams?"
+      title="List"
+      hint="单容器 1 filter · 行内 selected 高亮"
+      propsHint="List item: id, title, description?, selected?, disabled?, onClick?"
     >
-      {SIZES.map((size) => (
-        <DemoBlock
-          key={`avatar-size-${size}`}
-          title={`Avatar size · ${size}`}
-          code={`<LiquidGlassAvatar size="${size}" fallback="LG" />`}
-        >
-          <LiquidGlassAvatar size={size} fallback="LG" />
-        </DemoBlock>
-      ))}
-
       <DemoBlock
-        title="Avatar src / fallback"
-        code={`<LiquidGlassAvatar src="/avatar.png" alt="User" />\n<LiquidGlassAvatar fallback="AB" />`}
-      >
-        <LiquidGlassAvatar fallback="AB" />
-        <LiquidGlassAvatar fallback="CD" glassParams={{ strength: 1.3 }} />
-      </DemoBlock>
-
-      {[2, 3, 4].map((max) => (
-        <DemoBlock
-          key={`avatar-group-max-${max}`}
-          title={`AvatarGroup max · ${max}`}
-          code={`<LiquidGlassAvatarGroup max={${max}}>\n  <LiquidGlassAvatar fallback="A" size="sm" />\n  ...\n</LiquidGlassAvatarGroup>`}
-        >
-          <LiquidGlassAvatarGroup max={max}>
-            <LiquidGlassAvatar fallback="A" size="sm" />
-            <LiquidGlassAvatar fallback="B" size="sm" />
-            <LiquidGlassAvatar fallback="C" size="sm" />
-            <LiquidGlassAvatar fallback="D" size="sm" />
-            <LiquidGlassAvatar fallback="E" size="sm" />
-          </LiquidGlassAvatarGroup>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`list-glass-${preset.id}`}
-          title={`List glassParams · ${preset.label}`}
-          code={`<LiquidGlassList\n${glassPropsLine(preset.params)} items={items} />`}
-        >
-          <LiquidGlassList
-            glassParams={preset.params}
-            items={LIST_ITEMS.slice(0, 3).map((item) => ({
-              ...item,
-              selected: listSelected === item.id,
-              onClick: () => setListSelected(item.id),
-            }))}
-            style={{ width: 320 }}
-          />
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="List selected / disabled"
+        title="selected / disabled"
         description="selected 行高亮 · disabled 行不可点"
         code={`items={[\n  { id: '1', title: '...', selected: true, onClick },\n  { id: '4', title: '...', disabled: true },\n]}`}
       >
-        <LiquidGlassList
+        <ListLiquidGlass
           items={LIST_ITEMS.map((item) => ({
             ...item,
             selected: listSelected === item.id,
@@ -789,320 +754,126 @@ export function ListSection() {
           style={{ width: 320 }}
         />
       </DemoBlock>
-    </DemoSection>
-  )
-}
 
-export function NavigationSection() {
-  const [page, setPage] = useState(2)
-
-  return (
-    <DemoSection
-      id="navigation"
-      title="Navigation"
-      hint="Navbar / Breadcrumb / Pagination / Dock"
-      propsHint="Drawer (见 Overlay): side?: left | right · Dock 默认 dock 圆角 preset · Breadcrumb item: label, href?, onClick?"
-    >
-      {GLASS_PRESETS.slice(0, 3).map((preset) => (
-        <DemoBlock
-          key={`navbar-glass-${preset.id}`}
-          title={`Navbar glassParams · ${preset.label}`}
-          code={`<LiquidGlassNavbar brand="Brand"\n${glassPropsLine(preset.params)}>\n  <LiquidGlassButton size="sm">Docs</LiquidGlassButton>\n</LiquidGlassNavbar>`}
-        >
-          <LiquidGlassNavbar brand="Liquid Glass" glassParams={preset.params} style={{ width: '100%' }}>
-            <LiquidGlassButton size="sm">Docs</LiquidGlassButton>
-            <LiquidGlassIconButton aria-label="Menu">☰</LiquidGlassIconButton>
-          </LiquidGlassNavbar>
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="Breadcrumb items"
-        code={`<LiquidGlassBreadcrumb items={[\n  { label: 'Home', href: '/' },\n  { label: 'Components', onClick: () => {} },\n  { label: 'Current' },\n]} />`}
-      >
-        <LiquidGlassBreadcrumb
-          items={[
-            { label: 'Home', href: '#' },
-            { label: 'Components', onClick: () => {} },
-            { label: 'Navbar' },
-          ]}
-        />
-      </DemoBlock>
-
-      <DemoBlock
-        title="Pagination page / totalPages"
-        code={`<LiquidGlassPagination page={2} totalPages={5} onPageChange={setPage} />`}
-      >
-        <LiquidGlassPagination page={page} totalPages={5} onPageChange={setPage} />
-        <LiquidGlassPagination page={1} totalPages={1} />
-      </DemoBlock>
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`dock-glass-${preset.id}`}
-          title={`Dock glassParams · ${preset.label}`}
-          description="默认 preset dock 圆角 (24px)，可被 glassParams 覆盖"
-          code={`<LiquidGlassDock\n${glassPropsLine(preset.params)} items={items} />`}
-        >
-          <LiquidGlassDock glassParams={preset.params} items={DOCK_ITEMS} />
-        </DemoBlock>
-      ))}
-    </DemoSection>
-  )
-}
-
-export function OverlaySection() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [drawerLeftOpen, setDrawerLeftOpen] = useState(false)
-  const [drawerRightOpen, setDrawerRightOpen] = useState(false)
-  const [toastVariant, setToastVariant] = useState<'default' | 'success' | 'error' | null>(null)
-
-  useEffect(() => {
-    if (!toastVariant) return
-    const timer = window.setTimeout(() => setToastVariant(null), 3200)
-    return () => window.clearTimeout(timer)
-  }, [toastVariant])
-
-  const alertVariants = ['info', 'success', 'warning', 'error'] as const
-  const toastVariants = ['default', 'success', 'error'] as const
-
-  return (
-    <DemoSection
-      id="overlay"
-      title="Modal & Feedback"
-      hint="Alert / Tooltip / Popover / Modal / Drawer / Toast"
-      propsHint="Alert variant: info | success | warning | error · Toast variant: default | success | error · Modal/Drawer: open?, title?, footer?, onClose?, glassParams?"
-    >
-      {alertVariants.map((variant) => (
-        <DemoBlock
-          key={`alert-${variant}`}
-          title={`Alert variant · ${variant}`}
-          code={`<LiquidGlassAlert variant="${variant}" title="${variant}">\n  Message content.\n</LiquidGlassAlert>`}
-        >
-          <LiquidGlassAlert variant={variant} title={variant.charAt(0).toUpperCase() + variant.slice(1)}>
-            Semantic border color for {variant} state.
-          </LiquidGlassAlert>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`alert-glass-${preset.id}`}
-          title={`Alert glassParams · ${preset.label}`}
-          code={`<LiquidGlassAlert\n${glassPropsLine(preset.params)} variant="info" title="Info">\n  ...\n</LiquidGlassAlert>`}
-        >
-          <LiquidGlassAlert glassParams={preset.params} variant="info" title="Info">
-            Custom glass refraction on alert surface.
-          </LiquidGlassAlert>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`tooltip-glass-${preset.id}`}
-          title={`Tooltip glassParams · ${preset.label}`}
-          code={`<LiquidGlassTooltip\n${glassPropsLine(preset.params)} content="Tooltip">\n  <LiquidGlassButton>Hover</LiquidGlassButton>\n</LiquidGlassTooltip>`}
-        >
-          <LiquidGlassTooltip glassParams={preset.params} content={`${preset.label} tooltip`}>
-            <LiquidGlassButton size="sm">Hover</LiquidGlassButton>
-          </LiquidGlassTooltip>
-        </DemoBlock>
-      ))}
-
-      {GLASS_PRESETS.slice(1, 3).map((preset) => (
-        <DemoBlock
-          key={`popover-glass-${preset.id}`}
-          title={`Popover glassParams · ${preset.label}`}
-          code={`<LiquidGlassPopover\n${glassPropsLine(preset.params)}\n  trigger={<LiquidGlassButton>Open</LiquidGlassButton>}\n  content="Panel"\n/>`}
-        >
-          <LiquidGlassPopover
+      <GlassPresetDemoBlocks
+        component="ListLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps="items={items}"
+        render={(preset) => (
+          <ListLiquidGlass
             glassParams={preset.params}
-            trigger={<LiquidGlassButton size="sm">Popover</LiquidGlassButton>}
-            content={`${preset.label} popover content.`}
+            items={LIST_ITEMS.slice(0, 3).map((item) => ({
+              ...item,
+              selected: listSelected === item.id,
+              onClick: () => setListSelected(item.id),
+            }))}
+            style={{ width: 320 }}
           />
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title="Modal · open / title / footer / onClose"
-        code={`<LiquidGlassModal\n  open={open}\n  title="Glass Modal"\n  onClose={() => setOpen(false)}\n  footer={<LiquidGlassButton>OK</LiquidGlassButton>}\n>\n  Content\n</LiquidGlassModal>`}
-      >
-        <LiquidGlassButton size="sm" onClick={() => setModalOpen(true)}>
-          Open Modal
-        </LiquidGlassButton>
-      </DemoBlock>
-
-      {GLASS_PRESETS.slice(1, 2).map((preset) => (
-        <DemoBlock
-          key={`modal-glass-${preset.id}`}
-          title={`Modal glassParams · ${preset.label}`}
-          code={`<LiquidGlassModal\n${glassPropsLine(preset.params)} open={open} title="Modal" />`}
-        >
-          <LiquidGlassButton size="sm" onClick={() => setModalOpen(true)}>
-            Modal ({preset.label})
-          </LiquidGlassButton>
-        </DemoBlock>
-      ))}
-
-      <DemoBlock
-        title='Drawer side · left / right'
-        code={`<LiquidGlassDrawer side="left" open={open} title="Left" onClose={...} />\n<LiquidGlassDrawer side="right" open={open} title="Right" onClose={...} />`}
-      >
-        <LiquidGlassButton size="sm" onClick={() => setDrawerLeftOpen(true)}>
-          Left Drawer
-        </LiquidGlassButton>
-        <LiquidGlassButton size="sm" onClick={() => setDrawerRightOpen(true)}>
-          Right Drawer
-        </LiquidGlassButton>
-      </DemoBlock>
-
-      {toastVariants.map((variant) => (
-        <DemoBlock
-          key={`toast-${variant}`}
-          title={`Toast variant · ${variant}`}
-          code={`<LiquidGlassToast\n  open={open}\n  variant="${variant}"\n  title="Notification"\n  description="..."\n/>`}
-        >
-          <LiquidGlassButton size="sm" onClick={() => setToastVariant(variant)}>
-            Show {variant}
-          </LiquidGlassButton>
-        </DemoBlock>
-      ))}
-
-      <LiquidGlassModal
-        open={modalOpen}
-        title="Glass Modal"
-        onClose={() => setModalOpen(false)}
-        footer={
-          <>
-            <LiquidGlassButton size="sm" onClick={() => setModalOpen(false)}>
-              Cancel
-            </LiquidGlassButton>
-            <LiquidGlassButton size="sm" onClick={() => setModalOpen(false)}>
-              Confirm
-            </LiquidGlassButton>
-          </>
-        }
-      >
-        Modal dialog with liquid glass refraction. ESC 或点击遮罩关闭。
-      </LiquidGlassModal>
-
-      <LiquidGlassDrawer
-        open={drawerLeftOpen}
-        side="left"
-        title="Left Drawer"
-        onClose={() => setDrawerLeftOpen(false)}
-      >
-        <p>side=&quot;left&quot; 从左侧滑入</p>
-        <LiquidGlassButton size="sm" onClick={() => setDrawerLeftOpen(false)}>
-          Close
-        </LiquidGlassButton>
-      </LiquidGlassDrawer>
-
-      <LiquidGlassDrawer
-        open={drawerRightOpen}
-        side="right"
-        title="Right Drawer"
-        onClose={() => setDrawerRightOpen(false)}
-      >
-        <p>side=&quot;right&quot; 从右侧滑入</p>
-        <LiquidGlassButton size="sm" onClick={() => setDrawerRightOpen(false)}>
-          Close
-        </LiquidGlassButton>
-      </LiquidGlassDrawer>
-
-      {toastVariant && (
-        <LiquidGlassToast
-          open
-          variant={toastVariant}
-          title="Notification"
-          description={`Toast variant="${toastVariant}"`}
-        />
-      )}
+        )}
+      />
     </DemoSection>
   )
 }
 
-export function DataEntrySection() {
-  const [radioValue, setRadioValue] = useState('a')
-  const [rateValue, setRateValue] = useState(3)
-
+export function EmptySection() {
   return (
-    <DemoSection
-      id="data-entry"
-      title="Data Entry"
-      hint="Checkbox / Radio / Select / Rate"
-      propsHint="对齐 Ant Design 数据录入组件"
-    >
-      <DemoBlock
-        title="Checkbox checked / label"
-        code={`<LiquidGlassCheckbox label="Accept terms" defaultChecked />`}
-      >
-        <LiquidGlassCheckbox label="Accept terms" defaultChecked />
-        <LiquidGlassCheckbox label="Disabled" disabled />
-      </DemoBlock>
-
-      <DemoBlock
-        title="RadioGroup value / onChange"
-        code={`<LiquidGlassRadioGroup value={v} onChange={setV}>\n  <LiquidGlassRadio value="a">A</LiquidGlassRadio>\n</LiquidGlassRadioGroup>`}
-      >
-        <LiquidGlassRadioGroup value={radioValue} onValueChange={setRadioValue}>
-          <LiquidGlassRadio value="a" label="Option A" />
-          <LiquidGlassRadio value="b" label="Option B" />
-          <LiquidGlassRadio value="c" label="Option C" disabled />
-        </LiquidGlassRadioGroup>
-      </DemoBlock>
-
-      <DemoBlock
-        title="Select options"
-        code={`<LiquidGlassSelect options={[{ value: '1', label: 'One' }]} defaultValue="1" />`}
-      >
-        <LiquidGlassSelect
-          style={{ minWidth: 160 }}
-          defaultValue="react"
-          options={[
-            { value: 'react', label: 'React' },
-            { value: 'vue', label: 'Vue' },
-            { value: 'svelte', label: 'Svelte' },
-          ]}
-        />
-      </DemoBlock>
-
-      <DemoBlock
-        title="Rate allowHalf / value"
-        code={`<LiquidGlassRate value={3} onChange={setRate} allowHalf />`}
-      >
-        <LiquidGlassRate value={rateValue} onChange={setRateValue} allowHalf />
+    <DemoSection id="empty" title="Empty" hint="空状态占位" propsHint="Props: description?, children?">
+      <DemoBlock title="description + action" code={`<EmptyLiquidGlass description="暂无数据" />`}>
+        <EmptyLiquidGlass description="暂无数据">
+          <ButtonLiquidGlass size="sm">创建</ButtonLiquidGlass>
+        </EmptyLiquidGlass>
       </DemoBlock>
     </DemoSection>
   )
 }
 
-export function DataDisplaySection() {
+export function StatisticSection() {
   return (
     <DemoSection
-      id="data-display"
-      title="Data Display"
-      hint="Empty / Tag / Collapse / Statistic / Timeline"
+      id="statistic"
+      title="Statistic"
+      hint="统计数值展示"
+      propsHint="Props: title?, value?, suffix?, prefix?, glassParams?"
     >
-      <DemoBlock title="Empty description" code={`<LiquidGlassEmpty description="暂无数据" />`}>
-        <LiquidGlassEmpty description="暂无数据">
-          <LiquidGlassButton size="sm">创建</LiquidGlassButton>
-        </LiquidGlassEmpty>
+      <DemoBlock
+        title="title / value / suffix"
+        code={`<StatisticLiquidGlass title="Users" value={112893} suffix="人" />`}
+      >
+        <StatisticLiquidGlass title="Active Users" value={112893} suffix="人" />
+        <StatisticLiquidGlass title="Conversion" value={93.2} suffix="%" />
       </DemoBlock>
 
-      <DemoBlock title="Tag color / closable" code={`<LiquidGlassTag color="blue">Tag</LiquidGlassTag>`}>
-        <LiquidGlassTag color="info">Info</LiquidGlassTag>
-        <LiquidGlassTag color="success">Success</LiquidGlassTag>
-        <LiquidGlassTag closable onClose={() => {}}>
-          Closable
-        </LiquidGlassTag>
+      <GlassPresetDemoBlocks
+        component="StatisticLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps='title="Metric" value={1280}'
+        render={(preset) => (
+          <StatisticLiquidGlass
+            glassParams={preset.params}
+            title={preset.label}
+            value={1280}
+            suffix="pts"
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function TimelineSection() {
+  return (
+    <DemoSection
+      id="timeline"
+      title="Timeline"
+      hint="时间轴 — left / alternate 布局"
+      propsHint="Props: items[], mode?: left | alternate, variant?, glassParams?"
+    >
+      <DemoBlock
+        title="mode · left"
+        code={`<TimelineLiquidGlass mode="left" items={items} />`}
+      >
+        <TimelineLiquidGlass items={TIMELINE_ITEMS} style={{ width: 320 }} />
       </DemoBlock>
 
       <DemoBlock
-        title="Collapse accordion"
-        code={`<LiquidGlassCollapse accordion items={[...]} defaultActiveKeys={['1']} />`}
+        title="mode · alternate"
+        code={`<TimelineLiquidGlass mode="alternate" items={items} />`}
       >
-        <LiquidGlassCollapse
+        <TimelineLiquidGlass
+          mode="alternate"
+          items={TIMELINE_ITEMS}
+          style={{ width: 360 }}
+        />
+      </DemoBlock>
+
+      <VariantDemoBlock
+        component="TimelineLiquidGlass"
+        render={(variant) => (
+          <TimelineLiquidGlass
+            key={variant}
+            variant={variant}
+            items={TIMELINE_ITEMS.slice(0, 2)}
+            style={{ width: 320 }}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function CollapseSection() {
+  return (
+    <DemoSection
+      id="collapse"
+      title="Collapse"
+      hint="折叠面板"
+      propsHint="Props: items[], accordion?, defaultActiveKeys?, glassParams?"
+    >
+      <DemoBlock
+        title="accordion"
+        code={`<CollapseLiquidGlass accordion items={[...]} defaultActiveKeys={['1']} />`}
+      >
+        <CollapseLiquidGlass
           accordion
           defaultActiveKeys={['1']}
           items={[
@@ -1114,18 +885,15 @@ export function DataDisplaySection() {
       </DemoBlock>
 
       <DemoBlock
-        title="Statistic title / value"
-        code={`<LiquidGlassStatistic title="Users" value={112893} suffix="人" />`}
+        title="multiple panels"
+        code={`<CollapseLiquidGlass defaultActiveKeys={['a', 'b']} items={items} />`}
       >
-        <LiquidGlassStatistic title="Active Users" value={112893} suffix="人" />
-      </DemoBlock>
-
-      <DemoBlock title="Timeline items" code={`<LiquidGlassTimeline items={[...]} />`}>
-        <LiquidGlassTimeline
+        <CollapseLiquidGlass
+          defaultActiveKeys={['a']}
           items={[
-            { key: '1', label: '2024-01', children: 'Create project' },
-            { key: '2', label: '2024-06', children: 'Release v1.0' },
-            { key: '3', label: '2025-03', children: 'Liquid glass refresh' },
+            { key: 'a', label: 'Section A', children: 'First section content.' },
+            { key: 'b', label: 'Section B', children: 'Second section content.' },
+            { key: 'c', label: 'Section C', children: 'Third section content.' },
           ]}
           style={{ width: 320 }}
         />
@@ -1134,65 +902,665 @@ export function DataDisplaySection() {
   )
 }
 
-export function LayoutSection() {
+export function TypographySection() {
   return (
-    <DemoSection id="layout" title="Layout" hint="Space / Typography">
-      <DemoBlock title="Space horizontal / vertical" code={`<LiquidGlassSpace><Button /><Button /></LiquidGlassSpace>`}>
-        <LiquidGlassSpace>
-          <LiquidGlassButton size="sm">A</LiquidGlassButton>
-          <LiquidGlassButton size="sm">B</LiquidGlassButton>
-          <LiquidGlassButton size="sm">C</LiquidGlassButton>
-        </LiquidGlassSpace>
-        <LiquidGlassSpace direction="vertical" size="sm">
-          <LiquidGlassButton size="sm">Top</LiquidGlassButton>
-          <LiquidGlassButton size="sm">Bottom</LiquidGlassButton>
-        </LiquidGlassSpace>
-      </DemoBlock>
-
-      <DemoBlock title="Typography Title / Text" code={`<LiquidGlassTypography.Title level={2}>Title</LiquidGlassTypography.Title>`}>
-        <LiquidGlassTypography.Title level={2}>Liquid Glass</LiquidGlassTypography.Title>
-        <LiquidGlassTypography.Paragraph>
+    <DemoSection id="typography" title="Typography" hint="标题 / 段落 / 文本" propsHint="Title level, Text type, Paragraph">
+      <DemoBlock
+        title="Title / Paragraph / Text"
+        code={`<TypographyLiquidGlass.Title level={2}>Title</TypographyLiquidGlass.Title>`}
+      >
+        <TypographyLiquidGlass.Title level={2}>Liquid Glass</TypographyLiquidGlass.Title>
+        <TypographyLiquidGlass.Paragraph>
           Paragraph with secondary tone and glass-friendly contrast.
-        </LiquidGlassTypography.Paragraph>
-        <LiquidGlassTypography.Text type="success">Success text</LiquidGlassTypography.Text>
+        </TypographyLiquidGlass.Paragraph>
+        <TypographyLiquidGlass.Text type="success">Success text</TypographyLiquidGlass.Text>
         {' · '}
-        <LiquidGlassTypography.Text type="danger" delete>
+        <TypographyLiquidGlass.Text type="danger" delete>
           Deleted
-        </LiquidGlassTypography.Text>
+        </TypographyLiquidGlass.Text>
       </DemoBlock>
     </DemoSection>
   )
 }
 
-export function NavMoreSection() {
+export function InputSection() {
+  return (
+    <DemoSection
+      id="input"
+      title="Input"
+      hint="单行输入"
+      propsHint="Props: size?, variant?, disabled?, placeholder?, glassParams?"
+    >
+      <SizeDemoBlock
+        component="InputLiquidGlass"
+        render={(size) => (
+          <InputLiquidGlass
+            key={size}
+            size={size}
+            placeholder={`${size} input`}
+            style={{ minWidth: 180 }}
+          />
+        )}
+      />
+
+      <VariantDemoBlock
+        component="InputLiquidGlass"
+        render={(variant) => (
+          <InputLiquidGlass
+            key={variant}
+            variant={variant}
+            placeholder={variant}
+            style={{ minWidth: 180 }}
+          />
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="InputLiquidGlass"
+        renderDisabled={
+          <InputLiquidGlass disabled placeholder="Disabled" style={{ minWidth: 180 }} />
+        }
+        renderEnabled={
+          <InputLiquidGlass placeholder="Enabled" style={{ minWidth: 180 }} />
+        }
+      />
+
+      <GlassPresetDemoBlocks
+        component="InputLiquidGlass"
+        extraProps='placeholder="Search…"'
+        render={(preset) => (
+          <InputLiquidGlass
+            glassParams={preset.params}
+            placeholder={preset.label}
+            style={{ minWidth: 180 }}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function TextareaSection() {
+  return (
+    <DemoSection
+      id="textarea"
+      title="Textarea"
+      hint="多行输入"
+      propsHint="Props: size?, variant?, disabled?, rows?, glassParams?"
+    >
+      <SizeDemoBlock
+        component="TextareaLiquidGlass"
+        render={(size) => (
+          <TextareaLiquidGlass
+            key={size}
+            size={size}
+            rows={2}
+            placeholder={`${size} textarea`}
+            style={{ minWidth: 220 }}
+          />
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="TextareaLiquidGlass"
+        renderDisabled={
+          <TextareaLiquidGlass disabled rows={2} placeholder="Disabled" style={{ minWidth: 220 }} />
+        }
+        renderEnabled={
+          <TextareaLiquidGlass rows={2} placeholder="Enabled" style={{ minWidth: 220 }} />
+        }
+      />
+
+      <GlassPresetDemoBlocks
+        component="TextareaLiquidGlass"
+        presets={GLASS_PRESETS.slice(0, 4)}
+        extraProps='rows={2} placeholder="Note…"'
+        render={(preset) => (
+          <TextareaLiquidGlass
+            glassParams={preset.params}
+            rows={2}
+            placeholder={preset.label}
+            style={{ minWidth: 220 }}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function SelectSection() {
+  const selectOptions = [
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'svelte', label: 'Svelte' },
+  ]
+
+  return (
+    <DemoSection
+      id="select"
+      title="Select"
+      hint="下拉选择"
+      propsHint="Props: options[], size?, variant?, disabled?, value?, defaultValue?, onChange?, placeholder?, glassParams?, dropdownGlassParams?"
+    >
+      <SizeDemoBlock
+        component="SelectLiquidGlass"
+        render={(size) => (
+          <SelectLiquidGlass
+            key={size}
+            size={size}
+            defaultValue="react"
+            options={selectOptions}
+            style={{ minWidth: 160 }}
+          />
+        )}
+      />
+
+      <VariantDemoBlock
+        component="SelectLiquidGlass"
+        render={(variant) => (
+          <SelectLiquidGlass
+            key={variant}
+            variant={variant}
+            defaultValue="react"
+            options={selectOptions}
+            style={{ minWidth: 160 }}
+          />
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="SelectLiquidGlass"
+        renderDisabled={
+          <SelectLiquidGlass disabled defaultValue="react" options={selectOptions} style={{ minWidth: 160 }} />
+        }
+        renderEnabled={
+          <SelectLiquidGlass defaultValue="react" options={selectOptions} style={{ minWidth: 160 }} />
+        }
+      />
+    </DemoSection>
+  )
+}
+
+export function CheckboxSection() {
+  return (
+    <DemoSection
+      id="checkbox"
+      title="Checkbox"
+      hint="复选框"
+      propsHint="Props: label?, size?, variant?, checked?, disabled?, onCheckedChange?"
+    >
+      <SizeDemoBlock
+        component="CheckboxLiquidGlass"
+        render={(size) => (
+          <CheckboxLiquidGlass key={size} size={size} label={`Size ${size}`} defaultChecked />
+        )}
+      />
+
+      <VariantDemoBlock
+        component="CheckboxLiquidGlass"
+        render={(variant) => (
+          <CheckboxLiquidGlass key={variant} variant={variant} label={variant} defaultChecked />
+        )}
+      />
+
+      <DisabledDemoBlock
+        component="CheckboxLiquidGlass"
+        renderDisabled={<CheckboxLiquidGlass label="Disabled" disabled />}
+        renderEnabled={<CheckboxLiquidGlass label="Enabled" defaultChecked />}
+      />
+    </DemoSection>
+  )
+}
+
+export function RadioSection() {
+  const [radioValue, setRadioValue] = useState('a')
+
+  return (
+    <DemoSection
+      id="radio"
+      title="Radio"
+      hint="单选组"
+      propsHint="RadioGroup: value?, onValueChange? · Radio: value, label?, disabled?"
+    >
+      <DemoBlock
+        title="RadioGroup value / onValueChange"
+        code={`<RadioLiquidGlassGroup value={v} onValueChange={setV}>\n  <RadioLiquidGlass value="a">A</RadioLiquidGlass>\n</RadioLiquidGlassGroup>`}
+      >
+        <RadioLiquidGlassGroup value={radioValue} onValueChange={setRadioValue}>
+          <RadioLiquidGlass value="a" label="Option A" />
+          <RadioLiquidGlass value="b" label="Option B" />
+          <RadioLiquidGlass value="c" label="Option C" disabled />
+        </RadioLiquidGlassGroup>
+      </DemoBlock>
+
+      <SizeDemoBlock
+        component="RadioLiquidGlassGroup"
+        render={(size) => (
+          <RadioLiquidGlassGroup key={size} size={size} defaultValue="a">
+            <RadioLiquidGlass value="a" label="A" />
+            <RadioLiquidGlass value="b" label="B" />
+          </RadioLiquidGlassGroup>
+        )}
+      />
+
+      <DemoBlock
+        title="disabled"
+        code={`<RadioLiquidGlassGroup defaultValue="enabled">\n  <RadioLiquidGlass value="disabled" label="Disabled" disabled />\n  <RadioLiquidGlass value="enabled" label="Enabled" />\n</RadioLiquidGlassGroup>`}
+      >
+        <RadioLiquidGlassGroup defaultValue="enabled">
+          <RadioLiquidGlass value="disabled" label="Disabled" disabled />
+          <RadioLiquidGlass value="enabled" label="Enabled" />
+        </RadioLiquidGlassGroup>
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function SwitchSection() {
+  const [switchOn, setSwitchOn] = useState(true)
+
+  return (
+    <DemoSection
+      id="switch"
+      title="Switch"
+      hint="开关 — 点击 + 拖拽 thumb 吸附"
+      propsHint="Props: size?, checked?, onCheckedChange?, thumbGlassParams?, glassParams?"
+    >
+      <SizeDemoBlock
+        component="SwitchLiquidGlass"
+        render={(size) => <SwitchLiquidGlass key={size} size={size} defaultChecked />}
+      />
+
+      <DemoBlock
+        title="checked / unchecked"
+        description="点击切换 · 拖拽 thumb 吸附"
+        code={`<SwitchLiquidGlass checked={checked} onCheckedChange={setChecked} />`}
+      >
+        <SwitchLiquidGlass checked={switchOn} onCheckedChange={setSwitchOn} />
+        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>
+          {switchOn ? 'ON' : 'OFF'}
+        </span>
+      </DemoBlock>
+
+      <DisabledDemoBlock
+        component="SwitchLiquidGlass"
+        renderDisabled={<SwitchLiquidGlass disabled defaultChecked />}
+        renderEnabled={<SwitchLiquidGlass defaultChecked />}
+      />
+
+      {THUMB_PRESETS.map((preset) => (
+        <DemoBlock
+          key={`switch-thumb-${preset.id}`}
+          title={`thumbGlassParams · ${preset.label}`}
+          description="track 玻璃 + thumb 视觉强度"
+          code={`<SwitchLiquidGlass\n${thumbPropsLine(preset.params)} defaultChecked />`}
+        >
+          <SwitchLiquidGlass thumbGlassParams={preset.params} defaultChecked />
+        </DemoBlock>
+      ))}
+
+      <GlassPresetDemoBlocks
+        component="SwitchLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 4)}
+        extraProps="defaultChecked"
+        render={(preset) => (
+          <SwitchLiquidGlass glassParams={preset.params} defaultChecked />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function SliderSection() {
+  const [sliderValue, setSliderValue] = useState(62)
+
+  return (
+    <DemoSection
+      id="slider"
+      title="Slider"
+      hint="range 滑条 — track-only 玻璃"
+      propsHint="Props: value?, onChange?, min?, max?, glassParams?"
+    >
+      <DemoBlock
+        title="value · controlled"
+        code={`<SliderLiquidGlass value={62} onChange={...} />`}
+      >
+        <SliderLiquidGlass
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
+          style={{ width: 220 }}
+        />
+        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>{sliderValue}</span>
+      </DemoBlock>
+
+      <DisabledDemoBlock
+        component="SliderLiquidGlass"
+        renderDisabled={
+          <SliderLiquidGlass disabled value={40} style={{ width: 220 }} />
+        }
+        renderEnabled={
+          <SliderLiquidGlass value={sliderValue} onChange={(e) => setSliderValue(Number(e.target.value))} style={{ width: 220 }} />
+        }
+      />
+
+      <GlassPresetDemoBlocks
+        component="SliderLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 4)}
+        extraProps="value={62}"
+        render={(preset) => (
+          <SliderLiquidGlass
+            glassParams={preset.params}
+            value={sliderValue}
+            onChange={(e) => setSliderValue(Number(e.target.value))}
+            style={{ width: 220 }}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function RateSection() {
+  const [rateValue, setRateValue] = useState(3)
+
+  return (
+    <DemoSection
+      id="rate"
+      title="Rate"
+      hint="星级评分"
+      propsHint="Props: value?, onChange?, allowHalf?, disabled?"
+    >
+      <DemoBlock
+        title="allowHalf / value"
+        code={`<RateLiquidGlass value={3} onChange={setRate} allowHalf />`}
+      >
+        <RateLiquidGlass value={rateValue} onChange={setRateValue} allowHalf />
+      </DemoBlock>
+
+      <DisabledDemoBlock
+        component="RateLiquidGlass"
+        renderDisabled={<RateLiquidGlass disabled value={2} />}
+        renderEnabled={<RateLiquidGlass value={rateValue} onChange={setRateValue} />}
+      />
+    </DemoSection>
+  )
+}
+
+export function AlertSection() {
+  const alertVariants = ['default', 'primary', 'success', 'warning', 'danger'] as const
+
+  return (
+    <DemoSection
+      id="alert"
+      title="Alert"
+      hint="语义警告条"
+      propsHint="Props: variant?: default | primary | danger | success | warning, title?, glassParams?"
+    >
+      {alertVariants.map((variant) => (
+        <DemoBlock
+          key={`alert-${variant}`}
+          title={`variant · ${variant}`}
+          code={`<AlertLiquidGlass variant="${variant}" title="${variant}">\n  Message content.\n</AlertLiquidGlass>`}
+        >
+          <AlertLiquidGlass variant={variant} title={variant.charAt(0).toUpperCase() + variant.slice(1)}>
+            Semantic border color for {variant} state.
+          </AlertLiquidGlass>
+        </DemoBlock>
+      ))}
+
+      <GlassPresetDemoBlocks
+        component="AlertLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps='variant="primary" title="Primary"'
+        render={(preset) => (
+          <AlertLiquidGlass glassParams={preset.params} variant="primary" title="Primary">
+            Custom glass refraction on alert surface.
+          </AlertLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function ToastSection() {
+  const [toastVariant, setToastVariant] = useState<'default' | 'success' | 'error' | null>(null)
+
+  useEffect(() => {
+    if (!toastVariant) return
+    const timer = window.setTimeout(() => setToastVariant(null), 3200)
+    return () => window.clearTimeout(timer)
+  }, [toastVariant])
+
+  const toastVariants = ['default', 'success', 'error'] as const
+
+  return (
+    <DemoSection
+      id="toast"
+      title="Toast"
+      hint="轻量通知"
+      propsHint="Props: open?, variant?: default | success | error, title?, description?"
+    >
+      {toastVariants.map((variant) => (
+        <DemoBlock
+          key={`toast-${variant}`}
+          title={`variant · ${variant}`}
+          code={`<ToastLiquidGlass\n  open={open}\n  variant="${variant}"\n  title="Notification"\n  description="..."\n/>`}
+        >
+          <ButtonLiquidGlass size="sm" onClick={() => setToastVariant(variant)}>
+            Show {variant}
+          </ButtonLiquidGlass>
+        </DemoBlock>
+      ))}
+
+      {toastVariant && (
+        <ToastLiquidGlass
+          open
+          variant={toastVariant}
+          title="Notification"
+          description={`Toast variant="${toastVariant}"`}
+        />
+      )}
+    </DemoSection>
+  )
+}
+
+export function SpinSection() {
+  return (
+    <DemoSection
+      id="spin"
+      title="Spin"
+      hint="加载指示器"
+      propsHint="Props: size?, tip?, spinning?, variant?, children? (overlay)"
+    >
+      <SizeDemoBlock
+        component="SpinLiquidGlass"
+        render={(size) => <SpinLiquidGlass key={size} size={size} tip={size === 'md' ? 'Loading…' : undefined} />}
+      />
+
+      <DemoBlock
+        title="overlay · children"
+        code={`<SpinLiquidGlass spinning tip="Loading…">\n  <CardLiquidGlass>...</CardLiquidGlass>\n</SpinLiquidGlass>`}
+      >
+        <SpinLiquidGlass spinning tip="Loading…">
+          <CardLiquidGlass style={{ width: 240 }}>
+            <CardLiquidGlass.Header>Overlay</CardLiquidGlass.Header>
+            <CardLiquidGlass.Body>Content under spin overlay.</CardLiquidGlass.Body>
+          </CardLiquidGlass>
+        </SpinLiquidGlass>
+      </DemoBlock>
+
+      <VariantDemoBlock
+        component="SpinLiquidGlass"
+        render={(variant) => <SpinLiquidGlass key={variant} variant={variant} tip={variant} />}
+      />
+    </DemoSection>
+  )
+}
+
+export function SkeletonSection() {
+  return (
+    <DemoSection
+      id="skeleton"
+      title="Skeleton"
+      hint="骨架屏占位"
+      propsHint="Props: active?, avatar?, paragraph?, title?"
+    >
+      <DemoBlock
+        title="avatar / paragraph / active"
+        code={`<SkeletonLiquidGlass avatar paragraph={{ rows: 3 }} active />`}
+      >
+        <SkeletonLiquidGlass avatar paragraph={{ rows: 3 }} active />
+      </DemoBlock>
+
+      <DemoBlock
+        title="title only"
+        code={`<SkeletonLiquidGlass title paragraph={{ rows: 2 }} />`}
+      >
+        <SkeletonLiquidGlass title paragraph={{ rows: 2 }} />
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function ProgressSection() {
+  const [progressValue] = useState(72)
+
+  return (
+    <DemoSection
+      id="progress"
+      title="Progress"
+      hint="进度条 — track + fill 玻璃"
+      propsHint="Props: value?, max?, fillGlassParams?, glassParams?"
+    >
+      <DemoBlock
+        title="value · 25 / 50 / 75 / 100"
+        code={`<ProgressLiquidGlass value={75} max={100} />`}
+      >
+        {[25, 50, 75, 100].map((v) => (
+          <ProgressLiquidGlass key={v} value={v} style={{ width: 180 }} />
+        ))}
+      </DemoBlock>
+
+      {FILL_PRESETS.map((preset) => (
+        <DemoBlock
+          key={`progress-fill-${preset.id}`}
+          title={`fillGlassParams · ${preset.label}`}
+          code={`<ProgressLiquidGlass\n  value={72}\n${fillPropsLine(preset.params)}/>`}
+        >
+          <ProgressLiquidGlass
+            value={progressValue}
+            fillGlassParams={preset.params}
+            style={{ width: 220 }}
+          />
+        </DemoBlock>
+      ))}
+
+      <GlassPresetDemoBlocks
+        component="ProgressLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps="value={72}"
+        render={(preset) => (
+          <ProgressLiquidGlass
+            value={progressValue}
+            glassParams={preset.params}
+            style={{ width: 220 }}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function ResultSection() {
+  const statuses = ['success', 'error', 'info', 'warning'] as const
+
+  return (
+    <DemoSection
+      id="result"
+      title="Result"
+      hint="结果页 — 四种 status"
+      propsHint="Props: status?: success | error | info | warning, title?, subTitle?, extra?"
+    >
+      {statuses.map((status) => (
+        <DemoBlock
+          key={`result-${status}`}
+          title={`status · ${status}`}
+          code={`<ResultLiquidGlass status="${status}" title="${status}" subTitle="..." />`}
+        >
+          <ResultLiquidGlass
+            status={status}
+            title={status.charAt(0).toUpperCase() + status.slice(1)}
+            subTitle={`Result status="${status}"`}
+            extra={<ButtonLiquidGlass size="sm">Action</ButtonLiquidGlass>}
+          />
+        </DemoBlock>
+      ))}
+    </DemoSection>
+  )
+}
+
+export function PopconfirmSection() {
+  return (
+    <DemoSection
+      id="popconfirm"
+      title="Popconfirm"
+      hint="确认气泡"
+      propsHint="Props: title?, description?, onConfirm?, trigger?"
+    >
+      <DemoBlock
+        title="onConfirm"
+        code={`<PopconfirmLiquidGlass title="Delete?" onConfirm={...} trigger={...} />`}
+      >
+        <PopconfirmLiquidGlass
+          title="Delete this item?"
+          description="This action cannot be undone."
+          onConfirm={() => {}}
+          trigger={<ButtonLiquidGlass size="sm">Delete</ButtonLiquidGlass>}
+        />
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function BreadcrumbSection() {
+  return (
+    <DemoSection
+      id="breadcrumb"
+      title="Breadcrumb"
+      hint="面包屑导航"
+      propsHint="Props: items[] — label, href?, onClick?"
+    >
+      <DemoBlock
+        title="items · href / onClick"
+        code={`<BreadcrumbLiquidGlass items={[\n  { label: 'Home', href: '/' },\n  { label: 'Components', onClick: () => {} },\n  { label: 'Current' },\n]} />`}
+      >
+        <BreadcrumbLiquidGlass
+          items={[
+            { label: 'Home', href: '#' },
+            { label: 'Components', onClick: () => {} },
+            { label: 'Breadcrumb' },
+          ]}
+        />
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function MenuSection() {
   const [menuKey, setMenuKey] = useState('home')
 
   return (
-    <DemoSection id="nav-more" title="Navigation More" hint="Steps / Anchor / Menu / Dropdown">
-      <DemoBlock title="Steps current" code={`<LiquidGlassSteps current={1} items={[...]} />`}>
-        <LiquidGlassSteps
-          current={1}
-          items={[
-            { title: 'Finished', description: 'Step 1' },
-            { title: 'In Progress', description: 'Step 2' },
-            { title: 'Waiting', description: 'Step 3' },
-          ]}
-          style={{ width: '100%', maxWidth: 520 }}
-        />
-      </DemoBlock>
-
-      <DemoBlock title="Anchor links" code={`<LiquidGlassAnchor links={[...]} />`}>
-        <LiquidGlassAnchor
-          links={[
-            { key: 'theme', href: '#theme', title: 'Theme' },
-            { key: 'button', href: '#button', title: 'Button' },
-            { key: 'form', href: '#form', title: 'Form' },
-          ]}
-        />
-      </DemoBlock>
-
-      <DemoBlock title="Menu selectedKeys" code={`<LiquidGlassMenu items={items} selectedKeys={[key]} />`}>
-        <LiquidGlassMenu
+    <DemoSection
+      id="menu"
+      title="Menu"
+      hint="垂直菜单"
+      propsHint="Props: items[], selectedKeys?, onSelect?"
+    >
+      <DemoBlock
+        title="selectedKeys / disabled item"
+        code={`<MenuLiquidGlass items={items} selectedKeys={[key]} onSelect={setKey} />`}
+      >
+        <MenuLiquidGlass
           selectedKeys={[menuKey]}
           onSelect={setMenuKey}
           items={[
@@ -1202,10 +1570,24 @@ export function NavMoreSection() {
           ]}
         />
       </DemoBlock>
+    </DemoSection>
+  )
+}
 
-      <DemoBlock title="Dropdown menu" code={`<LiquidGlassDropdown trigger={<Button />} items={items} />`}>
-        <LiquidGlassDropdown
-          trigger={<LiquidGlassButton size="sm">Dropdown</LiquidGlassButton>}
+export function DropdownSection() {
+  return (
+    <DemoSection
+      id="dropdown"
+      title="Dropdown"
+      hint="下拉菜单"
+      propsHint="Props: trigger, items[] — key, label, danger?"
+    >
+      <DemoBlock
+        title="menu items"
+        code={`<DropdownLiquidGlass trigger={<Button />} items={items} />`}
+      >
+        <DropdownLiquidGlass
+          trigger={<ButtonLiquidGlass size="sm">Dropdown</ButtonLiquidGlass>}
           items={[
             { key: '1', label: 'Profile' },
             { key: '2', label: 'Settings' },
@@ -1217,45 +1599,493 @@ export function NavMoreSection() {
   )
 }
 
-export function FeedbackSection() {
+export function PaginationSection() {
+  const [page, setPage] = useState(2)
+
   return (
-    <DemoSection id="feedback" title="Feedback More" hint="Spin / Skeleton / Result / Popconfirm / FloatButton">
-      <DemoBlock title="Spin tip / size" code={`<LiquidGlassSpin tip="Loading…" />`}>
-        <LiquidGlassSpin tip="Loading…" />
-        <LiquidGlassSpin size="sm" />
+    <DemoSection
+      id="pagination"
+      title="Pagination"
+      hint="分页器"
+      propsHint="Props: page?, totalPages?, onPageChange?"
+    >
+      <DemoBlock
+        title="page / totalPages"
+        code={`<PaginationLiquidGlass page={2} totalPages={5} onPageChange={setPage} />`}
+      >
+        <PaginationLiquidGlass page={page} totalPages={5} onPageChange={setPage} />
+        <PaginationLiquidGlass page={1} totalPages={1} />
       </DemoBlock>
+    </DemoSection>
+  )
+}
 
-      <DemoBlock title="Skeleton avatar / paragraph" code={`<LiquidGlassSkeleton avatar paragraph={{ rows: 3 }} active />`}>
-        <LiquidGlassSkeleton avatar paragraph={{ rows: 3 }} active />
-      </DemoBlock>
-
-      <DemoBlock title="Result status" code={`<LiquidGlassResult status="success" title="Done" />`}>
-        <LiquidGlassResult
-          status="success"
-          title="Submission Successful"
-          subTitle="Order has been processed."
-          extra={<LiquidGlassButton size="sm">Back</LiquidGlassButton>}
+export function StepsSection() {
+  return (
+    <DemoSection
+      id="steps"
+      title="Steps"
+      hint="步骤条 — horizontal / vertical"
+      propsHint="Props: items[], current?, direction?: horizontal | vertical, variant?"
+    >
+      <DemoBlock
+        title="direction · horizontal"
+        code={`<StepsLiquidGlass current={1} items={items} />`}
+      >
+        <StepsLiquidGlass
+          current={1}
+          items={STEPS_ITEMS}
+          style={{ width: '100%', maxWidth: 520 }}
         />
       </DemoBlock>
 
-      <DemoBlock title="Popconfirm onConfirm" code={`<LiquidGlassPopconfirm title="Delete?" onConfirm={...} trigger={...} />`}>
-        <LiquidGlassPopconfirm
-          title="Delete this item?"
-          description="This action cannot be undone."
-          onConfirm={() => {}}
-          trigger={<LiquidGlassButton size="sm">Delete</LiquidGlassButton>}
+      <DemoBlock
+        title="direction · vertical"
+        code={`<StepsLiquidGlass direction="vertical" current={1} items={items} />`}
+      >
+        <StepsLiquidGlass
+          direction="vertical"
+          current={1}
+          items={STEPS_ITEMS}
+          style={{ width: 280 }}
         />
       </DemoBlock>
 
-      <DemoBlock title="FloatButton" code={`<LiquidGlassFloatButton icon="+" description="Help" />`}>
-        <div style={{ position: 'relative', height: 80, width: '100%' }}>
-          <LiquidGlassFloatButton
-            icon="+"
-            description="Help"
-            style={{ position: 'absolute', right: 0, bottom: 0 }}
+      <VariantDemoBlock
+        component="StepsLiquidGlass"
+        render={(variant) => (
+          <StepsLiquidGlass
+            key={variant}
+            variant={variant}
+            current={1}
+            items={STEPS_ITEMS.slice(0, 2)}
+            style={{ width: '100%', maxWidth: 420 }}
           />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function AnchorSection() {
+  return (
+    <DemoSection
+      id="anchor"
+      title="Anchor"
+      hint="页内锚点 — 链接至各 demo section"
+      propsHint="Props: links[] — key, href, title"
+    >
+      <DemoBlock
+        title="links · demoNav section ids"
+        code={`<AnchorLiquidGlass links={[{ key: 'button', href: '#button', title: 'Button' }, ...]} />`}
+      >
+        <AnchorLiquidGlass links={ANCHOR_LINKS} />
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function NavbarSection() {
+  return (
+    <DemoSection
+      id="navbar"
+      title="Navbar"
+      hint="顶栏导航"
+      propsHint="Props: brand?, glassParams?, children?"
+    >
+      <GlassPresetDemoBlocks
+        component="NavbarLiquidGlass"
+        presets={GLASS_PRESETS.slice(0, 3)}
+        extraProps='brand="Brand"'
+        render={(preset) => (
+          <NavbarLiquidGlass brand="Liquid Glass" glassParams={preset.params} style={{ width: '100%' }}>
+            <ButtonLiquidGlass size="sm">Docs</ButtonLiquidGlass>
+            <IconButtonLiquidGlass aria-label="Menu">☰</IconButtonLiquidGlass>
+          </NavbarLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function DockSection() {
+  return (
+    <DemoSection
+      id="dock"
+      title="Dock"
+      hint="底部 Dock — 默认 dock 圆角 preset"
+      propsHint="Props: items[], glassParams?"
+    >
+      <GlassPresetDemoBlocks
+        component="DockLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps="items={items}"
+        render={(preset) => (
+          <DockLiquidGlass glassParams={preset.params} items={DOCK_ITEMS} />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function TabsSection() {
+  const [tabValue, setTabValue] = useState('overview')
+
+  return (
+    <DemoSection
+      id="tabs"
+      title="Tabs"
+      hint="ButtonGroup slider + 独立 panel 玻璃"
+      propsHint="Props: items[], size?, glassParams?, thumbGlassParams?, panelGlassParams?, value?, onValueChange?"
+    >
+      <SizeDemoBlock
+        component="TabsLiquidGlass"
+        render={(size) => (
+          <TabsLiquidGlass key={size} items={TAB_ITEMS} size={size} defaultValue="overview" />
+        )}
+      />
+
+      <GlassPresetDemoBlocks
+        component="TabsLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        extraProps="items={items}"
+        render={(preset) => (
+          <TabsLiquidGlass items={TAB_ITEMS} glassParams={preset.params} defaultValue="overview" />
+        )}
+      />
+
+      {THUMB_PRESETS.slice(1).map((preset) => (
+        <DemoBlock
+          key={`tabs-thumb-${preset.id}`}
+          title={`thumbGlassParams · ${preset.label}`}
+          code={`<TabsLiquidGlass\n${thumbPropsLine(preset.params)} items={items} />`}
+        >
+          <TabsLiquidGlass items={TAB_ITEMS} thumbGlassParams={preset.params} defaultValue="overview" />
+        </DemoBlock>
+      ))}
+
+      {PANEL_PRESETS.map((preset) => (
+        <DemoBlock
+          key={`tabs-panel-${preset.id}`}
+          title={`panelGlassParams · ${preset.label}`}
+          description="Tab 内容面板独立玻璃"
+          code={`<TabsLiquidGlass\n${panelPropsLine(preset.params)} items={items} />`}
+        >
+          <TabsLiquidGlass
+            items={TAB_ITEMS}
+            panelGlassParams={preset.params}
+            defaultValue="overview"
+          />
+        </DemoBlock>
+      ))}
+
+      <DemoBlock
+        title="controlled · value + onValueChange"
+        code={`<TabsLiquidGlass\n  items={items}\n  value={value}\n  onValueChange={setValue}\n/>`}
+      >
+        <TabsLiquidGlass items={TAB_ITEMS} value={tabValue} onValueChange={setTabValue} />
+      </DemoBlock>
+    </DemoSection>
+  )
+}
+
+export function SpaceSection() {
+  return (
+    <DemoSection
+      id="space"
+      title="Space"
+      hint="间距布局"
+      propsHint="Props: direction?, size?, wrap?"
+    >
+      <DemoBlock
+        title="direction · horizontal / vertical"
+        code={`<SpaceLiquidGlass><Button /><Button /></SpaceLiquidGlass>`}
+      >
+        <SpaceLiquidGlass>
+          <ButtonLiquidGlass size="sm">A</ButtonLiquidGlass>
+          <ButtonLiquidGlass size="sm">B</ButtonLiquidGlass>
+          <ButtonLiquidGlass size="sm">C</ButtonLiquidGlass>
+        </SpaceLiquidGlass>
+        <SpaceLiquidGlass direction="vertical" size="sm">
+          <ButtonLiquidGlass size="sm">Top</ButtonLiquidGlass>
+          <ButtonLiquidGlass size="sm">Bottom</ButtonLiquidGlass>
+        </SpaceLiquidGlass>
+      </DemoBlock>
+
+      <SizeDemoBlock
+        component="SpaceLiquidGlass"
+        render={(size) => (
+          <SpaceLiquidGlass key={size} size={size}>
+            <BadgeLiquidGlass size="sm">1</BadgeLiquidGlass>
+            <BadgeLiquidGlass size="sm">2</BadgeLiquidGlass>
+            <BadgeLiquidGlass size="sm">3</BadgeLiquidGlass>
+          </SpaceLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function DividerSection() {
+  return (
+    <DemoSection
+      id="divider"
+      title="Divider"
+      hint="分隔线"
+      propsHint="Props: orientation?: horizontal | vertical, glassParams?"
+    >
+      <DemoBlock
+        title="orientation · horizontal / vertical"
+        code={`<DividerLiquidGlass orientation="horizontal" />\n<DividerLiquidGlass orientation="vertical" />`}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
+          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Left</span>
+          <DividerLiquidGlass orientation="vertical" />
+          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Right</span>
+        </div>
+        <DividerLiquidGlass orientation="horizontal" />
+      </DemoBlock>
+
+      <GlassPresetDemoBlocks
+        component="DividerLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        render={(preset) => <DividerLiquidGlass glassParams={preset.params} />}
+      />
+    </DemoSection>
+  )
+}
+
+export function AffixSection() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <DemoSection
+      id="affix"
+      title="Affix"
+      hint="滚动吸顶 / 吸底"
+      propsHint="Props: offsetTop?, offsetBottom?, target?, children"
+    >
+      <DemoBlock
+        title="offsetTop · scroll container"
+        description="在下方容器内滚动，标签吸顶"
+        code={`<AffixLiquidGlass offsetTop={0} target={() => scrollEl}>\n  <BadgeLiquidGlass shape="chip">Affixed</BadgeLiquidGlass>\n</AffixLiquidGlass>`}
+      >
+        <div
+          ref={scrollRef}
+          style={{
+            height: 200,
+            overflow: 'auto',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderRadius: 8,
+            padding: 12,
+          }}
+        >
+          <div style={{ height: 80, color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>
+            Scroll down ↓
+          </div>
+          <AffixLiquidGlass offsetTop={0} target={() => scrollRef.current}>
+            <BadgeLiquidGlass shape="chip">Affixed Header</BadgeLiquidGlass>
+          </AffixLiquidGlass>
+          <div style={{ height: 320, color: 'rgba(255,255,255,0.4)', fontSize: 12, paddingTop: 16 }}>
+            Long content area…
+          </div>
         </div>
       </DemoBlock>
     </DemoSection>
   )
 }
+
+export function ModalSection() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <DemoSection
+      id="modal"
+      title="Modal"
+      hint="对话框 — Portal + ESC + overlay"
+      propsHint="Props: open?, title?, footer?, onClose?, glassParams?"
+    >
+      <DemoBlock
+        title="open / title / footer / onClose"
+        code={`<ModalLiquidGlass\n  open={open}\n  title="Glass Modal"\n  onClose={() => setOpen(false)}\n  footer={<ButtonLiquidGlass>OK</ButtonLiquidGlass>}\n>\n  Content\n</ModalLiquidGlass>`}
+      >
+        <ButtonLiquidGlass size="sm" onClick={() => setOpen(true)}>
+          Open Modal
+        </ButtonLiquidGlass>
+      </DemoBlock>
+
+      <GlassPresetDemoBlocks
+        component="ModalLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 2)}
+        extraProps="open={open} title='Modal'"
+        render={(preset) => (
+          <ButtonLiquidGlass size="sm" onClick={() => setOpen(true)}>
+            Modal ({preset.label})
+          </ButtonLiquidGlass>
+        )}
+      />
+
+      <ModalLiquidGlass
+        open={open}
+        title="Glass Modal"
+        onClose={() => setOpen(false)}
+        footer={
+          <>
+            <ButtonLiquidGlass size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </ButtonLiquidGlass>
+            <ButtonLiquidGlass size="sm" onClick={() => setOpen(false)}>
+              Confirm
+            </ButtonLiquidGlass>
+          </>
+        }
+      >
+        Modal dialog with liquid glass refraction. ESC 或点击遮罩关闭。
+      </ModalLiquidGlass>
+    </DemoSection>
+  )
+}
+
+export function DrawerSection() {
+  const [drawerLeftOpen, setDrawerLeftOpen] = useState(false)
+  const [drawerRightOpen, setDrawerRightOpen] = useState(false)
+
+  return (
+    <DemoSection
+      id="drawer"
+      title="Drawer"
+      hint="侧栏抽屉"
+      propsHint="Props: open?, side?: left | right, title?, onClose?, glassParams?"
+    >
+      <DemoBlock
+        title="side · left / right"
+        code={`<DrawerLiquidGlass side="left" open={open} title="Left" onClose={...} />\n<DrawerLiquidGlass side="right" open={open} title="Right" onClose={...} />`}
+      >
+        <ButtonLiquidGlass size="sm" onClick={() => setDrawerLeftOpen(true)}>
+          Left Drawer
+        </ButtonLiquidGlass>
+        <ButtonLiquidGlass size="sm" onClick={() => setDrawerRightOpen(true)}>
+          Right Drawer
+        </ButtonLiquidGlass>
+      </DemoBlock>
+
+      <DrawerLiquidGlass
+        open={drawerLeftOpen}
+        side="left"
+        title="Left Drawer"
+        onClose={() => setDrawerLeftOpen(false)}
+      >
+        <p>side=&quot;left&quot; 从左侧滑入</p>
+        <ButtonLiquidGlass size="sm" onClick={() => setDrawerLeftOpen(false)}>
+          Close
+        </ButtonLiquidGlass>
+      </DrawerLiquidGlass>
+
+      <DrawerLiquidGlass
+        open={drawerRightOpen}
+        side="right"
+        title="Right Drawer"
+        onClose={() => setDrawerRightOpen(false)}
+      >
+        <p>side=&quot;right&quot; 从右侧滑入</p>
+        <ButtonLiquidGlass size="sm" onClick={() => setDrawerRightOpen(false)}>
+          Close
+        </ButtonLiquidGlass>
+      </DrawerLiquidGlass>
+    </DemoSection>
+  )
+}
+
+export function PopoverSection() {
+  return (
+    <DemoSection
+      id="popover"
+      title="Popover"
+      hint="弹出层"
+      propsHint="Props: trigger, content, glassParams?"
+    >
+      <GlassPresetDemoBlocks
+        component="PopoverLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        render={(preset) => (
+          <PopoverLiquidGlass
+            glassParams={preset.params}
+            trigger={<ButtonLiquidGlass size="sm">Popover</ButtonLiquidGlass>}
+            content={`${preset.label} popover content.`}
+          />
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export function TooltipSection() {
+  return (
+    <DemoSection
+      id="tooltip"
+      title="Tooltip"
+      hint="文字提示"
+      propsHint="Props: content, children, glassParams?"
+    >
+      <GlassPresetDemoBlocks
+        component="TooltipLiquidGlass"
+        presets={GLASS_PRESETS.slice(1, 3)}
+        render={(preset) => (
+          <TooltipLiquidGlass glassParams={preset.params} content={`${preset.label} tooltip`}>
+            <ButtonLiquidGlass size="sm">Hover</ButtonLiquidGlass>
+          </TooltipLiquidGlass>
+        )}
+      />
+    </DemoSection>
+  )
+}
+
+export const DEMO_SECTIONS: { id: string; Component: () => JSX.Element }[] = [
+  { id: 'button', Component: ButtonSection },
+  { id: 'button-group', Component: ButtonGroupSection },
+  { id: 'icon-button', Component: IconButtonSection },
+  { id: 'float-button', Component: FloatButtonSection },
+  { id: 'badge', Component: BadgeSection },
+  { id: 'tag', Component: TagSection },
+  { id: 'avatar', Component: AvatarSection },
+  { id: 'avatar-group', Component: AvatarGroupSection },
+  { id: 'card', Component: CardSection },
+  { id: 'media-card', Component: MediaCardSection },
+  { id: 'list', Component: ListSection },
+  { id: 'empty', Component: EmptySection },
+  { id: 'statistic', Component: StatisticSection },
+  { id: 'timeline', Component: TimelineSection },
+  { id: 'collapse', Component: CollapseSection },
+  { id: 'typography', Component: TypographySection },
+  { id: 'input', Component: InputSection },
+  { id: 'textarea', Component: TextareaSection },
+  { id: 'select', Component: SelectSection },
+  { id: 'checkbox', Component: CheckboxSection },
+  { id: 'radio', Component: RadioSection },
+  { id: 'switch', Component: SwitchSection },
+  { id: 'slider', Component: SliderSection },
+  { id: 'rate', Component: RateSection },
+  { id: 'alert', Component: AlertSection },
+  { id: 'toast', Component: ToastSection },
+  { id: 'spin', Component: SpinSection },
+  { id: 'skeleton', Component: SkeletonSection },
+  { id: 'progress', Component: ProgressSection },
+  { id: 'result', Component: ResultSection },
+  { id: 'popconfirm', Component: PopconfirmSection },
+  { id: 'breadcrumb', Component: BreadcrumbSection },
+  { id: 'menu', Component: MenuSection },
+  { id: 'dropdown', Component: DropdownSection },
+  { id: 'pagination', Component: PaginationSection },
+  { id: 'steps', Component: StepsSection },
+  { id: 'anchor', Component: AnchorSection },
+  { id: 'navbar', Component: NavbarSection },
+  { id: 'dock', Component: DockSection },
+  { id: 'tabs', Component: TabsSection },
+  { id: 'space', Component: SpaceSection },
+  { id: 'divider', Component: DividerSection },
+  { id: 'affix', Component: AffixSection },
+  { id: 'modal', Component: ModalSection },
+  { id: 'drawer', Component: DrawerSection },
+  { id: 'popover', Component: PopoverSection },
+  { id: 'tooltip', Component: TooltipSection },
+]

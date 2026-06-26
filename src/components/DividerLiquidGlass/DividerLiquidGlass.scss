@@ -1,0 +1,18 @@
+@use '../../styles/glass-mixins' as *;
+
+.divider-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  flex-shrink: 0;
+
+  &--horizontal {
+    width: 100%;
+    max-width: 320px;
+    height: 2px;
+  }
+
+  &--vertical {
+    width: 2px;
+    height: 48px;
+  }
+}

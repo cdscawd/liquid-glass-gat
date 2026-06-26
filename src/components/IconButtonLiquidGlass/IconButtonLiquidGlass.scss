@@ -1,0 +1,27 @@
+@use '../../styles/glass-mixins' as *;
+
+.icon-button-liquid-glass {
+  @include glass-surface;
+  @include glass-variant-modifiers;
+  @include glass-interactive;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+
+  &--sm {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  &--lg {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+}

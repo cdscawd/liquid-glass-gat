@@ -1,12 +1,12 @@
 ---
 description: Liquid Glass 组件库开发与扩展规范（共享 lib、样式 Token、新增组件清单）
-globs: src/components/LiquidGlass*/**/*.{tsx,scss,ts},src/lib/liquid-glass/**/*,src/styles/_*.scss,src/AppNewComponents.tsx
+globs: src/components/*LiquidGlass/**/*.{tsx,scss,ts},src/lib/liquid-glass/**/*,src/styles/_*.scss,src/AppNewComponents.tsx
 alwaysApply: false
 ---
 
 # Liquid Glass 组件库规范
 
-本仓库是一套 **Liquid Glass（液态玻璃折射）** React 组件库。所有 `LiquidGlass*` 组件共享同一套 SVG 位移贴图 + `backdrop-filter` 管线，在动态背景（如 `CyberspaceBackground`）上呈现边缘折射效果。
+本仓库是一套 **Liquid Glass（液态玻璃折射）** React 组件库。所有 `*LiquidGlass` 组件共享同一套 SVG 位移贴图 + `backdrop-filter` 管线，在动态背景（如 `CyberspaceBackground`）上呈现边缘折射效果。
 
 ---
 
@@ -25,11 +25,11 @@ src/
 ├── styles/
 │   ├── _variables.scss         # $glass-* SCSS Token（唯一颜色来源）
 │   ├── _glass-mixins.scss      # glass-surface / interactive / thumb…
-│   └── global.scss             # :root CSS 变量 --lg-*、.liquid-glass-filter
+│   └── global.scss             # :root CSS 变量 --lg-*、.filter-liquid-glass
 ├── components/
-│   ├── LiquidGlassXxx/         # 每个组件独立目录
-│   │   ├── LiquidGlassXxx.tsx
-│   │   ├── LiquidGlassXxx.scss
+│   ├── XxxLiquidGlass/         # 每个组件独立目录
+│   │   ├── XxxLiquidGlass.tsx
+│   │   ├── XxxLiquidGlass.scss
 │   │   └── index.ts
 │   └── index.ts                # barrel export
 ├── App.tsx                     # 主演示（Button / ButtonGroup / Provider 换肤）
@@ -40,10 +40,10 @@ src/
 
 | 层级 | 规则 | 示例 |
 |------|------|------|
-| 组件 | `LiquidGlass` + 语义名 | `LiquidGlassCard` |
-| Props | `LiquidGlass<Name>Props` | `LiquidGlassCardProps` |
-| 尺寸 | `LiquidGlass<Name>Size` | `'sm' \| 'md' \| 'lg'` |
-| CSS 类 | `liquid-glass-<kebab>` | `liquid-glass-card--sm` |
+| 组件 | 语义名 + `LiquidGlass` | `CardLiquidGlass` |
+| Props | `<Name>LiquidGlassProps` | `CardLiquidGlassProps` |
+| 尺寸 | `<Name>LiquidGlassSize` | `'sm' \| 'md' \| 'lg'` |
+| CSS 类 | `<kebab>-liquid-glass` | `card-liquid-glass--sm` |
 
 ---
 
@@ -55,47 +55,47 @@ src/
 
 | 组件 | 说明 | size | 特殊 Props |
 |------|------|------|------------|
-| `LiquidGlassButton` | 标准按钮 | ✓ | — |
-| `LiquidGlassIconButton` | 圆形图标按钮 | ✓ | `aria-label` 必填 |
-| `LiquidGlassButtonGroup` | 分段控制 | ✓ | `variant: default \| slider`；slider 有 `thumbGlassParams` |
-| `LiquidGlassSwitch` | 开关（点击 + 拖拽吸附） | ✓ | `thumbGlassParams`；thumb 无独立 filter |
-| `LiquidGlassInput` | 输入框 | ✓ | 外层 div 做 glass，内层 input 透明 |
-| `LiquidGlassTextarea` | 多行输入 | ✓ | 同上 |
-| `LiquidGlassSlider` | range 滑条 | — | track-only 玻璃；原生 thumb 样式 |
-| `LiquidGlassProgress` | 进度条 | — | `fillGlassParams` |
+| `ButtonLiquidGlass` | 标准按钮 | ✓ | — |
+| `IconButtonLiquidGlass` | 圆形图标按钮 | ✓ | `aria-label` 必填 |
+| `ButtonGroupLiquidGlass` | 分段控制 | ✓ | `variant: default \| slider`；slider 有 `thumbGlassParams` |
+| `SwitchLiquidGlass` | 开关（点击 + 拖拽吸附） | ✓ | `thumbGlassParams`；thumb 无独立 filter |
+| `InputLiquidGlass` | 输入框 | ✓ | 外层 div 做 glass，内层 input 透明 |
+| `TextareaLiquidGlass` | 多行输入 | ✓ | 同上 |
+| `SliderLiquidGlass` | range 滑条 | — | track-only 玻璃；原生 thumb 样式 |
+| `ProgressLiquidGlass` | 进度条 | — | `fillGlassParams` |
 
 ### 2.2 容器与展示
 
 | 组件 | 说明 | size | 特殊 Props |
 |------|------|------|------------|
-| `LiquidGlassCard` | 卡片（Header/Body/Footer 子组件） | ✓ | 复合组件 |
-| `LiquidGlassMediaCard` | 媒体卡片 | ✓ | 封装 Card |
-| `LiquidGlassBadge` | 标签 / Chip | ✓ | `variant: badge \| chip` |
-| `LiquidGlassDivider` | 分隔条 | — | `orientation` |
-| `LiquidGlassList` | 列表 | — | **单容器** 1 filter；行内 selected 高亮 |
-| `LiquidGlassAvatar` | 头像 | ✓ | preset pill |
-| `LiquidGlassAvatarGroup` | 头像组 | — | 透传 `glassParams` |
+| `CardLiquidGlass` | 卡片（Header/Body/Footer 子组件） | ✓ | 复合组件 |
+| `MediaCardLiquidGlass` | 媒体卡片 | ✓ | 封装 Card |
+| `BadgeLiquidGlass` | 标签 / Chip | ✓ | `variant: badge \| chip` |
+| `DividerLiquidGlass` | 分隔条 | — | `orientation` |
+| `ListLiquidGlass` | 列表 | — | **单容器** 1 filter；行内 selected 高亮 |
+| `AvatarLiquidGlass` | 头像 | ✓ | preset pill |
+| `AvatarGroupLiquidGlass` | 头像组 | — | 透传 `glassParams` |
 
 ### 2.3 导航与布局
 
 | 组件 | 说明 |
 |------|------|
-| `LiquidGlassNavbar` | 顶栏 |
-| `LiquidGlassDock` | 底部 Dock（preset dock 圆角） |
-| `LiquidGlassBreadcrumb` | 面包屑 |
-| `LiquidGlassPagination` | 分页 |
-| `LiquidGlassTabs` | Tab（ButtonGroup slider + `panelGlassParams` 面板） |
+| `NavbarLiquidGlass` | 顶栏 |
+| `DockLiquidGlass` | 底部 Dock（preset dock 圆角） |
+| `BreadcrumbLiquidGlass` | 面包屑 |
+| `PaginationLiquidGlass` | 分页 |
+| `TabsLiquidGlass` | Tab（ButtonGroup slider + `panelGlassParams` 面板） |
 
 ### 2.4 浮层与反馈
 
 | 组件 | 说明 |
 |------|------|
-| `LiquidGlassModal` | 对话框（Portal + ESC + overlay） |
-| `LiquidGlassDrawer` | 侧栏抽屉 |
-| `LiquidGlassPopover` | 弹出层 |
-| `LiquidGlassTooltip` | 提示 |
-| `LiquidGlassToast` | 通知 |
-| `LiquidGlassAlert` | 警告条（`variant` 语义边框） |
+| `ModalLiquidGlass` | 对话框（Portal + ESC + overlay） |
+| `DrawerLiquidGlass` | 侧栏抽屉 |
+| `PopoverLiquidGlass` | 弹出层 |
+| `TooltipLiquidGlass` | 提示 |
+| `ToastLiquidGlass` | 通知 |
+| `AlertLiquidGlass` | 警告条（`variant` 语义边框） |
 
 ### 2.5 非玻璃组件（同仓库，不走本规范）
 
@@ -132,7 +132,7 @@ export function LiquidGlassXxx({ glassParams, className = '', style, ...props }:
       />
       <div
         ref={hostRef}
-        className={`liquid-glass-xxx${className ? ` ${className}` : ''}`}
+        className={`xxx-liquid-glass${className ? ` ${className}` : ''}`}
         style={{ ...filterStyle, borderRadius, ...style }}
         {...props}
       />
@@ -233,7 +233,7 @@ extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 
 ### 5.4 复合组件
 
-- 子组件挂到主组件：`LiquidGlassCard.Header = …`
+- 子组件挂到主组件：`CardLiquidGlass.Header = …`
 - Context 仅用于强耦合组合（如 `ButtonGroup.Item`），不要滥用
 
 ---
@@ -243,7 +243,7 @@ extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 ```scss
 @use '../../styles/glass-mixins' as *;
 
-.liquid-glass-xxx {
+.xxx-liquid-glass {
   @include glass-surface;       // 必选：border/bg/shadow + contain + isolation
   @include glass-text;          // 有文字的容器
   @include glass-interactive;   // Button / IconButton
@@ -258,7 +258,7 @@ extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 
 - 布局、间距、尺寸在组件 SCSS；颜色/阴影/边框 **只用 Token**
 - `borderRadius` 视觉以 TS inline `borderRadius`（来自 hook）为准；SCSS 不写死 `999px` 与 preset 冲突
-- `.liquid-glass-filter` 仅在 `global.scss` 定义一次
+- `.filter-liquid-glass` 仅在 `global.scss` 定义一次
 
 ---
 
@@ -289,7 +289,7 @@ extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 | 规则 | 说明 |
 |------|------|
 | 1 宿主 = 1 filter | 每个 `useLiquidGlassEffect` 实例一个 SVG filter |
-| 列表单容器 | `LiquidGlassList` 模式；禁止 per-row filter |
+| 列表单容器 | `ListLiquidGlass` 模式；禁止 per-row filter |
 | `glass-surface` | 统一 `contain: layout style paint` + `isolation: isolate` |
 | 贴图生成 | hook 内防抖 + `requestIdleCallback`，勿重复实现 |
 
@@ -304,7 +304,7 @@ extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 3. **接入 hook** — `useLiquidGlassEffect` + 正确 `GLASS_SHAPE` preset
 4. **Props** — `glassParams` + 原生属性透传 + 类型导出
 5. **SCSS** — `@use glass-mixins` + Token，选对 mixin
-6. **导出** — `components/LiquidGlassXxx/index.ts` → `components/index.ts`
+6. **导出** — `components/XxxLiquidGlass/index.ts` → `components/index.ts`
 7. **演示** — 在 `AppNewComponents.tsx`（或 `App.tsx`）增加最小示例
 8. **构建** — `npm run build` 通过
 9. **更新本规则 §2 清单** — 把新组件加入对应分类表
