@@ -1,0 +1,18 @@
+.liquid-glass-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+
+  &__panel {
+    width: 100%;
+    padding: 16px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  }
+}

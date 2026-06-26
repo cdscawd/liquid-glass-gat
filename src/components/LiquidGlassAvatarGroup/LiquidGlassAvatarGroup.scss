@@ -1,0 +1,12 @@
+.liquid-glass-avatar-group {
+  display: inline-flex;
+  align-items: center;
+
+  .liquid-glass-avatar {
+    margin-left: -8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

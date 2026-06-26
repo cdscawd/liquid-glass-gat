@@ -1,0 +1,42 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-switch {
+  @include glass-surface;
+  @include glass-focus-ring;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 52px;
+  height: 32px;
+  padding: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &--checked {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  &--sm {
+    width: 42px;
+    height: 26px;
+  }
+
+  &--lg {
+    width: 60px;
+    height: 36px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+}

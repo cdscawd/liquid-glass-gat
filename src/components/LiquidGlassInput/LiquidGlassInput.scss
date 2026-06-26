@@ -1,0 +1,52 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-input {
+  @include glass-surface;
+  display: inline-flex;
+  align-items: center;
+  min-width: 180px;
+  transition: background-color 0.2s ease;
+
+  &:focus-within {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &--sm {
+    min-width: 140px;
+  }
+
+  &--lg {
+    min-width: 240px;
+  }
+
+  &__field {
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-family: $font-sans;
+    font-size: 14px;
+    line-height: 1.25;
+    outline: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &--sm .liquid-glass-input__field {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  &--lg .liquid-glass-input__field {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+}

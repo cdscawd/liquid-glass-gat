@@ -1,0 +1,33 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-toast {
+  @include glass-surface;
+  @include glass-text;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 55;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 14px 16px;
+
+  &--success {
+    border-color: rgba(120, 255, 180, 0.35);
+  }
+
+  &--error {
+    border-color: rgba(255, 120, 120, 0.35);
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__desc {
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}

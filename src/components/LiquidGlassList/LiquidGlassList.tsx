@@ -1,0 +1,76 @@
+import { type HTMLAttributes, type ReactNode } from 'react'
+import {
+  LiquidGlassFilter,
+  useLiquidGlassEffect,
+  type LiquidGlassParams,
+} from '../../lib/liquid-glass'
+import './LiquidGlassList.scss'
+
+export interface LiquidGlassListItem {
+  id: string
+  title: ReactNode
+  description?: ReactNode
+  selected?: boolean
+  onClick?: () => void
+}
+
+export interface LiquidGlassListProps extends HTMLAttributes<HTMLUListElement> {
+  glassParams?: LiquidGlassParams
+  items: LiquidGlassListItem[]
+}
+
+function LiquidGlassListRow({
+  item,
+  glassParams,
+}: {
+  item: LiquidGlassListItem
+  glassParams?: LiquidGlassParams
+}) {
+  const { hostRef, filterId, mapId, mapUrl, filterSize, filterStyle, borderRadius } =
+    useLiquidGlassEffect<HTMLLIElement>(glassParams)
+
+  return (
+    <>
+      <LiquidGlassFilter
+        filterId={filterId}
+        mapId={mapId}
+        mapUrl={mapUrl}
+        width={filterSize.width}
+        height={filterSize.height}
+      />
+      <li
+        ref={hostRef}
+        className={`liquid-glass-list__item${item.selected ? ' liquid-glass-list__item--selected' : ''}`}
+        style={{ ...filterStyle, borderRadius }}
+      >
+        <button
+          type="button"
+          className="liquid-glass-list__btn"
+          onClick={item.onClick}
+        >
+          <span className="liquid-glass-list__title">{item.title}</span>
+          {item.description && (
+            <span className="liquid-glass-list__desc">{item.description}</span>
+          )}
+        </button>
+      </li>
+    </>
+  )
+}
+
+export function LiquidGlassList({
+  glassParams,
+  items,
+  className = '',
+  ...props
+}: LiquidGlassListProps) {
+  return (
+    <ul className={`liquid-glass-list${className ? ` ${className}` : ''}`} {...props}>
+      {items.map((item) => (
+        <LiquidGlassListRow key={item.id} item={item} glassParams={glassParams} />
+      ))}
+    </ul>
+  )
+}
+
+export default LiquidGlassList

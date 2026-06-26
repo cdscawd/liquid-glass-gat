@@ -1,0 +1,38 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-dock {
+  @include glass-surface;
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: 24px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+
+    &:hover {
+      transform: translateY(-6px) scale(1.08);
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  &__icon {
+    display: flex;
+    line-height: 1;
+  }
+}

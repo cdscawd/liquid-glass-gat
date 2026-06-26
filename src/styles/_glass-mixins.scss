@@ -1,0 +1,25 @@
+@forward 'variables';
+@use 'variables' as *;
+
+@mixin glass-surface {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid $glass-border;
+  border-radius: $glass-radius;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    $glass-shadow-outer 0 4px 8px,
+    $glass-shadow-inner 0 -10px 25px inset;
+}
+
+@mixin glass-text {
+  color: #fff;
+  font-family: $font-sans;
+}
+
+@mixin glass-focus-ring {
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 2px;
+  }
+}

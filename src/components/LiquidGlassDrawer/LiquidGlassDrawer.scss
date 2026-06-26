@@ -1,0 +1,56 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-drawer {
+  @include glass-surface;
+  @include glass-text;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  width: min(280px, 85vw);
+  padding: 20px 16px;
+  transform: translateX(-105%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+
+  &--right {
+    right: 0;
+    left: auto;
+    transform: translateX(105%);
+  }
+
+  &--open {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  &--right.liquid-glass-drawer--open {
+    transform: translateX(0);
+  }
+
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 39;
+    padding: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

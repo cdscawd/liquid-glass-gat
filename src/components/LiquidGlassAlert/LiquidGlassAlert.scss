@@ -1,0 +1,37 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-alert {
+  @include glass-surface;
+  @include glass-text;
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 16px;
+
+  &--info {
+    border-color: rgba(140, 180, 255, 0.35);
+  }
+
+  &--success {
+    border-color: rgba(120, 255, 180, 0.35);
+  }
+
+  &--warning {
+    border-color: rgba(255, 210, 120, 0.35);
+  }
+
+  &--error {
+    border-color: rgba(255, 120, 120, 0.35);
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__body {
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}

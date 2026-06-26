@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AppNewComponents } from './AppNewComponents'
 import { CyberspaceBackground } from './components/CyberspaceBackground'
 import { LiquidGlassButton } from './components/LiquidGlassButton'
 import { LiquidGlassButtonGroup } from './components/LiquidGlassButtonGroup'
@@ -338,11 +339,11 @@ const DEMO_BUTTON_GROUPS: DemoButtonGroup[] = [
     size: 'sm',
     glassParams: { borderRadius: 999, strength: 1.05, edgeFalloff: 11 },
     items: [
-      { value: 'walk', label: '🚶' },
-      { value: 'bike', label: '🚲' },
+      { value: 'walk', label: '❤️' },
+      { value: 'bike', label: '🌟' },
       { value: 'bus', label: '🚌' },
       { value: 'car', label: '🚗' },
-      { value: 'fly', label: '✈' },
+      { value: 'fly', label: '🚀' },
     ],
   },
 ]
@@ -454,6 +455,8 @@ function App() {
             </div>
           </div>
         </section>
+
+        <AppNewComponents />
 
         <p className="app__hint">
           赛博隧道 Three.js 背景自动循环 · 玻璃折射建议在 Chrome 查看

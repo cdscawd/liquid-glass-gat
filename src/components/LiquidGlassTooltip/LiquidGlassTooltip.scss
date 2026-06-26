@@ -1,0 +1,19 @@
+@use '../../styles/glass-mixins' as *;
+
+.liquid-glass-tooltip {
+  @include glass-surface;
+  @include glass-text;
+  position: fixed;
+  z-index: 46;
+  max-width: 220px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+
+  &__anchor {
+    display: inline-flex;
+  }
+}
