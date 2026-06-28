@@ -1,12 +1,12 @@
 ---
-description: Liquid Glass 组件库开发与扩展规范（共享 lib、样式 Token、新增组件清单）
+description: LiquidGlassUI 组件库开发与扩展规范（共享 lib、样式 Token、新增组件清单）
 globs: src/components/*LiquidGlass/**/*.{tsx,scss,ts},src/lib/liquid-glass/**/*,src/styles/_*.scss,src/AppNewComponents.tsx
 alwaysApply: false
 ---
 
-# Liquid Glass 组件库规范
+# LiquidGlassUI 组件库规范
 
-本仓库是一套 **Liquid Glass（液态玻璃折射）** React 组件库。所有 `*LiquidGlass` 组件共享同一套 SVG 位移贴图 + `backdrop-filter` 管线，在动态背景（如 `CyberspaceBackground`）上呈现边缘折射效果。
+本仓库是 **LiquidGlassUI** — 一套 **液态玻璃折射（Liquid Glass）** React 组件库。所有 `*LiquidGlass` 组件共享同一套 SVG 位移贴图 + `backdrop-filter` 管线，在动态背景（如 `CyberspaceBackground`）上呈现边缘折射效果。
 
 ---
 

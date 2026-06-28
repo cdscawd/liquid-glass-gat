@@ -3,13 +3,13 @@ $font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
 $color-text: #1a1a1a;
 $color-bg: #0a0a0a;
 
-// Liquid Glass — 形状
+// LiquidGlassUI — 形状
 $glass-radius: 8px;
 $glass-radius-pill: 999px;
 $glass-radius-dock: 24px;
 $glass-radius-badge: 6px;
 
-// Liquid Glass — 表面
+// LiquidGlassUI — 表面
 $glass-border: rgba(255, 255, 255, 0.35);
 $glass-bg: rgba(255, 255, 255, 0.06);
 $glass-bg-hover: rgba(255, 255, 255, 0.1);
@@ -27,24 +27,24 @@ $glass-thumb-highlight: rgba(255, 255, 255, 0.35);
 $glass-thumb-ring: rgba(255, 255, 255, 0.08);
 $glass-divider: rgba(255, 255, 255, 0.12);
 
-// Liquid Glass — 文字
+// LiquidGlassUI — 文字
 $glass-text-primary: #fff;
 $glass-text-secondary: rgba(255, 255, 255, 0.85);
 $glass-text-muted: rgba(255, 255, 255, 0.65);
 $glass-text-faint: rgba(255, 255, 255, 0.45);
 $glass-text-disabled: rgba(255, 255, 255, 0.55);
 
-// Liquid Glass — 交互
+// LiquidGlassUI — 交互
 $glass-focus-ring: rgba(255, 255, 255, 0.45);
 $glass-overlay: rgba(0, 0, 0, 0.4);
 $glass-overlay-light: rgba(0, 0, 0, 0.35);
 
-// Liquid Glass — 语义 variant 基色（border / bg / text / glow 由 mixin 自动推导）
+// LiquidGlassUI — 语义 variant 基色（border / bg / text / glow 由 mixin 自动推导）
 $glass-variant-primary: #2161f7;
 $glass-variant-danger: #ff3c3c;
 $glass-variant-success: #28b464;
 
-// Liquid Glass — 语义边框（Alert / Toast / Steps 等待办状态，非 variant 体系）
+// LiquidGlassUI — 语义边框（Alert / Toast / Steps 等待办状态，非 variant 体系）
 $glass-border-info: rgba(140, 180, 255, 0.35);
 $glass-border-success: rgba(120, 255, 180, 0.35);
 $glass-border-warning: rgba(255, 210, 120, 0.35);

@@ -3,7 +3,7 @@ import type { LiquidGlassFilterMode, LiquidGlassNestedPolicy } from './types'
 export const DEFAULT_NESTED_POLICY: LiquidGlassNestedPolicy = 'overlay'
 
 const NESTED_WITHOUT_STACK_MSG =
-  '[liquid-glass] Nested glass host detected without LiquidGlassStack. ' +
+  '[liquidglassui] Nested glass host detected without LiquidGlassStack. ' +
   'Use <LiquidGlassStack> with sibling layers for double refraction, ' +
   'or set filterMode="filter" / nestedPolicy="filter" explicitly.'
 

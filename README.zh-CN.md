@@ -1,12 +1,12 @@
-# Liquid Glass
+# LiquidGlassUI
 
 <div align="center">
 
-![Liquid Glass preview](./doc/image.png)
+![LiquidGlassUI preview](./doc/image.png)
 
 **基于 SVG 位移折射的动态背景液态玻璃 React 组件库**
 
-**[在线演示](https://cdscawd.github.io/liquid-glass/)** · [English Documentation](./README.md)
+**[在线演示](https://cdscawd.github.io/liquidglassui/)** · [English Documentation](./README.md)
 
 </div>
 
@@ -42,7 +42,7 @@
 
 ## 简介
 
-Liquid Glass 是一套 **React 19** UI 组件库，在网页上复现 Apple 风格的液态玻璃折射效果。所有 `*LiquidGlass` 组件共用同一套渲染管线：
+LiquidGlassUI 是一套 **React 19** UI 组件库，在网页上复现 Apple 风格的液态玻璃折射效果。所有 `*LiquidGlass` 组件共用同一套渲染管线：
 
 **SDF 位移贴图 → SVG `feDisplacementMap` → `backdrop-filter`**
 
@@ -121,7 +121,7 @@ export function App() {
 
 ## 交互演示
 
-**在线访问：** https://cdscawd.github.io/liquid-glass/
+**在线访问：** https://cdscawd.github.io/liquidglassui/
 
 本地运行 `npm run dev` 后打开 Demo 页面，左侧导航按分类列出全部组件：
 
@@ -657,7 +657,7 @@ Portal 通知，通过 `open` 控制显隐。
 #### `NavbarLiquidGlass`
 
 ```tsx
-<NavbarLiquidGlass brand="Liquid Glass">
+<NavbarLiquidGlass brand="LiquidGlassUI">
   <ButtonLiquidGlass size="sm">文档</ButtonLiquidGlass>
   <IconButtonLiquidGlass aria-label="菜单">☰</IconButtonLiquidGlass>
 </NavbarLiquidGlass>

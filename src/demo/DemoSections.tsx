@@ -897,7 +897,7 @@ export function TypographySection() {
         title="Title / Paragraph / Text"
         code={`<TypographyLiquidGlass.Title level={2}>Title</TypographyLiquidGlass.Title>`}
       >
-        <TypographyLiquidGlass.Title level={2}>Liquid Glass</TypographyLiquidGlass.Title>
+        <TypographyLiquidGlass.Title level={2}>LiquidGlassUI</TypographyLiquidGlass.Title>
         <TypographyLiquidGlass.Paragraph>
           Paragraph with secondary tone and glass-friendly contrast.
         </TypographyLiquidGlass.Paragraph>
@@ -1686,7 +1686,7 @@ export function NavbarSection() {
         presets={GLASS_PRESETS.slice(0, 3)}
         extraProps='brand="Brand"'
         render={(preset) => (
-          <NavbarLiquidGlass brand="Liquid Glass" glassParams={preset.params} style={{ width: '100%' }}>
+          <NavbarLiquidGlass brand="LiquidGlassUI" glassParams={preset.params} style={{ width: '100%' }}>
             <ButtonLiquidGlass size="sm">Docs</ButtonLiquidGlass>
             <IconButtonLiquidGlass aria-label="Menu">☰</IconButtonLiquidGlass>
           </NavbarLiquidGlass>

@@ -69,7 +69,7 @@ export function DemoShowcase() {
             >
               <span className="demo-showcase__cta-eyebrow">Open</span>
               <span className="demo-showcase__cta-title">
-                <span className="demo-showcase__cta-title-line">Liquid Glass</span>
+                <span className="demo-showcase__cta-title-line">LiquidGlassUI</span>
                 <span className="demo-showcase__cta-title-highlight">
                   Components
                 </span>
@@ -87,7 +87,7 @@ export function DemoShowcase() {
             <main ref={mainRef} className="demo-showcase__main">
               <header className="demo-showcase__hero">
                 <h1 className="demo-showcase__title">
-                  Liquid Glass Components
+                  LiquidGlassUI Components
                 </h1>
                 <p className="demo-showcase__subtitle">
                   各组件不同 glassParams 配置 · 展开查看代码 · 左侧菜单快速定位

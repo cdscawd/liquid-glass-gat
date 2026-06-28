@@ -5,7 +5,7 @@ description: >-
   refraction). Use when creating or extending *LiquidGlass components, liquid
   glass UI, glassmorphism with edge refraction, useLiquidGlassEffect, or when
   the user imports this skill to scaffold glass buttons, cards, inputs, overlays,
-  switches, or similar components matching the liquid-glass library pattern.
+  switches, or similar components matching the liquidglassui library pattern.
 ---
 
 # Liquid Glass Component Generator
@@ -16,7 +16,7 @@ Generate **Liquid Glass** React components: SVG displacement refraction + `backd
 
 - User asks to **create / add / scaffold** a `*LiquidGlass` component
 - User mentions liquid glass, glass refraction, displacement map, or `glassParams`
-- User imported this skill to reproduce the liquid-glass component style
+- User imported this skill to reproduce the liquidglassui component style
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ src/styles/_glass-mixins.scss
 src/styles/global.scss    # .filter-liquid-glass
 ```
 
-If missing, tell the user to copy `src/lib/liquid-glass/` and `src/styles/` from the liquid-glass repo first. **Never re-implement** `generateDisplacementMap`, `LiquidGlassFilter`, or `BACKDROP_FILTER` inside a component.
+If missing, tell the user to copy `src/lib/liquid-glass/` and `src/styles/` from the liquidglassui repo first. **Never re-implement** `generateDisplacementMap`, `LiquidGlassFilter`, or `BACKDROP_FILTER` inside a component.
 
 If `.cursor/rules/liquid-glass-components.mdc` exists in the repo, read it and follow the component inventory — extend existing components before creating duplicates.
 

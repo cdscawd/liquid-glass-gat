@@ -108,7 +108,7 @@ export function useLiquidGlassEffect<T extends HTMLElement>(
   const shouldMeasure = isFilterActive && isEnabled
 
   const reactId = useId().replace(/:/g, '')
-  const filterId = `liquid-glass-${reactId}`
+  const filterId = `liquidglassui-${reactId}`
   const mapId = `${filterId}-map`
 
   const hostRef = useRef<T>(null)

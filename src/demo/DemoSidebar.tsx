@@ -32,7 +32,7 @@ export function DemoSidebar({
       <div className="demo-sidebar__brand">
         <AvatarLiquidGlass fallback="Gat" />
         <div className="demo-sidebar__brand-text">
-          <div className="demo-sidebar__title">Liquid Glass</div>
+          <div className="demo-sidebar__title">LiquidGlassUI</div>
           <BadgeLiquidGlass variant="chip" size="sm">
             Showcase
           </BadgeLiquidGlass>

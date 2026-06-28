@@ -95,7 +95,7 @@ export function Test() {
             strength: -0.8,
           }}
         >
-          Liquid Glass
+          LiquidGlassUI
         </CardLiquidGlass>
       </div>
     </div>

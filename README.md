@@ -1,12 +1,12 @@
-# Liquid Glass
+# LiquidGlassUI
 
 <div align="center">
 
-![Liquid Glass preview](./doc/image.png)
+![LiquidGlassUI preview](./doc/image.png)
 
 **React component library with SVG displacement refraction on dynamic backgrounds**
 
-**[Live Demo](https://cdscawd.github.io/liquid-glass/)** · [中文文档](./README.zh-CN.md)
+**[Live Demo](https://cdscawd.github.io/liquidglassui/)** · [中文文档](./README.zh-CN.md)
 
 </div>
 
@@ -40,7 +40,7 @@
 
 ## Overview
 
-Liquid Glass is a **React 19** UI kit that recreates Apple-style liquid glass refraction on the web. Every `*LiquidGlass` component shares one pipeline:
+LiquidGlassUI is a **React 19** UI kit that recreates Apple-style liquid glass refraction on the web. Every `*LiquidGlass` component shares one pipeline:
 
 **SDF displacement map → SVG `feDisplacementMap` → `backdrop-filter`**
 
@@ -62,7 +62,7 @@ Components are designed to sit over rich, animated backgrounds (the repo include
 
 ## Quick Start
 
-**Live demo:** https://cdscawd.github.io/liquid-glass/
+**Live demo:** https://cdscawd.github.io/liquidglassui/
 
 ```bash
 npm install
@@ -631,7 +631,7 @@ In-page anchor links.
 #### `NavbarLiquidGlass`
 
 ```tsx
-<NavbarLiquidGlass brand="Liquid Glass">
+<NavbarLiquidGlass brand="LiquidGlassUI">
   <ButtonLiquidGlass size="sm">Docs</ButtonLiquidGlass>
   <IconButtonLiquidGlass aria-label="Menu">☰</IconButtonLiquidGlass>
 </NavbarLiquidGlass>
