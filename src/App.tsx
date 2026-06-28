@@ -4,7 +4,7 @@ import { Test } from './pages/Test'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<DemoShowcase />} />
         <Route path="/test" element={<Test />} />
