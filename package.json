@@ -29,7 +29,7 @@
     "design-system",
     "typescript"
   ],
-  "homepage": "https://cdscawd.github.io/liquidglassui/",
+  "homepage": "https://cdscawd.github.io/Lquidglassui/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cdscawd/liquidglassui.git"
@@ -61,7 +61,7 @@
     "build": "npm run build:preview",
     "build:preview": "tsc -b && vite build",
     "build:lib": "vite build --config vite.lib.config.ts",
-    "build:pages": "GITHUB_PAGES=true npm run build:preview",
+    "build:pages": "GITHUB_PAGES=true GITHUB_REPOSITORY=cdscawd/Lquidglassui npm run build:preview",
     "prepublishOnly": "npm run build:lib",
     "publish:npm": "node scripts/publish-npm.mjs none",
     "release": "node scripts/publish-npm.mjs patch",

@@ -6,7 +6,7 @@
 
 **React component library with SVG displacement refraction on dynamic backgrounds**
 
-**[Live Demo](https://cdscawd.github.io/liquidglassui/)** · [中文文档](./README.zh-CN.md)
+**[Live Demo](https://cdscawd.github.io/Lquidglassui/)** · [中文文档](./README.zh-CN.md)
 
 </div>
 
@@ -64,7 +64,7 @@ Components are designed to sit over rich, animated backgrounds (the repo include
 
 ## Quick Start
 
-**Live demo:** https://cdscawd.github.io/liquidglassui/
+**Live demo:** https://cdscawd.github.io/Lquidglassui/
 
 ```bash
 npm install

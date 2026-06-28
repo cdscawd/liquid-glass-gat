@@ -6,7 +6,7 @@
 
 **基于 SVG 位移折射的动态背景液态玻璃 React 组件库**
 
-**[在线演示](https://cdscawd.github.io/liquidglassui/)** · [English Documentation](./README.md)
+**[在线演示](https://cdscawd.github.io/Lquidglassui/)** · [English Documentation](./README.md)
 
 </div>
 
@@ -363,7 +363,7 @@ npm run release
 
 ## 交互 Preview
 
-**在线访问：** https://cdscawd.github.io/liquidglassui/
+**在线访问：** https://cdscawd.github.io/Lquidglassui/
 
 本地运行 `npm run dev` 后打开 Preview 页面，左侧导航按分类列出全部组件：
 
