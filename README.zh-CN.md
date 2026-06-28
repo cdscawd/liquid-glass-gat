@@ -2,9 +2,11 @@
 
 <div align="center">
 
+![Liquid Glass preview](./doc/image.png)
+
 **基于 SVG 位移折射的动态背景液态玻璃 React 组件库**
 
-[English Documentation](./README.md)
+**[在线演示](https://cdscawd.github.io/liquid-glass/)** · [English Documentation](./README.md)
 
 </div>
 
@@ -119,7 +121,9 @@ export function App() {
 
 ## 交互演示
 
-运行 `npm run dev` 后打开 Demo 页面，左侧导航按分类列出全部组件：
+**在线访问：** https://cdscawd.github.io/liquid-glass/
+
+本地运行 `npm run dev` 后打开 Demo 页面，左侧导航按分类列出全部组件：
 
 | 分类 | 包含组件 |
 |------|----------|
