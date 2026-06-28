@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState, type PointerEvent } from "react";
 import "./Test.scss";
-import { ButtonLiquidGlass } from "../../components/ButtonLiquidGlass";
 import { CyberspaceBackground } from "../../components/CyberspaceBackground";
 import { CardLiquidGlass } from "../../components/CardLiquidGlass";
 export function Test() {
