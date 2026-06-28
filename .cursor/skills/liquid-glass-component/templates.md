@@ -257,32 +257,32 @@ One filter on `<ul>` / container; items toggle `--selected` class with `$glass-b
 
 ---
 
-## Demo section snippet
+## Preview section snippet
 
 ```tsx
 export function {Semantic}Section() {
   return (
-    <DemoSection
+    <PreviewSection
       id="{kebab}"
       title="{Semantic}"
       hint="简短中文说明"
       propsHint="Props: size?, glassParams?, variant?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="{Semantic}LiquidGlass"
         render={(size) => <{Semantic}LiquidGlass key={size} size={size} />}
       />
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="{Semantic}LiquidGlass"
         presets={GLASS_PRESETS.slice(1, 4)}
         render={(preset) => <{Semantic}LiquidGlass glassParams={preset.params} />}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 ```
 
-Add to `DEMO_SECTIONS` and `demoNav.ts`.
+Add to `PREVIEW_SECTIONS` and `previewNav.ts`.
 
 ---
 

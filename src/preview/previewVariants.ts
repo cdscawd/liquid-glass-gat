@@ -1,7 +1,7 @@
 import type { LiquidGlassParams } from '../lib/liquid-glass'
 
 export const SIZES = ['sm', 'md', 'lg'] as const
-export type DemoSize = (typeof SIZES)[number]
+export type PreviewSize = (typeof SIZES)[number]
 
 export interface GlassPreset {
   id: string

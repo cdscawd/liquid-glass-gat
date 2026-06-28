@@ -1,13 +1,13 @@
 import type { LiquidGlassParams } from '../lib/liquid-glass'
 
-export interface DemoButtonConfig {
+export interface PreviewButtonConfig {
   id: string
   label: string
   size?: 'sm' | 'md' | 'lg'
   glassParams?: LiquidGlassParams
 }
 
-export const DEMO_BUTTONS: DemoButtonConfig[] = [
+export const PREVIEW_BUTTONS: PreviewButtonConfig[] = [
   { id: 'default', label: 'Default', glassParams: {} },
   { id: 'strong', label: 'Strong Lens', glassParams: { strength: 1.45, edgeFalloff: 20 } },
   { id: 'subtle', label: 'Subtle Glass', glassParams: { strength: 0.45, edgeFalloff: 7 } },
@@ -38,7 +38,7 @@ export const DEMO_BUTTONS: DemoButtonConfig[] = [
   },
 ]
 
-export interface DemoButtonGroupConfig {
+export interface PreviewButtonGroupConfig {
   name: string
   label: string
   category: 'default' | 'slider'
@@ -50,7 +50,7 @@ export interface DemoButtonGroupConfig {
   variant?: 'default' | 'slider'
 }
 
-export const DEMO_BUTTON_GROUPS: DemoButtonGroupConfig[] = [
+export const PREVIEW_BUTTON_GROUPS: PreviewButtonGroupConfig[] = [
   {
     name: 'period',
     label: 'Default · md',
@@ -214,5 +214,5 @@ export const DEMO_BUTTON_GROUPS: DemoButtonGroupConfig[] = [
 ]
 
 export const INITIAL_GROUP_VALUES = Object.fromEntries(
-  DEMO_BUTTON_GROUPS.map(({ name, defaultValue }) => [name, defaultValue]),
+  PREVIEW_BUTTON_GROUPS.map(({ name, defaultValue }) => [name, defaultValue]),
 )

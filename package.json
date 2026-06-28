@@ -1,20 +1,79 @@
 {
   "name": "liquidglassui",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "LiquidGlassUI — React UI kit with Apple-style liquid glass refraction: SVG displacement maps, backdrop-filter, 50+ glass components, and global LiquidGlassProvider theming.",
+  "author": {
+    "url": "https://github.com/cdscawd"
+  },
+  "keywords": [
+    "liquidglassui",
+    "liquid-glass",
+    "liquid glass",
+    "glass ui",
+    "glassmorphism",
+    "frosted glass",
+    "apple glass",
+    "ios glass",
+    "backdrop-filter",
+    "svg filter",
+    "displacement map",
+    "refraction",
+    "transparent ui",
+    "blur effect",
+    "react",
+    "react19",
+    "react-components",
+    "react-ui",
+    "ui-kit",
+    "component-library",
+    "design-system",
+    "typescript"
+  ],
+  "homepage": "https://cdscawd.github.io/liquidglassui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdscawd/liquidglassui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cdscawd/liquidglassui/issues"
+  },
+  "license": "MIT",
   "type": "module",
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/liquidglassui.css"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "build:pages": "GITHUB_PAGES=true npm run build",
+    "build": "npm run build:preview",
+    "build:preview": "tsc -b && vite build",
+    "build:lib": "vite build --config vite.lib.config.ts",
+    "build:pages": "GITHUB_PAGES=true npm run build:preview",
+    "prepublishOnly": "npm run build:lib",
+    "publish:npm": "node scripts/publish-npm.mjs none",
+    "release": "node scripts/publish-npm.mjs patch",
+    "release:minor": "node scripts/publish-npm.mjs minor",
+    "release:major": "node scripts/publish-npm.mjs major",
+    "release:dry-run": "node scripts/publish-npm.mjs dry-run",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "serve": "vite preview"
   },
-  "dependencies": {
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.0",
-    "three": "^0.184.0"
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -26,8 +85,13 @@
     "@vitejs/plugin-react": "^6.0.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "oxlint": "^1.69.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.0",
     "sass": "^1.101.0",
+    "three": "^0.184.0",
     "typescript": "~6.0.2",
-    "vite": "^8.1.0"
+    "vite": "^8.1.0",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

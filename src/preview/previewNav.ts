@@ -1,15 +1,15 @@
-export interface DemoNavItem {
+export interface PreviewNavItem {
   id: string
   label: string
 }
 
-export interface DemoNavGroup {
+export interface PreviewNavGroup {
   title: string
-  items: DemoNavItem[]
+  items: PreviewNavItem[]
 }
 
 /** 每个已导出组件对应独立导航项与页面板块 */
-export const DEMO_NAV: DemoNavGroup[] = [
+export const PREVIEW_NAV: PreviewNavGroup[] = [
   {
     title: '全局',
     items: [{ id: 'theme', label: 'Provider 主题' }],
@@ -98,4 +98,4 @@ export const DEMO_NAV: DemoNavGroup[] = [
   },
 ]
 
-export const DEMO_NAV_ITEMS = DEMO_NAV.flatMap((group) => group.items)
+export const PREVIEW_NAV_ITEMS = PREVIEW_NAV.flatMap((group) => group.items)

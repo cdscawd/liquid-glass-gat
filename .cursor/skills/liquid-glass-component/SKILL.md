@@ -42,7 +42,7 @@ Copy and track progress:
 - [ ] 2. Check existing components — extend vs new
 - [ ] 3. Create ComponentNameLiquidGlass/ (tsx + scss + index.ts)
 - [ ] 4. Wire barrel export in components/index.ts
-- [ ] 5. Add minimal demo (DemoSections or App)
+- [ ] 5. Add minimal preview block (PreviewSections or App)
 - [ ] 6. npm run build
 - [ ] 7. Update liquid-glass-components.mdc inventory if present
 ```
@@ -160,16 +160,16 @@ Barrel (`src/components/index.ts`):
 export { ChipLiquidGlass, type ChipLiquidGlassProps, type ChipLiquidGlassSize } from './ChipLiquidGlass'
 ```
 
-### Step 7 — Demo block
+### Step 7 — Preview block
 
-Add a minimal demo section with:
+Add a minimal preview section with:
 
 - Default usage
 - `size` variants (if applicable)
 - One `glassParams` preset example
 - Disabled state (if interactive)
 
-Follow existing demo patterns in `src/demo/DemoSections.tsx` and `demoNav.ts`.
+Follow existing preview patterns in `src/preview/PreviewSections.tsx` and `previewNav.ts`.
 
 ### Step 8 — Validate
 

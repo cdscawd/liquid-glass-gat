@@ -1,4 +1,4 @@
-.demo-showcase {
+.preview-showcase {
   position: relative;
   z-index: 1;
   display: flex;
@@ -93,7 +93,7 @@
   }
 }
 
-.demo-section {
+.preview-section {
   scroll-margin-top: 24px;
 
   & + & {
@@ -139,7 +139,7 @@
 }
 
 @media (max-width: 768px) {
-  .demo-showcase {
+  .preview-showcase {
     flex-direction: column;
 
     &__main {

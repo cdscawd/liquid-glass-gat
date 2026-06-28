@@ -6,33 +6,33 @@ import {
   ListLiquidGlass,
 } from '../components'
 import type { LiquidGlassParams } from '../lib/liquid-glass'
-import { DemoGlassControls } from './DemoGlassControls'
-import { DEMO_NAV } from './demoNav'
-import './DemoSidebar.scss'
+import { PreviewGlassControls } from './PreviewGlassControls'
+import { PREVIEW_NAV } from './previewNav'
+import './PreviewSidebar.scss'
 
-interface DemoSidebarProps {
+interface PreviewSidebarProps {
   activeId: string
   onNavigate: (id: string) => void
   globalGlass: LiquidGlassParams
   onGlassChange: (params: LiquidGlassParams) => void
 }
 
-export function DemoSidebar({
+export function PreviewSidebar({
   activeId,
   onNavigate,
   globalGlass,
   onGlassChange,
-}: DemoSidebarProps) {
+}: PreviewSidebarProps) {
   return (
     <CardLiquidGlass
-      className="demo-sidebar"
+      className="preview-sidebar"
       size="sm"
       glassParams={{ borderRadius: 12, strength: 0.85, edgeFalloff: 14 }}
     >
-      <div className="demo-sidebar__brand">
+      <div className="preview-sidebar__brand">
         <AvatarLiquidGlass fallback="Gat" />
-        <div className="demo-sidebar__brand-text">
-          <div className="demo-sidebar__title">LiquidGlassUI</div>
+        <div className="preview-sidebar__brand-text">
+          <div className="preview-sidebar__title">LiquidGlassUI</div>
           <BadgeLiquidGlass variant="chip" size="sm">
             Showcase
           </BadgeLiquidGlass>
@@ -41,16 +41,16 @@ export function DemoSidebar({
 
       <DividerLiquidGlass
         orientation="horizontal"
-        className="demo-sidebar__divider"
+        className="preview-sidebar__divider"
         glassParams={{ borderRadius: 999, strength: 0.5, edgeFalloff: 6 }}
       />
 
-      <nav className="demo-sidebar__nav" aria-label="组件导航">
-        {DEMO_NAV.map((group) => (
-          <div key={group.title} className="demo-sidebar__group">
-            <div className="demo-sidebar__group-title">{group.title}</div>
+      <nav className="preview-sidebar__nav" aria-label="组件导航">
+        {PREVIEW_NAV.map((group) => (
+          <div key={group.title} className="preview-sidebar__group">
+            <div className="preview-sidebar__group-title">{group.title}</div>
             <ListLiquidGlass
-              className="demo-sidebar__list"
+              className="preview-sidebar__list"
               glassParams={{ borderRadius: 8, strength: 0.75, edgeFalloff: 10 }}
               items={group.items.map((item) => ({
                 id: item.id,
@@ -65,12 +65,12 @@ export function DemoSidebar({
 
       <DividerLiquidGlass
         orientation="horizontal"
-        className="demo-sidebar__controls-divider"
+        className="preview-sidebar__controls-divider"
         glassParams={{ borderRadius: 999, strength: 0.5, edgeFalloff: 6 }}
       />
 
-      <DemoGlassControls
-        className="demo-sidebar__controls"
+      <PreviewGlassControls
+        className="preview-sidebar__controls"
         value={globalGlass}
         onChange={onGlassChange}
       />

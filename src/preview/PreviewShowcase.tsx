@@ -3,14 +3,14 @@ import { ButtonLiquidGlass } from "../components/ButtonLiquidGlass";
 import { CyberspaceBackground } from "../components/CyberspaceBackground";
 import { LiquidGlassProvider } from "../lib/liquid-glass";
 import type { LiquidGlassParams } from "../lib/liquid-glass";
-import { DEMO_SECTIONS, ThemeSection } from "./DemoSections";
-import { DemoSidebar } from "./DemoSidebar";
-import { DEMO_NAV_ITEMS } from "./demoNav";
-import "./DemoShowcase.scss";
+import { PREVIEW_SECTIONS, ThemeSection } from "./PreviewSections";
+import { PreviewSidebar } from "./PreviewSidebar";
+import { PREVIEW_NAV_ITEMS } from "./previewNav";
+import "./PreviewShowcase.scss";
 
-export function DemoShowcase() {
+export function PreviewShowcase() {
   const [showDetail, setShowDetail] = useState(false);
-  const [activeId, setActiveId] = useState(DEMO_NAV_ITEMS[0]?.id ?? "theme");
+  const [activeId, setActiveId] = useState(PREVIEW_NAV_ITEMS[0]?.id ?? "theme");
   const [globalGlass, setGlobalGlass] = useState<LiquidGlassParams>({
     borderRadius: 8,
     strength: 1,
@@ -33,7 +33,7 @@ export function DemoShowcase() {
   useEffect(() => {
     if (!showDetail) return;
 
-    const sections = DEMO_NAV_ITEMS.map(({ id }) =>
+    const sections = PREVIEW_NAV_ITEMS.map(({ id }) =>
       document.getElementById(id),
     ).filter(Boolean) as HTMLElement[];
 
@@ -60,36 +60,36 @@ export function DemoShowcase() {
       <CyberspaceBackground />
       <LiquidGlassProvider glassParams={globalGlass}>
         {!showDetail ? (
-          <div className="demo-showcase demo-showcase--landing">
+          <div className="preview-showcase preview-showcase--landing">
             <ButtonLiquidGlass
               size="lg"
-              className="demo-showcase__cta"
+              className="preview-showcase__cta"
               glassParams={{ borderRadius: 10, edgeFalloff: 30, strength: 2 }}
               onClick={() => setShowDetail(true)}
             >
-              <span className="demo-showcase__cta-eyebrow">Open</span>
-              <span className="demo-showcase__cta-title">
-                <span className="demo-showcase__cta-title-line">LiquidGlassUI</span>
-                <span className="demo-showcase__cta-title-highlight">
+              <span className="preview-showcase__cta-eyebrow">Open</span>
+              <span className="preview-showcase__cta-title">
+                <span className="preview-showcase__cta-title-line">LiquidGlassUI</span>
+                <span className="preview-showcase__cta-title-highlight">
                   Components
                 </span>
               </span>
             </ButtonLiquidGlass>
           </div>
         ) : (
-          <div className="demo-showcase">
-            <DemoSidebar
+          <div className="preview-showcase">
+            <PreviewSidebar
               activeId={activeId}
               onNavigate={scrollToSection}
               globalGlass={globalGlass}
               onGlassChange={setGlobalGlass}
             />
-            <main ref={mainRef} className="demo-showcase__main">
-              <header className="demo-showcase__hero">
-                <h1 className="demo-showcase__title">
+            <main ref={mainRef} className="preview-showcase__main">
+              <header className="preview-showcase__hero">
+                <h1 className="preview-showcase__title">
                   LiquidGlassUI Components
                 </h1>
-                <p className="demo-showcase__subtitle">
+                <p className="preview-showcase__subtitle">
                   各组件不同 glassParams 配置 · 展开查看代码 · 左侧菜单快速定位
                 </p>
               </header>
@@ -98,11 +98,11 @@ export function DemoShowcase() {
                 globalGlass={globalGlass}
                 onThemeChange={setGlobalGlass}
               />
-              {DEMO_SECTIONS.map(({ id, Component }) => (
+              {PREVIEW_SECTIONS.map(({ id, Component }) => (
                 <Component key={id} />
               ))}
 
-              <footer className="demo-showcase__footer">
+              <footer className="preview-showcase__footer">
                 赛博隧道 Three.js 背景 · 玻璃折射建议在 Chrome 查看
               </footer>
             </main>
@@ -113,4 +113,4 @@ export function DemoShowcase() {
   );
 }
 
-export default DemoShowcase;
+export default PreviewShowcase;

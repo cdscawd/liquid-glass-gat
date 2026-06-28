@@ -1,6 +1,6 @@
 @use '../styles/variables' as *;
 
-.demo-sidebar {
+.preview-sidebar {
   &.card-liquid-glass {
     position: sticky;
     top: 0;
@@ -103,7 +103,7 @@
 }
 
 @media (max-width: 768px) {
-  .demo-sidebar {
+  .preview-sidebar {
     &.card-liquid-glass {
       position: relative;
       width: 100%;

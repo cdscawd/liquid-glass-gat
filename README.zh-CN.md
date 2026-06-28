@@ -18,7 +18,9 @@
 - [特性](#特性)
 - [快速开始](#快速开始)
 - [在项目中使用](#在项目中使用)
-- [交互演示](#交互演示)
+- [全局配置](#全局配置)
+- [发布到 npm](#发布到-npm)
+- [交互 Preview](#交互-preview)
 - [核心 API](#核心-api)
 - [组件用法](#组件用法)
   - [全局主题](#全局主题-liquidglassprovider)
@@ -46,7 +48,7 @@ LiquidGlassUI 是一套 **React 19** UI 组件库，在网页上复现 Apple 风
 
 **SDF 位移贴图 → SVG `feDisplacementMap` → `backdrop-filter`**
 
-组件设计用于叠加在丰富的动态背景之上（仓库内置 **Three.js 赛博隧道** 演示）。交互式 Demo 覆盖 **52 个导出组件**，支持实时调节 `glassParams` 与可展开的源码示例。
+组件设计用于叠加在丰富的动态背景之上（仓库内置 **Three.js 赛博隧道** 预览背景）。交互式 Preview 覆盖 **52 个导出组件**，支持实时调节 `glassParams` 与可展开的源码示例。
 
 ---
 
@@ -58,7 +60,7 @@ LiquidGlassUI 是一套 **React 19** UI 组件库，在网页上复现 Apple 风
 - 语义变体：`default` · `primary` · `danger` · `success`
 - 形状预设：`GLASS_SHAPE.default` · `pill` · `dock` · `badge`
 - 次级玻璃层：`thumbGlassParams`、`fillGlassParams`、`panelGlassParams`、`dropdownGlassParams`
-- 交互式演示：侧边栏导航、Intersection 区块追踪、分区源码展示
+- 交互式 Preview：侧边栏导航、Intersection 区块追踪、分区源码展示
 
 ---
 
@@ -68,7 +70,7 @@ LiquidGlassUI 是一套 **React 19** UI 组件库，在网页上复现 Apple 风
 npm install
 npm run dev      # http://localhost:5173
 npm run build
-npm run preview
+npm run serve
 npm run lint
 ```
 
@@ -76,14 +78,51 @@ npm run lint
 |------|------|
 | `dev` | 启动 Vite 开发服务（自动打开浏览器） |
 | `build` | TypeScript 检查 + 生产构建 |
-| `preview` | 预览生产构建产物 |
+| `serve` | 预览生产构建（Vite preview 服务） |
 | `lint` | 运行 oxlint |
 
 ---
 
 ## 在项目中使用
 
-本仓库是 **组件库 + 演示应用**。从 `src/components` 导入，并引入全局样式：
+### 从 npm 安装
+
+```bash
+npm install liquidglassui
+```
+
+```tsx
+// main.tsx
+import 'liquidglassui/styles.css'
+import {
+  ButtonLiquidGlass,
+  CardLiquidGlass,
+  LiquidGlassProvider,
+} from 'liquidglassui'
+
+export function App() {
+  return (
+    <LiquidGlassProvider
+      glassParams={{ borderRadius: 8, strength: 1, edgeFalloff: 14 }}
+      variant="primary"
+    >
+      <CardLiquidGlass>
+        <CardLiquidGlass.Body>
+          <ButtonLiquidGlass variant="primary">开始使用</ButtonLiquidGlass>
+        </CardLiquidGlass.Body>
+      </CardLiquidGlass>
+    </LiquidGlassProvider>
+  )
+}
+```
+
+> **提示：** 折射依赖组件**背后**可见的内容；若背景为纯色，视觉上更接近磨砂玻璃而非液态折射。
+
+详见 **[全局配置](#全局配置)**：`LiquidGlassProvider` 属性、参数合并优先级、嵌套 Provider、CSS 主题与自定义 Hook。
+
+### 从源码使用（Monorepo / 本地开发）
+
+从 `src/components` 导入，并引入全局样式：
 
 ```tsx
 // main.tsx
@@ -115,15 +154,218 @@ export function App() {
 }
 ```
 
-> **提示：** 折射依赖组件**背后**可见的内容；若背景为纯色，视觉上更接近磨砂玻璃而非液态折射。
+---
+
+## 全局配置
+
+通过 npm 安装后，**`LiquidGlassProvider`** 是应用级默认配置的入口。在根节点（或任意子树）外包一层，其下所有 `*LiquidGlass` 组件会自动继承统一的折射与语义色，无需在每个组件上重复传参。
+
+### 基本用法
+
+```tsx
+// main.tsx
+import 'liquidglassui/styles.css'
+import { LiquidGlassProvider } from 'liquidglassui'
+
+createRoot(document.getElementById('root')!).render(
+  <LiquidGlassProvider
+    glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
+    variant="primary"
+  >
+    <App />
+  </LiquidGlassProvider>,
+)
+```
+
+子组件可直接使用，不必逐个传入 `glassParams`：
+
+```tsx
+import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
+
+<CardLiquidGlass>
+  <ButtonLiquidGlass>提交</ButtonLiquidGlass>
+</CardLiquidGlass>
+```
+
+### `LiquidGlassProvider` 属性
+
+| 属性 | 类型 | 说明 |
+|------|------|------|
+| `glassParams` | `LiquidGlassParams` | 子组件默认折射参数 |
+| `variant` | `LiquidGlassVariant` | 子组件未传 `variant` 时的默认语义色 |
+| `nestedPolicy` | `'overlay' \| 'surface' \| 'filter'` | 玻璃宿主嵌套在已有 filter 宿主内时的默认策略 |
+
+`glassParams` 字段：
+
+| 字段 | 说明 |
+|------|------|
+| `borderRadius` | 圆角（px），默认 `8` |
+| `strength` | 折射强度，默认 `1` |
+| `edgeFalloff` | 边缘扭曲带宽度（px） |
+| `deformEdge` | 定向 melt 作用边：`'all' \| 'bottom' \| 'top' \| 'left' \| 'right'` |
+| `deformExtent` | 从 `deformEdge` 指定边向内的影响深度（px） |
+| `deformStrength` | 定向 melt 位移强度 |
+| `deformVertical` | 定向 melt 主方向倍率（`>1` 更「拉丝」） |
+| `deformSpread` | 边沿 bulge 宽度占比 `0–1` |
+
+形状预设（从 `liquidglassui` 导入）：
+
+```tsx
+import { GLASS_SHAPE, LiquidGlassProvider } from 'liquidglassui'
+
+<LiquidGlassProvider glassParams={{ borderRadius: GLASS_SHAPE.pill, strength: 1.2 }}>
+  <App />
+</LiquidGlassProvider>
+```
+
+### 参数合并优先级
+
+最终参数由 `resolveGlassParams` 决定：
+
+```
+component.glassParams  →  组件内部 preset  →  LiquidGlassProvider.glassParams  →  DEFAULT_GLASS_PARAMS
+```
+
+`variant` 合并：
+
+```
+component.variant  →  LiquidGlassProvider.variant  →  'default'
+```
+
+**全局配置是默认值，单个组件仍可覆盖：**
+
+```tsx
+<LiquidGlassProvider glassParams={{ borderRadius: 12 }} variant="primary">
+  <ButtonLiquidGlass>继承 12px 圆角 + primary</ButtonLiquidGlass>
+  <ButtonLiquidGlass glassParams={{ borderRadius: 24 }} variant="danger">
+    仅这个按钮使用 24px + danger
+  </ButtonLiquidGlass>
+</LiquidGlassProvider>
+```
+
+### 嵌套 Provider（局部主题）
+
+Provider 可嵌套，内层覆盖外层，适用于「整站默认 + 某区块特殊样式」：
+
+```tsx
+<LiquidGlassProvider glassParams={{ borderRadius: 8, strength: 1 }}>
+  <Layout>
+    <LiquidGlassProvider glassParams={{ borderRadius: 24, strength: 1.5 }} variant="primary">
+      <HeroSection />
+    </LiquidGlassProvider>
+    <Footer />
+  </Layout>
+</LiquidGlassProvider>
+```
+
+### 自定义组件中的 Hook
+
+以下 Hook 读取最近的 `LiquidGlassProvider` 配置：
+
+```tsx
+import {
+  useLiquidGlassDefaults,
+  useLiquidGlassVariantDefault,
+  useLiquidGlassNestedPolicyDefault,
+  useLiquidGlassEffect,
+} from 'liquidglassui'
+
+const defaults = useLiquidGlassDefaults()           // Provider 的 glassParams
+const defaultVariant = useLiquidGlassVariantDefault()
+const nestedPolicy = useLiquidGlassNestedPolicyDefault()
+```
+
+`useLiquidGlassEffect` 已自动合并 Provider 默认值，自定义玻璃宿主时直接使用：
+
+```tsx
+function MyGlassPanel({ glassParams, variant, children }) {
+  const { hostRef, filterStyle, variantClass, isFilterActive, HostBoundary } =
+    useLiquidGlassEffect(glassParams, { baseClass: 'my-panel', variant })
+  // ...
+}
+```
+
+### 样式与 CSS 变量
+
+在应用入口引入样式一次：
+
+```tsx
+import 'liquidglassui/styles.css'
+```
+
+会注入 `:root` 上的 `--lg-*` 变量（背景、边框、语义色等）。可在项目中覆盖以实现全局视觉主题：
+
+```css
+:root {
+  --lg-variant-primary: #3b82f6;
+  --lg-bg: rgba(255, 255, 255, 0.12);
+}
+```
+
+`variant` 颜色通过 CSS 修饰类（如 `button-liquid-glass--primary`）应用，而非 JS inline style。
+
+### 完整示例
+
+```tsx
+import 'liquidglassui/styles.css'
+import {
+  ButtonLiquidGlass,
+  CardLiquidGlass,
+  GLASS_SHAPE,
+  LiquidGlassProvider,
+} from 'liquidglassui'
+
+export default function App() {
+  return (
+    <LiquidGlassProvider
+      glassParams={{
+        borderRadius: GLASS_SHAPE.default,
+        strength: 1.2,
+        edgeFalloff: 16,
+      }}
+      variant="primary"
+      nestedPolicy="surface"
+    >
+      <CardLiquidGlass>
+        <CardLiquidGlass.Body>
+          <ButtonLiquidGlass>全局主题按钮</ButtonLiquidGlass>
+        </CardLiquidGlass.Body>
+      </CardLiquidGlass>
+    </LiquidGlassProvider>
+  )
+}
+```
+
+> **背景说明：** 折射需要玻璃背后有可见内容。Preview 应用中的 `CyberspaceBackground` **未**发布到 npm，第三方项目需自行提供图片、渐变或动画背景。
 
 ---
 
-## 交互演示
+## 发布到 npm
+
+| 脚本 | 说明 |
+|------|------|
+| `npm run build:lib` | 构建 ESM、CSS 与类型声明到 `dist/` |
+| `npm run release:dry-run` | 构建 + 模拟发布（检查包内容） |
+| `npm run release` | patch 版本号 + 发布 |
+| `npm run release:minor` | minor 版本号 + 发布 |
+| `npm run release:major` | major 版本号 + 发布 |
+| `npm run publish:npm` | 不升版本，直接发布当前版本 |
+
+首次发布：
+
+```bash
+npm login
+npm run release:dry-run
+npm run release
+```
+
+---
+
+## 交互 Preview
 
 **在线访问：** https://cdscawd.github.io/liquidglassui/
 
-本地运行 `npm run dev` 后打开 Demo 页面，左侧导航按分类列出全部组件：
+本地运行 `npm run dev` 后打开 Preview 页面，左侧导航按分类列出全部组件：
 
 | 分类 | 包含组件 |
 |------|----------|
@@ -168,10 +410,18 @@ export function App() {
 component.glassParams → useLiquidGlassEffect preset → LiquidGlassProvider → DEFAULT_GLASS_PARAMS
 ```
 
+**variant 合并：**
+
+```
+component.variant → LiquidGlassProvider.variant → 'default'
+```
+
+详见 **[全局配置](#全局配置)**：嵌套 Provider、CSS 变量与 Hook。
+
 ### 形状预设（`GLASS_SHAPE`）
 
 ```tsx
-import { GLASS_SHAPE } from './lib/liquid-glass'
+import { GLASS_SHAPE } from 'liquidglassui'
 
 GLASS_SHAPE.default  // 8
 GLASS_SHAPE.pill     // 999 — Avatar、Switch 轨道、Badge chip
@@ -191,14 +441,15 @@ GLASS_SHAPE.badge    // 6  — BadgeLiquidGlass
 
 ### 全局主题 (`LiquidGlassProvider`)
 
-为未单独传参的子组件注入默认 `glassParams` 与 `variant`。
+为子组件注入默认 `glassParams`、`variant` 与 `nestedPolicy`。完整说明见 **[全局配置](#全局配置)**。
 
 ```tsx
-import { LiquidGlassProvider } from './lib/liquid-glass'
+import { LiquidGlassProvider } from 'liquidglassui'
 
 <LiquidGlassProvider
   glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
   variant="primary"
+  nestedPolicy="surface"
 >
   <App />
 </LiquidGlassProvider>
@@ -207,9 +458,15 @@ import { LiquidGlassProvider } from './lib/liquid-glass'
 在子组件中读取默认值：
 
 ```tsx
-import { useLiquidGlassDefaults } from './lib/liquid-glass'
+import {
+  useLiquidGlassDefaults,
+  useLiquidGlassVariantDefault,
+  useLiquidGlassNestedPolicyDefault,
+} from 'liquidglassui'
 
 const defaults = useLiquidGlassDefaults()
+const variant = useLiquidGlassVariantDefault()
+const nestedPolicy = useLiquidGlassNestedPolicyDefault()
 ```
 
 ---
@@ -934,7 +1191,7 @@ src/
 ├── styles/                 # SCSS 变量与 glass mixins
 ├── components/             # *LiquidGlass 组件
 ├── engine/                 # Three.js 背景引擎
-├── demo/                   # 交互演示（DemoShowcase、DemoSections）
+├── preview/                # 交互 Preview（PreviewShowcase、PreviewSections）
 └── App.tsx
 ```
 
@@ -946,7 +1203,7 @@ src/
 2. 创建 `src/components/XxxLiquidGlass/`（`.tsx`、`.scss`、`index.ts`）。
 3. 接入 `useLiquidGlassEffect` 及正确的 `GLASS_SHAPE` preset。
 4. 在 `components/index.ts` 导出。
-5. 在 `demo/DemoSections.tsx` 添加演示，并在 `demo/demoNav.ts` 注册导航。
+5. 在 `preview/PreviewSections.tsx` 添加 Preview 区块，并在 `preview/previewNav.ts` 注册导航。
 6. 执行 `npm run build` 验证。
 
 完整规范见 `.cursor/rules/liquid-glass-components.mdc`。

@@ -50,24 +50,24 @@ import {
   TypographyLiquidGlass,
 } from '../components'
 import type { LiquidGlassParams } from '../lib/liquid-glass'
-import { DemoBlock } from './DemoBlock'
-import { DemoGlassControls } from './DemoGlassControls'
+import { PreviewBlock } from './PreviewBlock'
+import { PreviewGlassControls } from './PreviewGlassControls'
 import {
-  DEMO_BUTTON_GROUPS,
-  DEMO_BUTTONS,
+  PREVIEW_BUTTON_GROUPS,
+  PREVIEW_BUTTONS,
   INITIAL_GROUP_VALUES,
-  type DemoButtonConfig,
-  type DemoButtonGroupConfig,
-} from './demoData'
-import { DEMO_NAV_ITEMS } from './demoNav'
+  type PreviewButtonConfig,
+  type PreviewButtonGroupConfig,
+} from './previewData'
+import { PREVIEW_NAV_ITEMS } from './previewNav'
 import {
-  DisabledDemoBlock,
-  GlassPresetDemoBlocks,
+  DisabledPreviewBlock,
+  GlassPresetPreviewBlocks,
   LIQUID_GLASS_VARIANTS,
-  SizeDemoBlock,
-  VariantDemoBlock,
-} from './demoSectionHelpers'
-import { FILL_PRESETS, GLASS_PRESETS, PANEL_PRESETS, THUMB_PRESETS } from './demoVariants'
+  SizePreviewBlock,
+  VariantPreviewBlock,
+} from './previewSectionHelpers'
+import { FILL_PRESETS, GLASS_PRESETS, PANEL_PRESETS, THUMB_PRESETS } from './previewVariants'
 import {
   fillPropsLine,
   formatGlassParams,
@@ -109,34 +109,34 @@ const STEPS_ITEMS = [
   { title: 'Waiting', description: 'Step 3' },
 ]
 
-const ANCHOR_LINKS = DEMO_NAV_ITEMS.filter(({ id }) => id !== 'anchor').map(({ id, label }) => ({
+const ANCHOR_LINKS = PREVIEW_NAV_ITEMS.filter(({ id }) => id !== 'anchor').map(({ id, label }) => ({
   key: id,
   href: `#${id}`,
   title: label,
 }))
 
-function buttonCode(demo: DemoButtonConfig): string {
-  return `<ButtonLiquidGlass\n${sizePropLine(demo.size)}${glassPropsLine(demo.glassParams)}>\n  ${demo.label}\n</ButtonLiquidGlass>`
+function buttonCode(entry: PreviewButtonConfig): string {
+  return `<ButtonLiquidGlass\n${sizePropLine(entry.size)}${glassPropsLine(entry.glassParams)}>\n  ${entry.label}\n</ButtonLiquidGlass>`
 }
 
-function buttonGroupCode(demo: DemoButtonGroupConfig): string {
+function buttonGroupCode(entry: PreviewButtonGroupConfig): string {
   const lines: string[] = ['<ButtonGroupLiquidGlass']
-  if (demo.variant === 'slider') lines.push('  variant="slider"')
-  if (demo.size && demo.size !== 'md') lines.push(`  size="${demo.size}"`)
-  lines.push(`  defaultValue="${demo.defaultValue}"`)
-  const gp = formatGlassParams(demo.glassParams)
+  if (entry.variant === 'slider') lines.push('  variant="slider"')
+  if (entry.size && entry.size !== 'md') lines.push(`  size="${entry.size}"`)
+  lines.push(`  defaultValue="${entry.defaultValue}"`)
+  const gp = formatGlassParams(entry.glassParams)
   if (gp) lines.push(`  glassParams={${gp}}`)
-  const tgp = formatGlassParams(demo.thumbGlassParams)
+  const tgp = formatGlassParams(entry.thumbGlassParams)
   if (tgp) lines.push(`  thumbGlassParams={${tgp}}`)
   lines.push('>')
-  demo.items.forEach((item) => {
+  entry.items.forEach((item) => {
     lines.push(`  <ButtonGroupLiquidGlass.Item value="${item.value}">${item.label}</ButtonGroupLiquidGlass.Item>`)
   })
   lines.push('</ButtonGroupLiquidGlass>')
   return lines.join('\n')
 }
 
-function DemoSection({
+function PreviewSection({
   id,
   title,
   hint,
@@ -150,13 +150,13 @@ function DemoSection({
   children: ReactNode
 }) {
   return (
-    <section id={id} className="demo-section" data-demo-section={id}>
-      <header className="demo-section__header">
-        <h2 className="demo-section__title">{title}</h2>
-        {hint && <p className="demo-section__hint">{hint}</p>}
-        {propsHint && <p className="demo-section__props">{propsHint}</p>}
+    <section id={id} className="preview-section" data-preview-section={id}>
+      <header className="preview-section__header">
+        <h2 className="preview-section__title">{title}</h2>
+        {hint && <p className="preview-section__hint">{hint}</p>}
+        {propsHint && <p className="preview-section__props">{propsHint}</p>}
       </header>
-      <div className="demo-section__blocks">{children}</div>
+      <div className="preview-section__blocks">{children}</div>
     </section>
   )
 }
@@ -168,49 +168,49 @@ interface ThemeSectionProps {
 
 export function ThemeSection({ globalGlass, onThemeChange }: ThemeSectionProps) {
   return (
-    <DemoSection
+    <PreviewSection
       id="theme"
       title="Global Theme (Provider)"
       hint="LiquidGlassProvider 注入全局 glassParams，子组件未传 props 时继承"
       propsHint="glassParams: { borderRadius?, strength?, edgeFalloff? }"
     >
-      <DemoBlock
+      <PreviewBlock
         title="Provider 全局参数"
         description="左侧边栏底部可实时调节；此处同步展示当前 Provider 注入值"
         code={`<LiquidGlassProvider glassParams={${formatGlassParams(globalGlass) || '{ ... }'}}>
   <App />
 </LiquidGlassProvider>`}
       >
-        <DemoGlassControls
-          className="demo-theme-controls"
+        <PreviewGlassControls
+          className="preview-theme-controls"
           value={globalGlass}
           onChange={onThemeChange}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
       {GLASS_PRESETS.map((preset) => (
-        <DemoBlock
+        <PreviewBlock
           key={`theme-${preset.id}`}
           title={`glassParams · ${preset.label}`}
           description={preset.description}
           code={`<ButtonLiquidGlass\n${glassPropsLine(preset.params)}>\n  Preview\n</ButtonLiquidGlass>`}
         >
           <ButtonLiquidGlass glassParams={preset.params}>Preview</ButtonLiquidGlass>
-        </DemoBlock>
+        </PreviewBlock>
       ))}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function ButtonSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="button"
       title="Button"
       hint="标准按钮 — 支持 size 与 glassParams"
       propsHint="Props: glassParams?, variant?: default | primary | danger | success, size?, disabled?, onClick"
     >
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="ButtonLiquidGlass"
         render={(variant, label) => (
           <ButtonLiquidGlass key={variant} variant={variant}>
@@ -219,7 +219,7 @@ export function ButtonSection() {
         )}
       />
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="ButtonLiquidGlass"
         render={(size) => (
           <ButtonLiquidGlass key={size} size={size}>
@@ -228,45 +228,45 @@ export function ButtonSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="ButtonLiquidGlass"
         renderDisabled={<ButtonLiquidGlass disabled>Disabled</ButtonLiquidGlass>}
         renderEnabled={<ButtonLiquidGlass>Enabled</ButtonLiquidGlass>}
       />
 
-      {DEMO_BUTTONS.map((demo) => (
-        <DemoBlock key={demo.id} title={`glassParams · ${demo.label}`} code={buttonCode(demo)}>
-          <ButtonLiquidGlass size={demo.size} glassParams={demo.glassParams}>
-            {demo.label}
+      {PREVIEW_BUTTONS.map((entry) => (
+        <PreviewBlock key={entry.id} title={`glassParams · ${entry.label}`} code={buttonCode(entry)}>
+          <ButtonLiquidGlass size={entry.size} glassParams={entry.glassParams}>
+            {entry.label}
           </ButtonLiquidGlass>
-        </DemoBlock>
+        </PreviewBlock>
       ))}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function ButtonGroupSection() {
   const [groupValues, setGroupValues] = useState(INITIAL_GROUP_VALUES)
 
-  const renderGroup = (demo: DemoButtonGroupConfig) => {
-    const value = groupValues[demo.name]
+  const renderGroup = (entry: PreviewButtonGroupConfig) => {
+    const value = groupValues[entry.name]
     const onChange = (next: string) =>
-      setGroupValues((prev) => ({ ...prev, [demo.name]: next }))
+      setGroupValues((prev) => ({ ...prev, [entry.name]: next }))
 
-    const items = demo.items.map(({ value: itemValue, label }) => (
+    const items = entry.items.map(({ value: itemValue, label }) => (
       <ButtonGroupLiquidGlass.Item key={itemValue} value={itemValue}>
         {label}
       </ButtonGroupLiquidGlass.Item>
     ))
 
-    if (demo.variant === 'slider') {
+    if (entry.variant === 'slider') {
       return (
         <ButtonGroupLiquidGlass
-          name={demo.name}
-          size={demo.size}
+          name={entry.name}
+          size={entry.size}
           variant="slider"
-          glassParams={demo.glassParams}
-          thumbGlassParams={demo.thumbGlassParams}
+          glassParams={entry.glassParams}
+          thumbGlassParams={entry.thumbGlassParams}
           value={value}
           onValueChange={onChange}
         >
@@ -277,9 +277,9 @@ export function ButtonGroupSection() {
 
     return (
       <ButtonGroupLiquidGlass
-        name={demo.name}
-        size={demo.size}
-        glassParams={demo.glassParams}
+        name={entry.name}
+        size={entry.size}
+        glassParams={entry.glassParams}
         value={value}
         onValueChange={onChange}
       >
@@ -288,17 +288,17 @@ export function ButtonGroupSection() {
     )
   }
 
-  const defaultGroups = DEMO_BUTTON_GROUPS.filter((d) => d.category === 'default')
-  const sliderGroups = DEMO_BUTTON_GROUPS.filter((d) => d.category === 'slider')
+  const defaultGroups = PREVIEW_BUTTON_GROUPS.filter((entry) => entry.category === 'default')
+  const sliderGroups = PREVIEW_BUTTON_GROUPS.filter((entry) => entry.category === 'slider')
 
   return (
-    <DemoSection
+    <PreviewSection
       id="button-group"
       title="Button Group"
       hint="分段控制 — default 项内高亮 · slider 滑动 thumb"
       propsHint="Props: variant?: default | slider, size?, glassParams?, thumbGlassParams? (slider), value?, defaultValue?, onValueChange?, name?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="ButtonGroupLiquidGlass"
         render={(size) => (
           <ButtonGroupLiquidGlass key={size} variant="slider" size={size} defaultValue="a">
@@ -308,40 +308,40 @@ export function ButtonGroupSection() {
         )}
       />
 
-      {defaultGroups.map((demo) => (
-        <DemoBlock
-          key={demo.name}
-          title={`variant="default" · ${demo.label}`}
+      {defaultGroups.map((entry) => (
+        <PreviewBlock
+          key={entry.name}
+          title={`variant="default" · ${entry.label}`}
           description="点击切换选中项，选中项内嵌高亮"
-          code={buttonGroupCode(demo)}
+          code={buttonGroupCode(entry)}
         >
-          {renderGroup(demo)}
-        </DemoBlock>
+          {renderGroup(entry)}
+        </PreviewBlock>
       ))}
 
-      {sliderGroups.map((demo) => (
-        <DemoBlock
-          key={demo.name}
-          title={`variant="slider" · ${demo.label}`}
+      {sliderGroups.map((entry) => (
+        <PreviewBlock
+          key={entry.name}
+          title={`variant="slider" · ${entry.label}`}
           description="点击或拖拽 thumb 吸附到选项"
-          code={buttonGroupCode(demo)}
+          code={buttonGroupCode(entry)}
         >
-          {renderGroup(demo)}
-        </DemoBlock>
+          {renderGroup(entry)}
+        </PreviewBlock>
       ))}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function IconButtonSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="icon-button"
       title="Icon Button"
       hint="圆形图标按钮 — aria-label 必填"
       propsHint="Props: size?, variant?, disabled?, glassParams?, aria-label (必填)"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="IconButtonLiquidGlass"
         render={(size) => (
           <>
@@ -355,7 +355,7 @@ export function IconButtonSection() {
         )}
       />
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="IconButtonLiquidGlass"
         render={(variant) => (
           <IconButtonLiquidGlass key={variant} variant={variant} aria-label={variant}>
@@ -364,7 +364,7 @@ export function IconButtonSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="IconButtonLiquidGlass"
         renderDisabled={
           <IconButtonLiquidGlass disabled aria-label="Disabled">
@@ -378,7 +378,7 @@ export function IconButtonSection() {
         }
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="IconButtonLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 4)}
         extraProps='aria-label="Star"'
@@ -388,7 +388,7 @@ export function IconButtonSection() {
           </IconButtonLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -398,21 +398,21 @@ export function FloatButtonSection() {
   }
 
   return (
-    <DemoSection
+    <PreviewSection
       id="float-button"
       title="Float Button"
       hint="悬浮操作按钮"
       propsHint="Props: shape?: circle | square, variant?, icon?, description?, disabled?, onClick?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="点击返回顶部"
         description="固定于视口右下角，点击平滑滚动至页面顶部"
         code={`<FloatButtonLiquidGlass\n  icon="↑"\n  aria-label="返回顶部"\n  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}\n/>`}
       >
         <FloatButtonLiquidGlass icon="↑" aria-label="返回顶部" onClick={scrollToTop} />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="shape · circle / square"
         code={`<FloatButtonLiquidGlass shape="circle" icon="+" />\n<FloatButtonLiquidGlass shape="square" icon="+" />`}
       >
@@ -429,9 +429,9 @@ export function FloatButtonSection() {
             style={{ position: 'absolute', left: 72, bottom: 0 }}
           />
         </div>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="FloatButtonLiquidGlass"
         render={(variant) => (
           <div key={variant} style={{ position: 'relative', height: 56, width: 56 }}>
@@ -445,7 +445,7 @@ export function FloatButtonSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="FloatButtonLiquidGlass"
         renderDisabled={
           <FloatButtonLiquidGlass
@@ -464,28 +464,28 @@ export function FloatButtonSection() {
           />
         }
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function BadgeSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="badge"
       title="Badge"
       hint="标签 / Chip 外形"
       propsHint="Props: shape?: badge | chip, size?, tone?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="shape · badge / chip"
         description="chip 使用 pill 圆角预设"
         code={`<BadgeLiquidGlass shape="badge">Beta</BadgeLiquidGlass>\n<BadgeLiquidGlass shape="chip">Chip</BadgeLiquidGlass>`}
       >
         <BadgeLiquidGlass shape="badge">Beta</BadgeLiquidGlass>
         <BadgeLiquidGlass shape="chip">Chip</BadgeLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="BadgeLiquidGlass"
         render={(size) => (
           <>
@@ -499,7 +499,7 @@ export function BadgeSection() {
         )}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="tone · semantic colors"
         code={LIQUID_GLASS_VARIANTS.map(
           (v) => `<BadgeLiquidGlass tone="${v}">${v}</BadgeLiquidGlass>`,
@@ -510,27 +510,27 @@ export function BadgeSection() {
             {tone}
           </BadgeLiquidGlass>
         ))}
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="BadgeLiquidGlass"
         render={(preset) => (
           <BadgeLiquidGlass glassParams={preset.params}>{preset.label}</BadgeLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function TagSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="tag"
       title="Tag"
       hint="可关闭标签 — variant 与 legacy color"
       propsHint="Props: variant?, size?, closable?, color? (legacy), glassParams?"
     >
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="TagLiquidGlass"
         render={(variant, label) => (
           <TagLiquidGlass key={variant} variant={variant}>
@@ -539,7 +539,7 @@ export function TagSection() {
         )}
       />
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="TagLiquidGlass"
         render={(size) => (
           <TagLiquidGlass key={size} size={size}>
@@ -548,7 +548,7 @@ export function TagSection() {
         )}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="closable"
         code={`<TagLiquidGlass closable onClose={() => {}}>Closable</TagLiquidGlass>`}
       >
@@ -558,9 +558,9 @@ export function TagSection() {
         <TagLiquidGlass variant="primary" closable onClose={() => {}}>
           Primary
         </TagLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="color · legacy semantic"
         description="color 映射 variant；warning 保留 legacy 样式类"
         code={`<TagLiquidGlass color="warning">Warning</TagLiquidGlass>\n<TagLiquidGlass color="info">Info</TagLiquidGlass>`}
@@ -569,33 +569,33 @@ export function TagSection() {
         <TagLiquidGlass color="info">Info</TagLiquidGlass>
         <TagLiquidGlass color="success">Success</TagLiquidGlass>
         <TagLiquidGlass color="error">Error</TagLiquidGlass>
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function AvatarSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="avatar"
       title="Avatar"
       hint="头像 — fallback 或 src"
       propsHint="Props: size?, src?, fallback?, glassParams?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="AvatarLiquidGlass"
         render={(size) => <AvatarLiquidGlass key={size} size={size} fallback="LG" />}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="fallback / custom glass"
         code={`<AvatarLiquidGlass fallback="AB" />\n<AvatarLiquidGlass fallback="CD" glassParams={{ strength: 1.3 }} />`}
       >
         <AvatarLiquidGlass fallback="AB" />
         <AvatarLiquidGlass fallback="CD" glassParams={{ strength: 1.3 }} />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="AvatarLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps='fallback="GL"'
@@ -603,20 +603,20 @@ export function AvatarSection() {
           <AvatarLiquidGlass glassParams={preset.params} fallback="GL" />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function AvatarGroupSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="avatar-group"
       title="Avatar Group"
       hint="头像组 — max 限制显示数量"
       propsHint="Props: max?, glassParams?, children: AvatarLiquidGlass[]"
     >
       {[2, 3, 4].map((max) => (
-        <DemoBlock
+        <PreviewBlock
           key={`avatar-group-max-${max}`}
           title={`max · ${max}`}
           code={`<AvatarGroupLiquidGlass max={${max}}>\n  <AvatarLiquidGlass fallback="A" size="sm" />\n  ...\n</AvatarGroupLiquidGlass>`}
@@ -628,21 +628,21 @@ export function AvatarGroupSection() {
             <AvatarLiquidGlass fallback="D" size="sm" />
             <AvatarLiquidGlass fallback="E" size="sm" />
           </AvatarGroupLiquidGlass>
-        </DemoBlock>
+        </PreviewBlock>
       ))}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function CardSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="card"
       title="Card"
       hint="复合卡片 — Header / Body / Footer"
       propsHint="Props: size?, glassParams?, Header/Body/Footer 子组件"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="CardLiquidGlass"
         render={(size) => (
           <CardLiquidGlass key={size} size={size} style={{ width: 280 }}>
@@ -652,7 +652,7 @@ export function CardSection() {
         )}
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="CardLiquidGlass"
         render={(preset) => (
           <CardLiquidGlass glassParams={preset.params} style={{ width: 280 }}>
@@ -664,19 +664,19 @@ export function CardSection() {
           </CardLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function MediaCardSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="media-card"
       title="Media Card"
       hint="媒体卡片 — 封装 Card"
       propsHint="Props: image?, title?, description?, footer?, size?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="无 image"
         code={`<MediaCardLiquidGlass\n  title="Title"\n  description="Description text"\n  footer={<BadgeLiquidGlass shape="chip">New</BadgeLiquidGlass>}\n/>`}
       >
@@ -686,9 +686,9 @@ export function MediaCardSection() {
           footer={<BadgeLiquidGlass shape="chip">New</BadgeLiquidGlass>}
           style={{ width: 280 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="MediaCardLiquidGlass"
         render={(size) => (
           <MediaCardLiquidGlass
@@ -701,7 +701,7 @@ export function MediaCardSection() {
         )}
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="MediaCardLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps='title="Media"'
@@ -714,7 +714,7 @@ export function MediaCardSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -722,13 +722,13 @@ export function ListSection() {
   const [listSelected, setListSelected] = useState('1')
 
   return (
-    <DemoSection
+    <PreviewSection
       id="list"
       title="List"
       hint="单容器 1 filter · 行内 selected 高亮"
       propsHint="List item: id, title, description?, selected?, disabled?, onClick?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="selected / disabled"
         description="selected 行高亮 · disabled 行不可点"
         code={`items={[\n  { id: '1', title: '...', selected: true, onClick },\n  { id: '4', title: '...', disabled: true },\n]}`}
@@ -741,9 +741,9 @@ export function ListSection() {
           }))}
           style={{ width: 320 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="ListLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps="items={items}"
@@ -759,39 +759,39 @@ export function ListSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function EmptySection() {
   return (
-    <DemoSection id="empty" title="Empty" hint="空状态占位" propsHint="Props: description?, children?">
-      <DemoBlock title="description + action" code={`<EmptyLiquidGlass description="暂无数据" />`}>
+    <PreviewSection id="empty" title="Empty" hint="空状态占位" propsHint="Props: description?, children?">
+      <PreviewBlock title="description + action" code={`<EmptyLiquidGlass description="暂无数据" />`}>
         <EmptyLiquidGlass description="暂无数据">
           <ButtonLiquidGlass size="sm">创建</ButtonLiquidGlass>
         </EmptyLiquidGlass>
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function StatisticSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="statistic"
       title="Statistic"
       hint="统计数值展示"
       propsHint="Props: title?, value?, suffix?, prefix?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="title / value / suffix"
         code={`<StatisticLiquidGlass title="Users" value={112893} suffix="人" />`}
       >
         <StatisticLiquidGlass title="Active Users" value={112893} suffix="人" />
         <StatisticLiquidGlass title="Conversion" value={93.2} suffix="%" />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="StatisticLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps='title="Metric" value={1280}'
@@ -804,26 +804,26 @@ export function StatisticSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function TimelineSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="timeline"
       title="Timeline"
       hint="时间轴 — left / alternate 布局"
       propsHint="Props: items[], mode?: left | alternate, variant?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="mode · left"
         code={`<TimelineLiquidGlass mode="left" items={items} />`}
       >
         <TimelineLiquidGlass items={TIMELINE_ITEMS} style={{ width: 320 }} />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="mode · alternate"
         code={`<TimelineLiquidGlass mode="alternate" items={items} />`}
       >
@@ -832,9 +832,9 @@ export function TimelineSection() {
           items={TIMELINE_ITEMS}
           style={{ width: 360 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="TimelineLiquidGlass"
         render={(variant) => (
           <TimelineLiquidGlass
@@ -845,19 +845,19 @@ export function TimelineSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function CollapseSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="collapse"
       title="Collapse"
       hint="折叠面板"
       propsHint="Props: items[], accordion?, defaultActiveKeys?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="accordion"
         code={`<CollapseLiquidGlass accordion items={[...]} defaultActiveKeys={['1']} />`}
       >
@@ -870,9 +870,9 @@ export function CollapseSection() {
           ]}
           style={{ width: 320 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="multiple panels"
         code={`<CollapseLiquidGlass defaultActiveKeys={['a', 'b']} items={items} />`}
       >
@@ -885,15 +885,15 @@ export function CollapseSection() {
           ]}
           style={{ width: 320 }}
         />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function TypographySection() {
   return (
-    <DemoSection id="typography" title="Typography" hint="标题 / 段落 / 文本" propsHint="Title level, Text type, Paragraph">
-      <DemoBlock
+    <PreviewSection id="typography" title="Typography" hint="标题 / 段落 / 文本" propsHint="Title level, Text type, Paragraph">
+      <PreviewBlock
         title="Title / Paragraph / Text"
         code={`<TypographyLiquidGlass.Title level={2}>Title</TypographyLiquidGlass.Title>`}
       >
@@ -906,20 +906,20 @@ export function TypographySection() {
         <TypographyLiquidGlass.Text type="danger" delete>
           Deleted
         </TypographyLiquidGlass.Text>
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function InputSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="input"
       title="Input"
       hint="单行输入"
       propsHint="Props: size?, variant?, disabled?, placeholder?, glassParams?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="InputLiquidGlass"
         render={(size) => (
           <InputLiquidGlass
@@ -931,7 +931,7 @@ export function InputSection() {
         )}
       />
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="InputLiquidGlass"
         render={(variant) => (
           <InputLiquidGlass
@@ -943,7 +943,7 @@ export function InputSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="InputLiquidGlass"
         renderDisabled={
           <InputLiquidGlass disabled placeholder="Disabled" style={{ minWidth: 180 }} />
@@ -953,7 +953,7 @@ export function InputSection() {
         }
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="InputLiquidGlass"
         extraProps='placeholder="Search…"'
         render={(preset) => (
@@ -964,19 +964,19 @@ export function InputSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function TextareaSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="textarea"
       title="Textarea"
       hint="多行输入"
       propsHint="Props: size?, variant?, disabled?, rows?, glassParams?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="TextareaLiquidGlass"
         render={(size) => (
           <TextareaLiquidGlass
@@ -989,7 +989,7 @@ export function TextareaSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="TextareaLiquidGlass"
         renderDisabled={
           <TextareaLiquidGlass disabled rows={2} placeholder="Disabled" style={{ minWidth: 220 }} />
@@ -999,7 +999,7 @@ export function TextareaSection() {
         }
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="TextareaLiquidGlass"
         presets={GLASS_PRESETS.slice(0, 4)}
         extraProps='rows={2} placeholder="Note…"'
@@ -1012,7 +1012,7 @@ export function TextareaSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1024,13 +1024,13 @@ export function SelectSection() {
   ]
 
   return (
-    <DemoSection
+    <PreviewSection
       id="select"
       title="Select"
       hint="下拉选择"
       propsHint="Props: options[], size?, variant?, disabled?, value?, defaultValue?, onChange?, placeholder?, glassParams?, dropdownGlassParams?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="SelectLiquidGlass"
         render={(size) => (
           <SelectLiquidGlass
@@ -1043,7 +1043,7 @@ export function SelectSection() {
         )}
       />
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="SelectLiquidGlass"
         render={(variant) => (
           <SelectLiquidGlass
@@ -1056,7 +1056,7 @@ export function SelectSection() {
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="SelectLiquidGlass"
         renderDisabled={
           <SelectLiquidGlass disabled defaultValue="react" options={selectOptions} style={{ minWidth: 160 }} />
@@ -1065,38 +1065,38 @@ export function SelectSection() {
           <SelectLiquidGlass defaultValue="react" options={selectOptions} style={{ minWidth: 160 }} />
         }
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function CheckboxSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="checkbox"
       title="Checkbox"
       hint="复选框"
       propsHint="Props: label?, size?, variant?, checked?, disabled?, onCheckedChange?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="CheckboxLiquidGlass"
         render={(size) => (
           <CheckboxLiquidGlass key={size} size={size} label={`Size ${size}`} defaultChecked />
         )}
       />
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="CheckboxLiquidGlass"
         render={(variant) => (
           <CheckboxLiquidGlass key={variant} variant={variant} label={variant} defaultChecked />
         )}
       />
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="CheckboxLiquidGlass"
         renderDisabled={<CheckboxLiquidGlass label="Disabled" disabled />}
         renderEnabled={<CheckboxLiquidGlass label="Enabled" defaultChecked />}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1104,13 +1104,13 @@ export function RadioSection() {
   const [radioValue, setRadioValue] = useState('a')
 
   return (
-    <DemoSection
+    <PreviewSection
       id="radio"
       title="Radio"
       hint="单选组"
       propsHint="RadioGroup: value?, onValueChange? · Radio: value, label?, disabled?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="RadioGroup value / onValueChange"
         code={`<RadioLiquidGlassGroup value={v} onValueChange={setV}>\n  <RadioLiquidGlass value="a">A</RadioLiquidGlass>\n</RadioLiquidGlassGroup>`}
       >
@@ -1119,9 +1119,9 @@ export function RadioSection() {
           <RadioLiquidGlass value="b" label="Option B" />
           <RadioLiquidGlass value="c" label="Option C" disabled />
         </RadioLiquidGlassGroup>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="RadioLiquidGlassGroup"
         render={(size) => (
           <RadioLiquidGlassGroup key={size} size={size} defaultValue="a">
@@ -1131,7 +1131,7 @@ export function RadioSection() {
         )}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="disabled"
         code={`<RadioLiquidGlassGroup defaultValue="enabled">\n  <RadioLiquidGlass value="disabled" label="Disabled" disabled />\n  <RadioLiquidGlass value="enabled" label="Enabled" />\n</RadioLiquidGlassGroup>`}
       >
@@ -1139,8 +1139,8 @@ export function RadioSection() {
           <RadioLiquidGlass value="disabled" label="Disabled" disabled />
           <RadioLiquidGlass value="enabled" label="Enabled" />
         </RadioLiquidGlassGroup>
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
@@ -1148,18 +1148,18 @@ export function SwitchSection() {
   const [switchOn, setSwitchOn] = useState(true)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="switch"
       title="Switch"
       hint="开关 — 点击 + 拖拽 thumb 吸附"
       propsHint="Props: size?, checked?, onCheckedChange?, thumbGlassParams?, glassParams?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="SwitchLiquidGlass"
         render={(size) => <SwitchLiquidGlass key={size} size={size} defaultChecked />}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="checked / unchecked"
         description="点击切换 · 拖拽 thumb 吸附"
         code={`<SwitchLiquidGlass checked={checked} onCheckedChange={setChecked} />`}
@@ -1168,26 +1168,26 @@ export function SwitchSection() {
         <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>
           {switchOn ? 'ON' : 'OFF'}
         </span>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="SwitchLiquidGlass"
         renderDisabled={<SwitchLiquidGlass disabled defaultChecked />}
         renderEnabled={<SwitchLiquidGlass defaultChecked />}
       />
 
       {THUMB_PRESETS.map((preset) => (
-        <DemoBlock
+        <PreviewBlock
           key={`switch-thumb-${preset.id}`}
           title={`thumbGlassParams · ${preset.label}`}
           description="track 玻璃 + thumb 视觉强度"
           code={`<SwitchLiquidGlass\n${thumbPropsLine(preset.params)} defaultChecked />`}
         >
           <SwitchLiquidGlass thumbGlassParams={preset.params} defaultChecked />
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="SwitchLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 4)}
         extraProps="defaultChecked"
@@ -1195,7 +1195,7 @@ export function SwitchSection() {
           <SwitchLiquidGlass glassParams={preset.params} defaultChecked />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1203,13 +1203,13 @@ export function SliderSection() {
   const [sliderValue, setSliderValue] = useState(62)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="slider"
       title="Slider"
       hint="range 滑条 — track-only 玻璃"
       propsHint="Props: value?, onChange?, min?, max?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="value · controlled"
         code={`<SliderLiquidGlass value={62} onChange={...} />`}
       >
@@ -1219,9 +1219,9 @@ export function SliderSection() {
           style={{ width: 220 }}
         />
         <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>{sliderValue}</span>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="SliderLiquidGlass"
         renderDisabled={
           <SliderLiquidGlass disabled value={40} style={{ width: 220 }} />
@@ -1231,7 +1231,7 @@ export function SliderSection() {
         }
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="SliderLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 4)}
         extraProps="value={62}"
@@ -1244,7 +1244,7 @@ export function SliderSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1252,25 +1252,25 @@ export function RateSection() {
   const [rateValue, setRateValue] = useState(3)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="rate"
       title="Rate"
       hint="星级评分"
       propsHint="Props: value?, onChange?, allowHalf?, disabled?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="allowHalf / value"
         code={`<RateLiquidGlass value={3} onChange={setRate} allowHalf />`}
       >
         <RateLiquidGlass value={rateValue} onChange={setRateValue} allowHalf />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DisabledDemoBlock
+      <DisabledPreviewBlock
         component="RateLiquidGlass"
         renderDisabled={<RateLiquidGlass disabled value={2} />}
         renderEnabled={<RateLiquidGlass value={rateValue} onChange={setRateValue} />}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1278,14 +1278,14 @@ export function AlertSection() {
   const alertVariants = ['default', 'primary', 'success', 'warning', 'danger'] as const
 
   return (
-    <DemoSection
+    <PreviewSection
       id="alert"
       title="Alert"
       hint="语义警告条"
       propsHint="Props: variant?: default | primary | danger | success | warning, title?, glassParams?"
     >
       {alertVariants.map((variant) => (
-        <DemoBlock
+        <PreviewBlock
           key={`alert-${variant}`}
           title={`variant · ${variant}`}
           code={`<AlertLiquidGlass variant="${variant}" title="${variant}">\n  Message content.\n</AlertLiquidGlass>`}
@@ -1293,10 +1293,10 @@ export function AlertSection() {
           <AlertLiquidGlass variant={variant} title={variant.charAt(0).toUpperCase() + variant.slice(1)}>
             Semantic border color for {variant} state.
           </AlertLiquidGlass>
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="AlertLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps='variant="primary" title="Primary"'
@@ -1306,7 +1306,7 @@ export function AlertSection() {
           </AlertLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1322,14 +1322,14 @@ export function ToastSection() {
   const toastVariants = ['default', 'success', 'error'] as const
 
   return (
-    <DemoSection
+    <PreviewSection
       id="toast"
       title="Toast"
       hint="轻量通知"
       propsHint="Props: open?, variant?: default | success | error, title?, description?"
     >
       {toastVariants.map((variant) => (
-        <DemoBlock
+        <PreviewBlock
           key={`toast-${variant}`}
           title={`variant · ${variant}`}
           code={`<ToastLiquidGlass\n  open={open}\n  variant="${variant}"\n  title="Notification"\n  description="..."\n/>`}
@@ -1337,7 +1337,7 @@ export function ToastSection() {
           <ButtonLiquidGlass size="sm" onClick={() => setToastVariant(variant)}>
             Show {variant}
           </ButtonLiquidGlass>
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
       {toastVariant && (
@@ -1348,24 +1348,24 @@ export function ToastSection() {
           description={`Toast variant="${toastVariant}"`}
         />
       )}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function SpinSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="spin"
       title="Spin"
       hint="加载指示器"
       propsHint="Props: size?, tip?, spinning?, variant?, children? (overlay)"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="SpinLiquidGlass"
         render={(size) => <SpinLiquidGlass key={size} size={size} tip={size === 'md' ? 'Loading…' : undefined} />}
       />
 
-      <DemoBlock
+      <PreviewBlock
         title="overlay · children"
         code={`<SpinLiquidGlass spinning tip="Loading…">\n  <CardLiquidGlass>...</CardLiquidGlass>\n</SpinLiquidGlass>`}
       >
@@ -1375,38 +1375,38 @@ export function SpinSection() {
             <CardLiquidGlass.Body>Content under spin overlay.</CardLiquidGlass.Body>
           </CardLiquidGlass>
         </SpinLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="SpinLiquidGlass"
         render={(variant) => <SpinLiquidGlass key={variant} variant={variant} tip={variant} />}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function SkeletonSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="skeleton"
       title="Skeleton"
       hint="骨架屏占位"
       propsHint="Props: active?, avatar?, paragraph?, title?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="avatar / paragraph / active"
         code={`<SkeletonLiquidGlass avatar paragraph={{ rows: 3 }} active />`}
       >
         <SkeletonLiquidGlass avatar paragraph={{ rows: 3 }} active />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="title only"
         code={`<SkeletonLiquidGlass title paragraph={{ rows: 2 }} />`}
       >
         <SkeletonLiquidGlass title paragraph={{ rows: 2 }} />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
@@ -1414,23 +1414,23 @@ export function ProgressSection() {
   const [progressValue] = useState(72)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="progress"
       title="Progress"
       hint="进度条 — track + fill 玻璃"
       propsHint="Props: value?, max?, fillGlassParams?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="value · 25 / 50 / 75 / 100"
         code={`<ProgressLiquidGlass value={75} max={100} />`}
       >
         {[25, 50, 75, 100].map((v) => (
           <ProgressLiquidGlass key={v} value={v} style={{ width: 180 }} />
         ))}
-      </DemoBlock>
+      </PreviewBlock>
 
       {FILL_PRESETS.map((preset) => (
-        <DemoBlock
+        <PreviewBlock
           key={`progress-fill-${preset.id}`}
           title={`fillGlassParams · ${preset.label}`}
           code={`<ProgressLiquidGlass\n  value={72}\n${fillPropsLine(preset.params)}/>`}
@@ -1440,10 +1440,10 @@ export function ProgressSection() {
             fillGlassParams={preset.params}
             style={{ width: 220 }}
           />
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="ProgressLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps="value={72}"
@@ -1455,7 +1455,7 @@ export function ProgressSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1463,14 +1463,14 @@ export function ResultSection() {
   const statuses = ['success', 'error', 'info', 'warning'] as const
 
   return (
-    <DemoSection
+    <PreviewSection
       id="result"
       title="Result"
       hint="结果页 — 四种 status"
       propsHint="Props: status?: success | error | info | warning, title?, subTitle?, extra?"
     >
       {statuses.map((status) => (
-        <DemoBlock
+        <PreviewBlock
           key={`result-${status}`}
           title={`status · ${status}`}
           code={`<ResultLiquidGlass status="${status}" title="${status}" subTitle="..." />`}
@@ -1481,21 +1481,21 @@ export function ResultSection() {
             subTitle={`Result status="${status}"`}
             extra={<ButtonLiquidGlass size="sm">Action</ButtonLiquidGlass>}
           />
-        </DemoBlock>
+        </PreviewBlock>
       ))}
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function PopconfirmSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="popconfirm"
       title="Popconfirm"
       hint="确认气泡"
       propsHint="Props: title?, description?, onConfirm?, trigger?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="onConfirm"
         code={`<PopconfirmLiquidGlass title="Delete?" onConfirm={...} trigger={...} />`}
       >
@@ -1505,20 +1505,20 @@ export function PopconfirmSection() {
           onConfirm={() => {}}
           trigger={<ButtonLiquidGlass size="sm">Delete</ButtonLiquidGlass>}
         />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function BreadcrumbSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="breadcrumb"
       title="Breadcrumb"
       hint="面包屑导航"
       propsHint="Props: items[] — label, href?, onClick?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="items · href / onClick"
         code={`<BreadcrumbLiquidGlass items={[\n  { label: 'Home', href: '/' },\n  { label: 'Components', onClick: () => {} },\n  { label: 'Current' },\n]} />`}
       >
@@ -1529,8 +1529,8 @@ export function BreadcrumbSection() {
             { label: 'Breadcrumb' },
           ]}
         />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
@@ -1538,13 +1538,13 @@ export function MenuSection() {
   const [menuKey, setMenuKey] = useState('home')
 
   return (
-    <DemoSection
+    <PreviewSection
       id="menu"
       title="Menu"
       hint="垂直菜单"
       propsHint="Props: items[], selectedKeys?, onSelect?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="selectedKeys / disabled item"
         code={`<MenuLiquidGlass items={items} selectedKeys={[key]} onSelect={setKey} />`}
       >
@@ -1557,20 +1557,20 @@ export function MenuSection() {
             { key: 'settings', label: 'Settings', icon: '⚙️', disabled: true },
           ]}
         />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function DropdownSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="dropdown"
       title="Dropdown"
       hint="下拉菜单"
       propsHint="Props: trigger, items[] — key, label, danger?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="menu items"
         code={`<DropdownLiquidGlass trigger={<Button />} items={items} />`}
       >
@@ -1582,8 +1582,8 @@ export function DropdownSection() {
             { key: '3', label: 'Logout', danger: true },
           ]}
         />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
@@ -1591,32 +1591,32 @@ export function PaginationSection() {
   const [page, setPage] = useState(2)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="pagination"
       title="Pagination"
       hint="分页器"
       propsHint="Props: page?, totalPages?, onPageChange?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="page / totalPages"
         code={`<PaginationLiquidGlass page={2} totalPages={5} onPageChange={setPage} />`}
       >
         <PaginationLiquidGlass page={page} totalPages={5} onPageChange={setPage} />
         <PaginationLiquidGlass page={1} totalPages={1} />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function StepsSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="steps"
       title="Steps"
       hint="步骤条 — horizontal / vertical"
       propsHint="Props: items[], current?, direction?: horizontal | vertical, variant?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="direction · horizontal"
         code={`<StepsLiquidGlass current={1} items={items} />`}
       >
@@ -1625,9 +1625,9 @@ export function StepsSection() {
           items={STEPS_ITEMS}
           style={{ width: '100%', maxWidth: 520 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <DemoBlock
+      <PreviewBlock
         title="direction · vertical"
         code={`<StepsLiquidGlass direction="vertical" current={1} items={items} />`}
       >
@@ -1637,9 +1637,9 @@ export function StepsSection() {
           items={STEPS_ITEMS}
           style={{ width: 280 }}
         />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <VariantDemoBlock
+      <VariantPreviewBlock
         component="StepsLiquidGlass"
         render={(variant) => (
           <StepsLiquidGlass
@@ -1651,37 +1651,37 @@ export function StepsSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function AnchorSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="anchor"
       title="Anchor"
-      hint="页内锚点 — 链接至各 demo section"
+      hint="页内锚点 — 链接至各 preview section"
       propsHint="Props: links[] — key, href, title"
     >
-      <DemoBlock
-        title="links · demoNav section ids"
+      <PreviewBlock
+        title="links · previewNav section ids"
         code={`<AnchorLiquidGlass links={[{ key: 'button', href: '#button', title: 'Button' }, ...]} />`}
       >
         <AnchorLiquidGlass links={ANCHOR_LINKS} />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function NavbarSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="navbar"
       title="Navbar"
       hint="顶栏导航"
       propsHint="Props: brand?, glassParams?, children?"
     >
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="NavbarLiquidGlass"
         presets={GLASS_PRESETS.slice(0, 3)}
         extraProps='brand="Brand"'
@@ -1692,19 +1692,19 @@ export function NavbarSection() {
           </NavbarLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function DockSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="dock"
       title="Dock"
       hint="底部 Dock — 默认 dock 圆角 preset"
       propsHint="Props: items[], glassParams?"
     >
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="DockLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps="items={items}"
@@ -1712,7 +1712,7 @@ export function DockSection() {
           <DockLiquidGlass glassParams={preset.params} items={DOCK_ITEMS} />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1720,20 +1720,20 @@ export function TabsSection() {
   const [tabValue, setTabValue] = useState('overview')
 
   return (
-    <DemoSection
+    <PreviewSection
       id="tabs"
       title="Tabs"
       hint="ButtonGroup slider + 独立 panel 玻璃"
       propsHint="Props: items[], size?, glassParams?, thumbGlassParams?, panelGlassParams?, value?, onValueChange?"
     >
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="TabsLiquidGlass"
         render={(size) => (
           <TabsLiquidGlass key={size} items={TAB_ITEMS} size={size} defaultValue="overview" />
         )}
       />
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="TabsLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         extraProps="items={items}"
@@ -1743,17 +1743,17 @@ export function TabsSection() {
       />
 
       {THUMB_PRESETS.slice(1).map((preset) => (
-        <DemoBlock
+        <PreviewBlock
           key={`tabs-thumb-${preset.id}`}
           title={`thumbGlassParams · ${preset.label}`}
           code={`<TabsLiquidGlass\n${thumbPropsLine(preset.params)} items={items} />`}
         >
           <TabsLiquidGlass items={TAB_ITEMS} thumbGlassParams={preset.params} defaultValue="overview" />
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
       {PANEL_PRESETS.map((preset) => (
-        <DemoBlock
+        <PreviewBlock
           key={`tabs-panel-${preset.id}`}
           title={`panelGlassParams · ${preset.label}`}
           description="Tab 内容面板独立玻璃"
@@ -1764,28 +1764,28 @@ export function TabsSection() {
             panelGlassParams={preset.params}
             defaultValue="overview"
           />
-        </DemoBlock>
+        </PreviewBlock>
       ))}
 
-      <DemoBlock
+      <PreviewBlock
         title="controlled · value + onValueChange"
         code={`<TabsLiquidGlass\n  items={items}\n  value={value}\n  onValueChange={setValue}\n/>`}
       >
         <TabsLiquidGlass items={TAB_ITEMS} value={tabValue} onValueChange={setTabValue} />
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
 export function SpaceSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="space"
       title="Space"
       hint="间距布局"
       propsHint="Props: direction?, size?, wrap?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="direction · horizontal / vertical"
         code={`<SpaceLiquidGlass><Button /><Button /></SpaceLiquidGlass>`}
       >
@@ -1798,9 +1798,9 @@ export function SpaceSection() {
           <ButtonLiquidGlass size="sm">Top</ButtonLiquidGlass>
           <ButtonLiquidGlass size="sm">Bottom</ButtonLiquidGlass>
         </SpaceLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <SizeDemoBlock
+      <SizePreviewBlock
         component="SpaceLiquidGlass"
         render={(size) => (
           <SpaceLiquidGlass key={size} size={size}>
@@ -1810,19 +1810,19 @@ export function SpaceSection() {
           </SpaceLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function DividerSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="divider"
       title="Divider"
       hint="分隔线"
       propsHint="Props: orientation?: horizontal | vertical, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="orientation · horizontal / vertical"
         code={`<DividerLiquidGlass orientation="horizontal" />\n<DividerLiquidGlass orientation="vertical" />`}
       >
@@ -1832,14 +1832,14 @@ export function DividerSection() {
           <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>Right</span>
         </div>
         <DividerLiquidGlass orientation="horizontal" />
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="DividerLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         render={(preset) => <DividerLiquidGlass glassParams={preset.params} />}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1847,13 +1847,13 @@ export function AffixSection() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="affix"
       title="Affix"
       hint="滚动吸顶 / 吸底"
       propsHint="Props: offsetTop?, offsetBottom?, target?, children"
     >
-      <DemoBlock
+      <PreviewBlock
         title="offsetTop · scroll container"
         description="在下方容器内滚动，标签吸顶"
         code={`<AffixLiquidGlass offsetTop={0} target={() => scrollEl}>\n  <BadgeLiquidGlass shape="chip">Affixed</BadgeLiquidGlass>\n</AffixLiquidGlass>`}
@@ -1878,8 +1878,8 @@ export function AffixSection() {
             Long content area…
           </div>
         </div>
-      </DemoBlock>
-    </DemoSection>
+      </PreviewBlock>
+    </PreviewSection>
   )
 }
 
@@ -1887,22 +1887,22 @@ export function ModalSection() {
   const [open, setOpen] = useState(false)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="modal"
       title="Modal"
       hint="对话框 — Portal + ESC + overlay"
       propsHint="Props: open?, title?, footer?, onClose?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="open / title / footer / onClose"
         code={`<ModalLiquidGlass\n  open={open}\n  title="Glass Modal"\n  onClose={() => setOpen(false)}\n  footer={<ButtonLiquidGlass>OK</ButtonLiquidGlass>}\n>\n  Content\n</ModalLiquidGlass>`}
       >
         <ButtonLiquidGlass size="sm" onClick={() => setOpen(true)}>
           Open Modal
         </ButtonLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="ModalLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 2)}
         extraProps="open={open} title='Modal'"
@@ -1930,7 +1930,7 @@ export function ModalSection() {
       >
         Modal dialog with liquid glass refraction. ESC 或点击遮罩关闭。
       </ModalLiquidGlass>
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
@@ -1939,13 +1939,13 @@ export function DrawerSection() {
   const [drawerRightOpen, setDrawerRightOpen] = useState(false)
 
   return (
-    <DemoSection
+    <PreviewSection
       id="drawer"
       title="Drawer"
       hint="侧栏抽屉"
       propsHint="Props: open?, side?: left | right, title?, onClose?, glassParams?"
     >
-      <DemoBlock
+      <PreviewBlock
         title="side · left / right"
         code={`<DrawerLiquidGlass side="left" open={open} title="Left" onClose={...} />\n<DrawerLiquidGlass side="right" open={open} title="Right" onClose={...} />`}
       >
@@ -1955,7 +1955,7 @@ export function DrawerSection() {
         <ButtonLiquidGlass size="sm" onClick={() => setDrawerRightOpen(true)}>
           Right Drawer
         </ButtonLiquidGlass>
-      </DemoBlock>
+      </PreviewBlock>
 
       <DrawerLiquidGlass
         open={drawerLeftOpen}
@@ -1980,19 +1980,19 @@ export function DrawerSection() {
           Close
         </ButtonLiquidGlass>
       </DrawerLiquidGlass>
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function PopoverSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="popover"
       title="Popover"
       hint="弹出层"
       propsHint="Props: trigger, content, glassParams?"
     >
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="PopoverLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         render={(preset) => (
@@ -2003,19 +2003,19 @@ export function PopoverSection() {
           />
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
 export function TooltipSection() {
   return (
-    <DemoSection
+    <PreviewSection
       id="tooltip"
       title="Tooltip"
       hint="文字提示"
       propsHint="Props: content, children, glassParams?"
     >
-      <GlassPresetDemoBlocks
+      <GlassPresetPreviewBlocks
         component="TooltipLiquidGlass"
         presets={GLASS_PRESETS.slice(1, 3)}
         render={(preset) => (
@@ -2024,11 +2024,11 @@ export function TooltipSection() {
           </TooltipLiquidGlass>
         )}
       />
-    </DemoSection>
+    </PreviewSection>
   )
 }
 
-export const DEMO_SECTIONS: { id: string; Component: () => JSX.Element }[] = [
+export const PREVIEW_SECTIONS: { id: string; Component: () => JSX.Element }[] = [
   { id: 'button', Component: ButtonSection },
   { id: 'button-group', Component: ButtonGroupSection },
   { id: 'icon-button', Component: IconButtonSection },

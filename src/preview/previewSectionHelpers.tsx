@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 import type { LiquidGlassVariant } from '../lib/liquid-glass'
-import { DemoBlock } from './DemoBlock'
-import { GLASS_PRESETS, SIZES, type DemoSize } from './demoVariants'
+import { PreviewBlock } from './PreviewBlock'
+import { GLASS_PRESETS, SIZES, type PreviewSize } from './previewVariants'
 import { glassPropsLine, sizePropLine } from './formatCode'
 
 export const LIQUID_GLASS_VARIANTS = ['default', 'primary', 'danger', 'success'] as const
 
-export function VariantDemoBlock({
+export function VariantPreviewBlock({
   component,
   render,
 }: {
@@ -14,7 +14,7 @@ export function VariantDemoBlock({
   render: (variant: LiquidGlassVariant, label: string) => ReactNode
 }) {
   return (
-    <DemoBlock
+    <PreviewBlock
       title="variant · default / primary / danger / success"
       code={LIQUID_GLASS_VARIANTS.filter((v) => v !== 'default')
         .slice(0, 1)
@@ -24,32 +24,32 @@ export function VariantDemoBlock({
       {LIQUID_GLASS_VARIANTS.map((variant) => (
         <span key={variant}>{render(variant, variant)}</span>
       ))}
-    </DemoBlock>
+    </PreviewBlock>
   )
 }
 
-export function SizeDemoBlock({
+export function SizePreviewBlock({
   component,
   render,
   sizes = SIZES,
 }: {
   component: string
-  render: (size: DemoSize) => ReactNode
-  sizes?: readonly DemoSize[]
+  render: (size: PreviewSize) => ReactNode
+  sizes?: readonly PreviewSize[]
 }) {
   return (
-    <DemoBlock
+    <PreviewBlock
       title="size · sm / md / lg"
       code={sizes.map((s) => `<${component}${sizePropLine(s).trim() ? ` ${sizePropLine(s).trim()}` : ''}>${s.toUpperCase()}</${component}>`).join('\n')}
     >
       {sizes.map((size) => (
         <span key={size}>{render(size)}</span>
       ))}
-    </DemoBlock>
+    </PreviewBlock>
   )
 }
 
-export function GlassPresetDemoBlocks({
+export function GlassPresetPreviewBlocks({
   component,
   render,
   presets = GLASS_PRESETS.slice(0, 4),
@@ -61,18 +61,18 @@ export function GlassPresetDemoBlocks({
   extraProps?: string
 }) {
   return presets.map((preset) => (
-    <DemoBlock
+    <PreviewBlock
       key={`${component}-glass-${preset.id}`}
       title={`glassParams · ${preset.label}`}
       description={preset.description}
       code={`<${component}\n${glassPropsLine(preset.params)}${extraProps ? ` ${extraProps}` : ''}>\n  ${preset.label}\n</${component}>`}
     >
       {render(preset)}
-    </DemoBlock>
+    </PreviewBlock>
   ))
 }
 
-export function DisabledDemoBlock({
+export function DisabledPreviewBlock({
   component,
   renderEnabled,
   renderDisabled,
@@ -82,12 +82,12 @@ export function DisabledDemoBlock({
   renderDisabled: ReactNode
 }) {
   return (
-    <DemoBlock
+    <PreviewBlock
       title="disabled"
       code={`<${component} disabled>Disabled</${component}>`}
     >
       {renderDisabled}
       {renderEnabled}
-    </DemoBlock>
+    </PreviewBlock>
   )
 }

@@ -18,6 +18,8 @@
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Using in Your App](#using-in-your-app)
+- [Global Configuration](#global-configuration)
+- [Publish to npm](#publish-to-npm)
 - [Core API](#core-api)
 - [Component Usage](#component-usage)
   - [Global Theme](#global-theme-liquidglassprovider)
@@ -44,7 +46,7 @@ LiquidGlassUI is a **React 19** UI kit that recreates Apple-style liquid glass r
 
 **SDF displacement map → SVG `feDisplacementMap` → `backdrop-filter`**
 
-Components are designed to sit over rich, animated backgrounds (the repo includes a **Three.js cyberspace tunnel** demo). The interactive showcase covers **52 exported components** with live `glassParams` tuning and expandable code snippets.
+Components are designed to sit over rich, animated backgrounds (the repo includes a **Three.js cyberspace tunnel** preview backdrop). The interactive preview covers **52 exported components** with live `glassParams` tuning and expandable code snippets.
 
 ---
 
@@ -56,7 +58,7 @@ Components are designed to sit over rich, animated backgrounds (the repo include
 - Semantic variants: `default` · `primary` · `danger` · `success`
 - Shape presets: `GLASS_SHAPE.default` · `pill` · `dock` · `badge`
 - Secondary glass layers: `thumbGlassParams`, `fillGlassParams`, `panelGlassParams`
-- Interactive demo with sidebar navigation and per-section source code
+- Interactive preview with sidebar navigation and per-section source code
 
 ---
 
@@ -68,7 +70,7 @@ Components are designed to sit over rich, animated backgrounds (the repo include
 npm install
 npm run dev      # http://localhost:5173
 npm run build
-npm run preview
+npm run serve
 npm run lint
 ```
 
@@ -76,14 +78,51 @@ npm run lint
 |--------|-------------|
 | `dev` | Vite dev server (auto-opens browser) |
 | `build` | TypeScript check + production bundle |
-| `preview` | Preview production build |
+| `serve` | Preview production build (Vite preview server) |
 | `lint` | Run oxlint |
 
 ---
 
 ## Using in Your App
 
-This repo is a **component library + demo**. Import from `src/components` and include global styles:
+### Install from npm
+
+```bash
+npm install liquidglassui
+```
+
+```tsx
+// main.tsx
+import 'liquidglassui/styles.css'
+import {
+  ButtonLiquidGlass,
+  CardLiquidGlass,
+  LiquidGlassProvider,
+} from 'liquidglassui'
+
+export function App() {
+  return (
+    <LiquidGlassProvider
+      glassParams={{ borderRadius: 8, strength: 1, edgeFalloff: 14 }}
+      variant="primary"
+    >
+      <CardLiquidGlass>
+        <CardLiquidGlass.Body>
+          <ButtonLiquidGlass variant="primary">Get started</ButtonLiquidGlass>
+        </CardLiquidGlass.Body>
+      </CardLiquidGlass>
+    </LiquidGlassProvider>
+  )
+}
+```
+
+> **Tip:** Glass refraction needs visible content *behind* the component. A solid flat color will look like frosted glass only.
+
+See **[Global Configuration](#global-configuration)** for `LiquidGlassProvider` props, merge priority, nested providers, CSS theming, and custom hooks.
+
+### Use from source (monorepo / local development)
+
+Import from `src/components` and include global styles:
 
 ```tsx
 // main.tsx
@@ -93,7 +132,7 @@ import './styles/global.scss'
 Minimal setup:
 
 ```tsx
-import { LiquidGlassProvider } from './lib/liquid-glass'
+import { LiquidGlassProvider } from 'liquidglassui'
 import { ButtonLiquidGlass, CardLiquidGlass } from './components'
 import { CyberspaceBackground } from './components/CyberspaceBackground'
 
@@ -115,7 +154,212 @@ export function App() {
 }
 ```
 
-> **Tip:** Glass refraction needs visible content *behind* the component. A solid flat color will look like frosted glass only.
+---
+
+## Global Configuration
+
+When using the npm package, **`LiquidGlassProvider`** is the entry point for app-wide defaults. Wrap your root (or any subtree) so all `*LiquidGlass` descendants inherit shared refraction and variant settings without repeating props on every component.
+
+### Setup
+
+```tsx
+// main.tsx
+import 'liquidglassui/styles.css'
+import { LiquidGlassProvider } from 'liquidglassui'
+
+createRoot(document.getElementById('root')!).render(
+  <LiquidGlassProvider
+    glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
+    variant="primary"
+  >
+    <App />
+  </LiquidGlassProvider>,
+)
+```
+
+Child components can be used directly — no per-component `glassParams` required:
+
+```tsx
+import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
+
+<CardLiquidGlass>
+  <ButtonLiquidGlass>Submit</ButtonLiquidGlass>
+</CardLiquidGlass>
+```
+
+### `LiquidGlassProvider` props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `glassParams` | `LiquidGlassParams` | Default refraction for descendants |
+| `variant` | `LiquidGlassVariant` | Default semantic tone when a child omits `variant` |
+| `nestedPolicy` | `'overlay' \| 'surface' \| 'filter'` | Default behavior when a glass host is nested inside another filter host |
+
+`glassParams` fields:
+
+| Field | Description |
+|-------|-------------|
+| `borderRadius` | Corner radius (px), default `8` |
+| `strength` | Refraction intensity, default `1` |
+| `edgeFalloff` | Edge distortion band width (px) |
+| `deformEdge` | Directional melt edge: `'all' \| 'bottom' \| 'top' \| 'left' \| 'right'` |
+| `deformExtent` | Influence depth from `deformEdge` (px) |
+| `deformStrength` | Directional melt displacement strength |
+| `deformVertical` | Directional melt axis multiplier (`>1` = more stretch) |
+| `deformSpread` | Bulge width ratio `0–1` along the edge |
+
+Shape presets (import from `liquidglassui`):
+
+```tsx
+import { GLASS_SHAPE, LiquidGlassProvider } from 'liquidglassui'
+
+<LiquidGlassProvider glassParams={{ borderRadius: GLASS_SHAPE.pill, strength: 1.2 }}>
+  <App />
+</LiquidGlassProvider>
+```
+
+### Parameter merge priority
+
+Final params are resolved by `resolveGlassParams`:
+
+```
+component.glassParams  →  component preset (internal)  →  LiquidGlassProvider.glassParams  →  DEFAULT_GLASS_PARAMS
+```
+
+Variant resolution:
+
+```
+component.variant  →  LiquidGlassProvider.variant  →  'default'
+```
+
+**Global config is the default; any component can override:**
+
+```tsx
+<LiquidGlassProvider glassParams={{ borderRadius: 12 }} variant="primary">
+  <ButtonLiquidGlass>Inherits 12px + primary</ButtonLiquidGlass>
+  <ButtonLiquidGlass glassParams={{ borderRadius: 24 }} variant="danger">
+    Only this button uses 24px + danger
+  </ButtonLiquidGlass>
+</LiquidGlassProvider>
+```
+
+### Nested providers (local themes)
+
+Providers can nest — inner values override outer ones for that subtree:
+
+```tsx
+<LiquidGlassProvider glassParams={{ borderRadius: 8, strength: 1 }}>
+  <Layout>
+    <LiquidGlassProvider glassParams={{ borderRadius: 24, strength: 1.5 }} variant="primary">
+      <HeroSection />
+    </LiquidGlassProvider>
+    <Footer />
+  </Layout>
+</LiquidGlassProvider>
+```
+
+### Hooks for custom components
+
+Exported hooks read the nearest `LiquidGlassProvider`:
+
+```tsx
+import {
+  useLiquidGlassDefaults,
+  useLiquidGlassVariantDefault,
+  useLiquidGlassNestedPolicyDefault,
+  useLiquidGlassEffect,
+} from 'liquidglassui'
+
+const defaults = useLiquidGlassDefaults()           // Provider glassParams
+const defaultVariant = useLiquidGlassVariantDefault()
+const nestedPolicy = useLiquidGlassNestedPolicyDefault()
+```
+
+`useLiquidGlassEffect` already merges Provider defaults automatically — use it when building your own glass hosts:
+
+```tsx
+function MyGlassPanel({ glassParams, variant, children }) {
+  const { hostRef, filterStyle, variantClass, isFilterActive, HostBoundary } =
+    useLiquidGlassEffect(glassParams, { baseClass: 'my-panel', variant })
+  // ...
+}
+```
+
+### Styles and CSS variables
+
+Import styles once at app entry:
+
+```tsx
+import 'liquidglassui/styles.css'
+```
+
+This injects `:root` CSS variables (`--lg-bg`, `--lg-border`, `--lg-variant-primary`, etc.) used by all components. Override them in your app for global visual theming:
+
+```css
+:root {
+  --lg-variant-primary: #3b82f6;
+  --lg-bg: rgba(255, 255, 255, 0.12);
+}
+```
+
+Variant colors are applied via CSS modifier classes (e.g. `button-liquid-glass--primary`), not inline JS styles.
+
+### Complete example
+
+```tsx
+import 'liquidglassui/styles.css'
+import {
+  ButtonLiquidGlass,
+  CardLiquidGlass,
+  GLASS_SHAPE,
+  LiquidGlassProvider,
+} from 'liquidglassui'
+
+export default function App() {
+  return (
+    <LiquidGlassProvider
+      glassParams={{
+        borderRadius: GLASS_SHAPE.default,
+        strength: 1.2,
+        edgeFalloff: 16,
+      }}
+      variant="primary"
+      nestedPolicy="surface"
+    >
+      <CardLiquidGlass>
+        <CardLiquidGlass.Body>
+          <ButtonLiquidGlass>Global theme button</ButtonLiquidGlass>
+        </CardLiquidGlass.Body>
+      </CardLiquidGlass>
+    </LiquidGlassProvider>
+  )
+}
+```
+
+> **Background:** Refraction needs visible content behind the glass. The preview app’s `CyberspaceBackground` is **not** published to npm — supply your own image, gradient, or animated background in consumer apps.
+
+---
+
+## Publish to npm
+
+Library build and release scripts (run from repo root):
+
+| Script | Description |
+|--------|-------------|
+| `npm run build:lib` | Build ESM bundle + CSS + `.d.ts` into `dist/` |
+| `npm run release:dry-run` | Build + `npm publish --dry-run` (inspect tarball) |
+| `npm run release` | Bump patch version + publish |
+| `npm run release:minor` | Bump minor version + publish |
+| `npm run release:major` | Bump major version + publish |
+| `npm run publish:npm` | Publish current version without bump |
+
+First-time publish:
+
+```bash
+npm login
+npm run release:dry-run   # verify package contents
+npm run release           # 0.1.0 → 0.1.1 patch + publish
+```
 
 ---
 
@@ -147,10 +391,18 @@ Native HTML attributes are forwarded where applicable (`onClick`, `disabled`, `p
 component.glassParams → useLiquidGlassEffect preset → LiquidGlassProvider → DEFAULT_GLASS_PARAMS
 ```
 
+**Variant merge:**
+
+```
+component.variant → LiquidGlassProvider.variant → 'default'
+```
+
+See **[Global Configuration](#global-configuration)** for nested providers, CSS variables, and hooks.
+
 ### Shape presets (`GLASS_SHAPE`)
 
 ```tsx
-import { GLASS_SHAPE } from './lib/liquid-glass'
+import { GLASS_SHAPE } from 'liquidglassui'
 
 GLASS_SHAPE.default  // 8
 GLASS_SHAPE.pill     // 999 — Avatar, Switch track, Badge chip
@@ -170,14 +422,15 @@ All components are exported from `src/components/index.ts`.
 
 ### Global Theme (`LiquidGlassProvider`)
 
-Inject default `glassParams` and `variant` for descendants that omit their own props.
+Inject default `glassParams`, `variant`, and `nestedPolicy` for descendants. Full details: **[Global Configuration](#global-configuration)**.
 
 ```tsx
-import { LiquidGlassProvider } from './lib/liquid-glass'
+import { LiquidGlassProvider } from 'liquidglassui'
 
 <LiquidGlassProvider
   glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
   variant="primary"
+  nestedPolicy="surface"
 >
   <App />
 </LiquidGlassProvider>
@@ -186,9 +439,15 @@ import { LiquidGlassProvider } from './lib/liquid-glass'
 Read defaults in a child:
 
 ```tsx
-import { useLiquidGlassDefaults } from './lib/liquid-glass'
+import {
+  useLiquidGlassDefaults,
+  useLiquidGlassVariantDefault,
+  useLiquidGlassNestedPolicyDefault,
+} from 'liquidglassui'
 
 const defaults = useLiquidGlassDefaults()
+const variant = useLiquidGlassVariantDefault()
+const nestedPolicy = useLiquidGlassNestedPolicyDefault()
 ```
 
 ---
@@ -773,7 +1032,7 @@ Side: `left` | `right`
 
 #### `CyberspaceBackground`
 
-Three.js tunnel + particles. Not a glass component — use as a demo backdrop.
+Three.js tunnel + particles. Not a glass component — use as a preview backdrop.
 
 ```tsx
 import { CyberspaceBackground } from './components/CyberspaceBackground'
@@ -849,7 +1108,7 @@ src/
 ├── styles/                 # SCSS tokens & glass mixins
 ├── components/             # *LiquidGlass components
 ├── engine/                 # Three.js background
-├── demo/                   # Interactive showcase
+├── preview/                # Interactive component preview (PreviewShowcase, PreviewSections)
 └── App.tsx
 ```
 
@@ -861,7 +1120,7 @@ src/
 2. Create `src/components/XxxLiquidGlass/` (`.tsx`, `.scss`, `index.ts`).
 3. Wire `useLiquidGlassEffect` with the correct `GLASS_SHAPE` preset.
 4. Export from `components/index.ts`.
-5. Add a demo section in `demo/DemoSections.tsx` and entry in `demo/demoNav.ts`.
+5. Add a preview section in `preview/PreviewSections.tsx` and entry in `preview/previewNav.ts`.
 6. Run `npm run build`.
 
 See `.cursor/rules/liquid-glass-components.mdc` for full authoring guidelines.

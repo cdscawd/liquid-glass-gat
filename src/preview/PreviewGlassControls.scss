@@ -1,6 +1,6 @@
 @use '../styles/variables' as *;
 
-.demo-glass-controls {
+.preview-glass-controls {
   &__header {
     display: flex;
     flex-direction: column;
@@ -95,7 +95,7 @@
     line-height: 1.45;
   }
 
-  &.demo-theme-controls {
+  &.preview-theme-controls {
     max-width: 360px;
   }
 }

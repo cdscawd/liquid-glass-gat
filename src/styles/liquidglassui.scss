@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+:root {
+  --lg-bg: #{$glass-bg};
+  --lg-bg-hover: #{$glass-bg-hover};
+  --lg-bg-selected: #{$glass-bg-selected};
+  --lg-border: #{$glass-border};
+  --lg-text-primary: #{$glass-text-primary};
+  --lg-text-secondary: #{$glass-text-secondary};
+  --lg-text-muted: #{$glass-text-muted};
+  --lg-focus-ring: #{$glass-focus-ring};
+  --lg-overlay: #{$glass-overlay};
+  --lg-radius: #{$glass-radius};
+  --lg-radius-pill: #{$glass-radius-pill};
+  --lg-variant-primary: #{$glass-variant-primary};
+  --lg-variant-danger: #{$glass-variant-danger};
+  --lg-variant-success: #{$glass-variant-success};
+}
+
+.filter-liquid-glass {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+}

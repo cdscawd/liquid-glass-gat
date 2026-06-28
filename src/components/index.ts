@@ -35,8 +35,14 @@ export {
 export { TabsLiquidGlass, type LiquidGlassTabItem, type TabsLiquidGlassProps } from './TabsLiquidGlass'
 export { ProgressLiquidGlass, type ProgressLiquidGlassProps } from './ProgressLiquidGlass'
 export { SliderLiquidGlass, type SliderLiquidGlassProps } from './SliderLiquidGlass'
-export { LiquidGlassProvider, useLiquidGlassDefaults } from '../lib/liquid-glass'
-export type { LiquidGlassVariant } from '../lib/liquid-glass'
+export { LiquidGlassProvider, useLiquidGlassDefaults, useLiquidGlassVariantDefault, useLiquidGlassNestedPolicyDefault } from '../lib/liquid-glass'
+export type {
+  LiquidGlassFilterMode,
+  LiquidGlassNestedPolicy,
+  LiquidGlassParams,
+  LiquidGlassProviderProps,
+  LiquidGlassVariant,
+} from '../lib/liquid-glass'
 export { NavbarLiquidGlass, type NavbarLiquidGlassProps } from './NavbarLiquidGlass'
 export {
   DockLiquidGlass,

@@ -1,9 +1,9 @@
 import { SliderLiquidGlass } from '../components/SliderLiquidGlass'
 import type { LiquidGlassParams } from '../lib/liquid-glass'
 import { PILL_BORDER_RADIUS } from '../lib/liquid-glass/constants'
-import { GLOBAL_GLASS_PRESETS } from './demoGlassPresets'
+import { GLOBAL_GLASS_PRESETS } from './previewGlassPresets'
 import { formatGlassParams } from './formatCode'
-import './DemoGlassControls.scss'
+import './PreviewGlassControls.scss'
 
 const CONTROL_SLIDER_GLASS: LiquidGlassParams = {
   borderRadius: 999,
@@ -11,7 +11,7 @@ const CONTROL_SLIDER_GLASS: LiquidGlassParams = {
   edgeFalloff: 10,
 }
 
-export interface DemoGlassControlsProps {
+export interface PreviewGlassControlsProps {
   value: LiquidGlassParams
   onChange: (params: LiquidGlassParams) => void
   className?: string
@@ -29,11 +29,11 @@ function sliderRadiusValue(borderRadius: number | undefined): number {
   return borderRadius
 }
 
-export function DemoGlassControls({
+export function PreviewGlassControls({
   value,
   onChange,
   className = '',
-}: DemoGlassControlsProps) {
+}: PreviewGlassControlsProps) {
   const borderRadius = value.borderRadius ?? 8
   const strength = value.strength ?? 1
   const edgeFalloff = value.edgeFalloff ?? 14
@@ -43,20 +43,20 @@ export function DemoGlassControls({
   }
 
   return (
-    <div className={`demo-glass-controls${className ? ` ${className}` : ''}`}>
-      <div className="demo-glass-controls__header">
-        <span className="demo-glass-controls__title">Global glassParams</span>
-        <code className="demo-glass-controls__code">
+    <div className={`preview-glass-controls${className ? ` ${className}` : ''}`}>
+      <div className="preview-glass-controls__header">
+        <span className="preview-glass-controls__title">Global glassParams</span>
+        <code className="preview-glass-controls__code">
           {formatGlassParams(value) || '{ }'}
         </code>
       </div>
 
-      <div className="demo-glass-controls__presets">
+      <div className="preview-glass-controls__presets">
         {GLOBAL_GLASS_PRESETS.map((preset) => (
           <button
             key={preset.id}
             type="button"
-            className="demo-glass-controls__preset"
+            className="preview-glass-controls__preset"
             onClick={() => onChange(preset.params)}
           >
             {preset.label}
@@ -64,15 +64,15 @@ export function DemoGlassControls({
         ))}
       </div>
 
-      <div className="demo-glass-controls__field">
-        <span className="demo-glass-controls__label">
+      <div className="preview-glass-controls__field">
+        <span className="preview-glass-controls__label">
           borderRadius
-          <span className="demo-glass-controls__value">
+          <span className="preview-glass-controls__value">
             {formatRadiusLabel(borderRadius)}
           </span>
         </span>
         <SliderLiquidGlass
-          className="demo-glass-controls__slider"
+          className="preview-glass-controls__slider"
           glassParams={CONTROL_SLIDER_GLASS}
           min={0}
           max={24}
@@ -84,13 +84,13 @@ export function DemoGlassControls({
         />
       </div>
 
-      <div className="demo-glass-controls__field">
-        <span className="demo-glass-controls__label">
+      <div className="preview-glass-controls__field">
+        <span className="preview-glass-controls__label">
           strength
-          <span className="demo-glass-controls__value">{strength.toFixed(2)}</span>
+          <span className="preview-glass-controls__value">{strength.toFixed(2)}</span>
         </span>
         <SliderLiquidGlass
-          className="demo-glass-controls__slider"
+          className="preview-glass-controls__slider"
           glassParams={CONTROL_SLIDER_GLASS}
           min={0}
           max={2}
@@ -102,13 +102,13 @@ export function DemoGlassControls({
         />
       </div>
 
-      <div className="demo-glass-controls__field">
-        <span className="demo-glass-controls__label">
+      <div className="preview-glass-controls__field">
+        <span className="preview-glass-controls__label">
           edgeFalloff
-          <span className="demo-glass-controls__value">{edgeFalloff}</span>
+          <span className="preview-glass-controls__value">{edgeFalloff}</span>
         </span>
         <SliderLiquidGlass
-          className="demo-glass-controls__slider"
+          className="preview-glass-controls__slider"
           glassParams={CONTROL_SLIDER_GLASS}
           min={0}
           max={40}
@@ -120,7 +120,7 @@ export function DemoGlassControls({
         />
       </div>
 
-      <p className="demo-glass-controls__hint">
+      <p className="preview-glass-controls__hint">
         通过 LiquidGlassProvider 注入 · 未传 glassParams 的组件会联动
       </p>
     </div>
