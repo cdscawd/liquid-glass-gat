@@ -1,5 +1,5 @@
 {
-  "name": "liquidglassui",
+  "name": "@gatsby/liquidglassui",
   "version": "1.0.0",
   "description": "LiquidGlassUI — React UI kit with Apple-style liquid glass refraction: SVG displacement maps, backdrop-filter, 50+ glass components, and global LiquidGlassProvider theming.",
   "author": {

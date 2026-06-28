@@ -87,18 +87,20 @@ npm run lint
 
 ### Install from npm
 
+npm blocks the unscoped name `liquidglassui` (too similar to `liquid-glass-ui`). Install the scoped package:
+
 ```bash
-npm install liquidglassui
+npm install @gatsby/liquidglassui
 ```
 
 ```tsx
 // main.tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 import {
   ButtonLiquidGlass,
   CardLiquidGlass,
   LiquidGlassProvider,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 export function App() {
   return (
@@ -132,7 +134,7 @@ import './styles/global.scss'
 Minimal setup:
 
 ```tsx
-import { LiquidGlassProvider } from 'liquidglassui'
+import { LiquidGlassProvider } from '@gatsby/liquidglassui'
 import { ButtonLiquidGlass, CardLiquidGlass } from './components'
 import { CyberspaceBackground } from './components/CyberspaceBackground'
 
@@ -164,8 +166,8 @@ When using the npm package, **`LiquidGlassProvider`** is the entry point for app
 
 ```tsx
 // main.tsx
-import 'liquidglassui/styles.css'
-import { LiquidGlassProvider } from 'liquidglassui'
+import '@gatsby/liquidglassui/styles.css'
+import { LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 createRoot(document.getElementById('root')!).render(
   <LiquidGlassProvider
@@ -180,7 +182,7 @@ createRoot(document.getElementById('root')!).render(
 Child components can be used directly — no per-component `glassParams` required:
 
 ```tsx
-import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
+import { ButtonLiquidGlass, CardLiquidGlass } from '@gatsby/liquidglassui'
 
 <CardLiquidGlass>
   <ButtonLiquidGlass>Submit</ButtonLiquidGlass>
@@ -208,10 +210,10 @@ import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
 | `deformVertical` | Directional melt axis multiplier (`>1` = more stretch) |
 | `deformSpread` | Bulge width ratio `0–1` along the edge |
 
-Shape presets (import from `liquidglassui`):
+Shape presets (import from `@gatsby/liquidglassui`):
 
 ```tsx
-import { GLASS_SHAPE, LiquidGlassProvider } from 'liquidglassui'
+import { GLASS_SHAPE, LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 <LiquidGlassProvider glassParams={{ borderRadius: GLASS_SHAPE.pill, strength: 1.2 }}>
   <App />
@@ -268,7 +270,7 @@ import {
   useLiquidGlassVariantDefault,
   useLiquidGlassNestedPolicyDefault,
   useLiquidGlassEffect,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 const defaults = useLiquidGlassDefaults()           // Provider glassParams
 const defaultVariant = useLiquidGlassVariantDefault()
@@ -290,7 +292,7 @@ function MyGlassPanel({ glassParams, variant, children }) {
 Import styles once at app entry:
 
 ```tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 ```
 
 This injects `:root` CSS variables (`--lg-bg`, `--lg-border`, `--lg-variant-primary`, etc.) used by all components. Override them in your app for global visual theming:
@@ -307,13 +309,13 @@ Variant colors are applied via CSS modifier classes (e.g. `button-liquid-glass--
 ### Complete example
 
 ```tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 import {
   ButtonLiquidGlass,
   CardLiquidGlass,
   GLASS_SHAPE,
   LiquidGlassProvider,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 export default function App() {
   return (
@@ -402,7 +404,7 @@ See **[Global Configuration](#global-configuration)** for nested providers, CSS 
 ### Shape presets (`GLASS_SHAPE`)
 
 ```tsx
-import { GLASS_SHAPE } from 'liquidglassui'
+import { GLASS_SHAPE } from '@gatsby/liquidglassui'
 
 GLASS_SHAPE.default  // 8
 GLASS_SHAPE.pill     // 999 — Avatar, Switch track, Badge chip
@@ -425,7 +427,7 @@ All components are exported from `src/components/index.ts`.
 Inject default `glassParams`, `variant`, and `nestedPolicy` for descendants. Full details: **[Global Configuration](#global-configuration)**.
 
 ```tsx
-import { LiquidGlassProvider } from 'liquidglassui'
+import { LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 <LiquidGlassProvider
   glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
@@ -443,7 +445,7 @@ import {
   useLiquidGlassDefaults,
   useLiquidGlassVariantDefault,
   useLiquidGlassNestedPolicyDefault,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 const defaults = useLiquidGlassDefaults()
 const variant = useLiquidGlassVariantDefault()

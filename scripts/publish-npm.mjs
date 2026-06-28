@@ -52,7 +52,7 @@ try {
   console.error(
     '\nPublish failed. Common fixes:\n' +
       '  • ENEEDAUTH — npm login --registry=https://registry.npmjs.org/\n' +
-      '  • 404 on PUT — not logged in, or package name taken by another user\n' +
+      '  • E403 — name too similar to an existing package; use a scoped name e.g. @gatsby/liquidglassui\n' +
       '  • Global install mirror (npmmirror) is fine; publish uses registry.npmjs.org\n',
   )
   process.exit(1)

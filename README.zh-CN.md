@@ -87,18 +87,20 @@ npm run lint
 
 ### 从 npm 安装
 
+npm 不允许未作用域名 `liquidglassui`（与 `liquid-glass-ui` 过于相似），请安装作用域包：
+
 ```bash
-npm install liquidglassui
+npm install @gatsby/liquidglassui
 ```
 
 ```tsx
 // main.tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 import {
   ButtonLiquidGlass,
   CardLiquidGlass,
   LiquidGlassProvider,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 export function App() {
   return (
@@ -164,8 +166,8 @@ export function App() {
 
 ```tsx
 // main.tsx
-import 'liquidglassui/styles.css'
-import { LiquidGlassProvider } from 'liquidglassui'
+import '@gatsby/liquidglassui/styles.css'
+import { LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 createRoot(document.getElementById('root')!).render(
   <LiquidGlassProvider
@@ -180,7 +182,7 @@ createRoot(document.getElementById('root')!).render(
 子组件可直接使用，不必逐个传入 `glassParams`：
 
 ```tsx
-import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
+import { ButtonLiquidGlass, CardLiquidGlass } from '@gatsby/liquidglassui'
 
 <CardLiquidGlass>
   <ButtonLiquidGlass>提交</ButtonLiquidGlass>
@@ -208,10 +210,10 @@ import { ButtonLiquidGlass, CardLiquidGlass } from 'liquidglassui'
 | `deformVertical` | 定向 melt 主方向倍率（`>1` 更「拉丝」） |
 | `deformSpread` | 边沿 bulge 宽度占比 `0–1` |
 
-形状预设（从 `liquidglassui` 导入）：
+形状预设（从 `@gatsby/liquidglassui` 导入）：
 
 ```tsx
-import { GLASS_SHAPE, LiquidGlassProvider } from 'liquidglassui'
+import { GLASS_SHAPE, LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 <LiquidGlassProvider glassParams={{ borderRadius: GLASS_SHAPE.pill, strength: 1.2 }}>
   <App />
@@ -268,7 +270,7 @@ import {
   useLiquidGlassVariantDefault,
   useLiquidGlassNestedPolicyDefault,
   useLiquidGlassEffect,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 const defaults = useLiquidGlassDefaults()           // Provider 的 glassParams
 const defaultVariant = useLiquidGlassVariantDefault()
@@ -290,7 +292,7 @@ function MyGlassPanel({ glassParams, variant, children }) {
 在应用入口引入样式一次：
 
 ```tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 ```
 
 会注入 `:root` 上的 `--lg-*` 变量（背景、边框、语义色等）。可在项目中覆盖以实现全局视觉主题：
@@ -307,13 +309,13 @@ import 'liquidglassui/styles.css'
 ### 完整示例
 
 ```tsx
-import 'liquidglassui/styles.css'
+import '@gatsby/liquidglassui/styles.css'
 import {
   ButtonLiquidGlass,
   CardLiquidGlass,
   GLASS_SHAPE,
   LiquidGlassProvider,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 export default function App() {
   return (
@@ -421,7 +423,7 @@ component.variant → LiquidGlassProvider.variant → 'default'
 ### 形状预设（`GLASS_SHAPE`）
 
 ```tsx
-import { GLASS_SHAPE } from 'liquidglassui'
+import { GLASS_SHAPE } from '@gatsby/liquidglassui'
 
 GLASS_SHAPE.default  // 8
 GLASS_SHAPE.pill     // 999 — Avatar、Switch 轨道、Badge chip
@@ -444,7 +446,7 @@ GLASS_SHAPE.badge    // 6  — BadgeLiquidGlass
 为子组件注入默认 `glassParams`、`variant` 与 `nestedPolicy`。完整说明见 **[全局配置](#全局配置)**。
 
 ```tsx
-import { LiquidGlassProvider } from 'liquidglassui'
+import { LiquidGlassProvider } from '@gatsby/liquidglassui'
 
 <LiquidGlassProvider
   glassParams={{ borderRadius: 12, strength: 1.35, edgeFalloff: 20 }}
@@ -462,7 +464,7 @@ import {
   useLiquidGlassDefaults,
   useLiquidGlassVariantDefault,
   useLiquidGlassNestedPolicyDefault,
-} from 'liquidglassui'
+} from '@gatsby/liquidglassui'
 
 const defaults = useLiquidGlassDefaults()
 const variant = useLiquidGlassVariantDefault()
