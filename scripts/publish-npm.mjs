@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build and publish liquidglassui to npm.
+ * Build and publish liquidglassui to npm (registry.npmjs.org).
  *
  * Usage:
  *   node scripts/publish-npm.mjs patch     # bump patch + publish
@@ -8,11 +8,15 @@
  *   node scripts/publish-npm.mjs major     # bump major + publish
  *   node scripts/publish-npm.mjs none      # publish current version (no bump)
  *   node scripts/publish-npm.mjs dry-run   # build + npm publish --dry-run
+ *
+ * First-time setup (official npm, not npmmirror):
+ *   npm login --registry=https://registry.npmjs.org/
  */
 
 import { execSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
+const NPM_REGISTRY = 'https://registry.npmjs.org/'
 const bump = process.argv[2] ?? 'patch'
 const allowed = new Set(['patch', 'minor', 'major', 'none', 'dry-run'])
 
@@ -21,26 +25,39 @@ if (!allowed.has(bump)) {
   process.exit(1)
 }
 
+const publishArgs = `--registry=${NPM_REGISTRY} --access public`
+
 function run(command) {
   execSync(command, { stdio: 'inherit' })
 }
 
-console.log('Building library…')
+console.log(`Building library…`)
 run('npm run build:lib')
 
 if (bump === 'dry-run') {
-  console.log('Dry run — package contents:')
-  run('npm publish --dry-run --access public')
+  console.log(`Dry run — publishing to ${NPM_REGISTRY}`)
+  run(`npm publish --dry-run ${publishArgs}`)
   process.exit(0)
 }
 
 if (bump !== 'none') {
-  console.log(`Bumping ${bump} version…`)
-  run(`npm version ${bump}`)
+  console.log(`Bumping ${bump} version (package.json only, no git tag)…`)
+  run(`npm version ${bump} --no-git-tag-version`)
 }
 
-console.log('Publishing to npm…')
-run('npm publish --access public')
+console.log(`Publishing to ${NPM_REGISTRY}…`)
+try {
+  run(`npm publish ${publishArgs}`)
+} catch {
+  console.error(
+    '\nPublish failed. Common fixes:\n' +
+      '  • ENEEDAUTH — npm login --registry=https://registry.npmjs.org/\n' +
+      '  • 404 on PUT — not logged in, or package name taken by another user\n' +
+      '  • Global install mirror (npmmirror) is fine; publish uses registry.npmjs.org\n',
+  )
+  process.exit(1)
+}
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 console.log(`\nPublished ${pkg.name}@${pkg.version}`)
+console.log('Remember to commit package.json and package-lock.json if version was bumped.')

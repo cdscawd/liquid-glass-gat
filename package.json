@@ -38,6 +38,10 @@
     "url": "https://github.com/cdscawd/liquidglassui/issues"
   },
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css",
